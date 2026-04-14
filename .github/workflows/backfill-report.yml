@@ -1,0 +1,45 @@
+name: Backfill Report
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_date:
+        description: "Target date for the backfill run, for example 2026-04-09"
+        required: false
+        type: string
+      skip_push:
+        description: "Skip push notification during this manual run"
+        required: false
+        default: true
+        type: boolean
+      publication_mode:
+        description: "Publication track for this manual backfill"
+        required: false
+        default: auto
+        type: choice
+        options:
+          - auto
+          - reviewed
+      reviewer:
+        description: "Optional reviewer name for reviewed publication"
+        required: false
+        default: ""
+        type: string
+      review_note:
+        description: "Optional review note for reviewed publication"
+        required: false
+        default: ""
+        type: string
+
+jobs:
+  backfill:
+    uses: ./.github/workflows/reusable-backfill.yml
+    with:
+      target_date: ${{ inputs.target_date }}
+      skip_push: ${{ inputs.skip_push }}
+      publication_mode: ${{ inputs.publication_mode }}
+      reviewer: ${{ inputs.reviewer }}
+      review_note: ${{ inputs.review_note }}
+      scheduler_trigger_kind: manual
+      scheduler_compensation_run: false
+    secrets: inherit

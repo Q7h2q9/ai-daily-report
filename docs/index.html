@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VS_AI 情报阅读站</title>
+<meta name="description" content="本轮采集到 6 个主题，覆盖 0 个信息源（0高置信/0中置信）。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #eef4fb;
+    --muted: #9fb2c8;
+    --line: rgba(255,255,255,0.10);
+    --surface: rgba(6, 18, 31, 0.78);
+    --surface-strong: #08192a;
+    --accent: #7be0d6;
+    --accent-2: #f3b562;
+    --accent-3: #7ca6ff;
+    --bg: #03101d;
+    --hero: linear-gradient(135deg, #061c31 0%, #0f3a52 42%, #174a49 72%, #80603a 100%);
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+    font-family: "Space Grotesk", "IBM Plex Sans", "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 12% 0%, rgba(123, 224, 214, 0.18), transparent 24%),
+      radial-gradient(circle at 100% 20%, rgba(243, 181, 98, 0.14), transparent 28%),
+      linear-gradient(180deg, #020b14 0%, var(--bg) 100%);
+  }
+  a { color: inherit; }
+  .site-shell { max-width: 1200px; margin: 0 auto; padding: 0 20px 56px; }
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .brand-mark {
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 18px rgba(123, 224, 214, 0.55);
+  }
+  .nav-links {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .hero {
+    position: relative;
+    min-height: calc(100svh - 72px);
+    display: grid;
+    align-items: end;
+    padding: 72px 28px 36px;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    background: var(--hero);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(130deg, rgba(255,255,255,0.04), transparent 35%),
+      linear-gradient(0deg, rgba(2,11,20,0.58), rgba(2,11,20,0.18));
+    pointer-events: none;
+  }
+  .hero-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 24px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(238,244,251,0.72);
+  }
+  .hero h1 {
+    margin: 0;
+    max-width: 9ch;
+    font-size: clamp(42px, 9vw, 96px);
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+  }
+  .hero-copy {
+    max-width: 620px;
+    color: rgba(238,244,251,0.84);
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(2,11,20,0.18);
+    color: rgba(238,244,251,0.78);
+    font-size: 13px;
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+  }
+  .chip:hover { background: rgba(2,11,20,0.28); }
+  .section {
+    margin-top: 28px;
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    background: var(--surface);
+    backdrop-filter: blur(14px);
+  }
+  .section-title {
+    margin: 0 0 18px;
+    font-size: 21px;
+    letter-spacing: -0.02em;
+  }
+  .subtle { color: var(--muted); }
+  .stats-grid,
+  .signal-grid,
+  .archive-grid,
+  .summary-grid {
+    display: grid;
+    gap: 16px;
+  }
+  .stats-grid { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+  .summary-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .signal-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .archive-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .stat, .signal, .archive-card, .summary-card, .topic-card {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: rgba(4, 15, 28, 0.54);
+  }
+  .stat strong, .summary-card strong {
+    display: block;
+    margin-top: 8px;
+    font-size: 30px;
+    letter-spacing: -0.04em;
+  }
+  .signal h3, .archive-card h3, .topic-card h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+  .signal p, .archive-card p, .summary-card p, .topic-card p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.72;
+  }
+  .signal-tags, .filter-group, .archive-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    display: inline-flex;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(123, 224, 214, 0.08);
+    color: var(--accent);
+    font-size: 12px;
+  }
+  .tag.alt {
+    background: rgba(124, 166, 255, 0.10);
+    color: #9bb7ff;
+  }
+  .tag.warm {
+    background: rgba(243, 181, 98, 0.10);
+    color: #ffd089;
+  }
+  .signal-footer, .archive-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .signal a, .archive-card a, .feed-links a {
+    text-decoration: none;
+  }
+  .signal a:hover, .archive-card a:hover, .feed-links a:hover {
+    color: var(--accent);
+  }
+  .search-shell {
+    display: grid;
+    gap: 16px;
+  }
+  .search-shell input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: rgba(1, 9, 17, 0.56);
+    color: var(--ink);
+    font: inherit;
+  }
+  .search-results {
+    display: grid;
+    gap: 12px;
+  }
+  .search-hit {
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(4, 15, 28, 0.48);
+  }
+  .search-hit h4 {
+    margin: 0 0 8px;
+    font-size: 16px;
+  }
+  .search-hit p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .feed-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .archive-filters {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .filter-group button {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    cursor: pointer;
+  }
+  .filter-group button.is-active,
+  .filter-group button:hover {
+    color: var(--ink);
+    border-color: rgba(123, 224, 214, 0.32);
+    background: rgba(123, 224, 214, 0.08);
+  }
+  .footer {
+    margin-top: 28px;
+    padding: 24px 0 8px;
+    color: var(--muted);
+    text-align: center;
+    font-size: 13px;
+  }
+  @media (max-width: 760px) {
+    .site-shell { padding: 0 14px 40px; }
+    .hero { min-height: auto; padding: 56px 18px 24px; border-radius: 24px; }
+    .section { padding: 18px; border-radius: 20px; }
+    .topbar { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./"><span class="brand-mark"></span><span>VS_AI</span></a>
+      <nav class="nav-links">
+        <a href="./archives/">Archives</a>
+        <a href="./weekly/">Weekly</a>
+        <a href="./special/">Special</a>
+        <a href="./feed.json">JSON Feed</a>
+        <a href="./rss.xml">RSS</a>
+        <a href="" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="eyebrow">Daily Briefing</div>
+        <h1>Briefing For AI Signals.</h1>
+        <p class="hero-copy">本轮采集到 6 个主题，覆盖 0 个信息源（0高置信/0中置信）。</p>
+        <div class="hero-meta">
+          <span class="chip">最新更新 2026-04-14T01:10:25.988800+00:00</span>
+          <span class="chip">自动版</span>
+          <a class="chip" href="./archives/">进入归档检索</a>
+          <a class="chip" href="./weekly/">进入周报</a>
+          <a class="chip" href="./special/">进入专题</a>
+          <a class="chip" href="./rss.xml">订阅 RSS</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">今日面板</h2>
+      <div class="stats-grid">
+        <article class="stat"><span class="subtle">Raw items</span><strong>97</strong></article>
+        <article class="stat"><span class="subtle">Topics</span><strong>97</strong></article>
+        <article class="stat"><span class="subtle">Domains</span><strong>2</strong></article>
+        <article class="stat"><span class="subtle">Sources</span><strong>30</strong></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">AI Insight</h2>
+      <div class="summary-grid">
+        <article class="summary-card">
+  <h3>Exploiting the most prominent AI agent benchmarks</h3>
+  <p>Exploiting the most prominent AI agent benchmarks appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.</p>
+</article><article class="summary-card">
+  <h3>Systematic debugging for AI agents: Introducing the AgentRx framework</h3>
+  <p>Systematic debugging for AI agents: Introducing the AgentRx framework appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.</p>
+</article><article class="summary-card">
+  <h3>LiteRT: The Universal Framework for On-Device AI</h3>
+  <p>LiteRT: The Universal Framework for On-Device AI appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.</p>
+</article>
+      </div>
+      <p class="subtle" style="margin-top:16px;">Exploiting the most prominent AI agent benchmarks 等主题将在未来数天内继续出现在多个信息源中，建议保持监控并关注官方后续发布。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Theme Signals</h2>
+      <div class="signal-grid">
+        <article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Exploiting the most prominent AI agent benchmarks</h3>
+  <p>Score: 574 | Comments: 137</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span><span class="tag">hot</span><span class="tag">trending</span></div>
+  <div class="signal-footer">
+    <span>rdi.berkeley.edu · 3.3</span>
+    <a href="https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Systematic debugging for AI agents: Introducing the AgentRx framework</h3>
+  <p>As AI agents transition from simple chatbots to autonomous systems capable of managing cloud incidents, navigating complex web interfaces, and executing multi-step API workflows, a new challenge has emerged: transparency. When a human makes a mistake, we can usually trace the logic. But when an AI agent fails, perhaps by hallucinating a tool output or […] The post Systematic debugging for AI agents: Introducing the AgentRx framework appeared first on Microsoft Research .</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Research Blog</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>microsoft.com · 3.3</span>
+    <a href="https://www.microsoft.com/en-us/research/blog/systematic-debugging-for-ai-agents-introducing-the-agentrx-framework/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>LiteRT: The Universal Framework for On-Device AI</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developers.googleblog.com · 2.6</span>
+    <a href="https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>vllm-project/vllm</h3>
+  <p>A high-throughput and memory-efficient inference and serving engine for LLMs</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span><span class="tag">amd</span><span class="tag">blackwell</span></div>
+  <div class="signal-footer">
+    <span>github.com · 2.5</span>
+    <a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>(AMD) Build AI Agents That Run Locally</h3>
+  <p>Score: 92 | Comments: 21</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>amd-gaia.ai · 2.5</span>
+    <a href="https://amd-gaia.ai/docs" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>The looming college-enrollment death spiral</h3>
+  <p>Score: 92 | Comments: 106</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>theatlantic.com · 2.5</span>
+    <a href="https://www.theatlantic.com/ideas/2026/04/college-enrollment-demographic-cliff/686750/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Search</h2>
+      <div class="search-shell">
+        <p class="subtle">基础检索覆盖标题、标签、领域、来源，索引来自 <code>search-index.json</code>。</p>
+        <input id="site-search" type="search" placeholder="搜索标题、标签、领域、来源">
+        <div id="search-results" class="search-results"></div>
+      </div>
+      <div class="feed-links">
+        <a class="chip" href="./search-index.json">search-index.json</a>
+        <a class="chip" href="./feed.json">feed.json</a>
+        <a class="chip" href="./rss.xml">rss.xml</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Archive Stream</h2>
+      <div class="archive-grid">
+        <article class="archive-card" data-domain="AI / Agent AI × Electronics" data-source="huggingface.co github.com openai.com api-docs.deepseek.com anthropic.com microsoft.com developers.googleblog.com platform.moonshot.cn developer.nvidia.com blog.openvino.ai rdi.berkeley.edu amd-gaia.ai theatlantic.com ndaybench.winfunc.com servo.org github.github.com neowin.net blog.danielvaughan.com thecentersquare.com techcrunch.com blog.kaving.me planetscale.com spectrum.ieee.org collabora.com encore.dev youtube.com timesofisrael.com efficienist.com magis.substack.com twitter.com">
+  <span class="eyebrow">2026.04.14</span>
+  <h3>本轮采集到 6 个主题，覆盖 0 个信息源（0高置信/0中置信）。</h3>
+  <p>重点关注：Exploiting the most prominent AI agent benchmarks Systematic debugging for AI agents: Introducing the AgentRx framework LiteRT: The Universal Framework for On-Device AI</p>
+  <div class="archive-meta" style="margin-top:12px;"><span class="tag alt">AI / Agent</span><span class="tag alt">AI × Electronics</span><span class="tag warm">huggingface.co</span><span class="tag warm">github.com</span><span class="tag">自动版</span></div>
+  <div class="archive-footer">
+    <span>97 topics · 97 items</span>
+    <a href="archives/2026-04-14/">打开日报</a>
+  </div>
+</article><article class="archive-card" data-domain="AI / Agent AI × Electronics" data-source="github.com huggingface.co api-docs.deepseek.com openai.com anthropic.com microsoft.com developers.googleblog.com platform.moonshot.cn developer.nvidia.com blog.openvino.ai news.ycombinator.com rdi.berkeley.edu aisle.com bsky.app trainjazz.com eualternative.eu europe.mistral.ai apollo.com thinkingcomplete.com twitter.com defensescoop.com x86.fr tomshardware.com">
+  <span class="eyebrow">2026.04.13</span>
+  <h3>本轮采集到 6 个主题，覆盖 0 个信息源（0高置信/0中置信）。</h3>
+  <p>重点关注：Exploiting the most prominent AI agent benchmarks Systematic debugging for AI agents: Introducing the AgentRx framework LiteRT: The Universal Framework for On-Device AI</p>
+  <div class="archive-meta" style="margin-top:12px;"><span class="tag alt">AI / Agent</span><span class="tag alt">AI × Electronics</span><span class="tag warm">github.com</span><span class="tag warm">huggingface.co</span><span class="tag">自动版</span></div>
+  <div class="archive-footer">
+    <span>93 topics · 93 items</span>
+    <a href="archives/2026-04-13/">打开日报</a>
+  </div>
+</article><article class="archive-card" data-domain="AI / Agent AI × Electronics" data-source="github.com huggingface.co api-docs.deepseek.com openai.com anthropic.com microsoft.com developers.googleblog.com platform.moonshot.cn developer.nvidia.com blog.openvino.ai rdi.berkeley.edu aisle.com news.ycombinator.com cirruslabs.org notes.brooklynzelenka.com khronokernel.com electronicspecifier.com hamy.xyz blog.yossarian.net theregister.com">
+  <span class="eyebrow">2026.04.12</span>
+  <h3>AI智能体领域正经历从追求单一能力突破向构建系统化工程能力的范式转变，核心矛盾从“能否执行任务”转向“能否可靠、透明、持续地适应真实世界”。</h3>
+  <p>当前AI智能体研发面临三大核心瓶颈：记忆系统因信息过载而失效、故障难以诊断调试、以及静态模型无法适应动态环境。 微软和IBM等机构提出的解决方案（PlugMem、AgentRx、ALTK-Evolve）共同指向一个趋势：智能体的发展重点正从提升任务完成率转向构建可维护、可进化、可信任的系统工程基础。 与此同时，基准测试被快速“破解”的现象暴露了评估体系严重滞后于能力发展的结构性矛盾，凸显了定义和衡量智能体“真实能力”的紧迫性。</p>
+  <div class="archive-meta" style="margin-top:12px;"><span class="tag alt">AI / Agent</span><span class="tag alt">AI × Electronics</span><span class="tag warm">github.com</span><span class="tag warm">huggingface.co</span><span class="tag">人工复核版</span></div>
+  <div class="archive-footer">
+    <span>89 topics · 89 items</span>
+    <a href="archives/2026-04-12/">打开日报</a>
+  </div>
+</article><article class="archive-card" data-domain="AI / Agent AI × Electronics" data-source="github.com huggingface.co api-docs.deepseek.com openai.com anthropic.com microsoft.com developers.googleblog.com platform.moonshot.cn developer.nvidia.com blog.openvino.ai rdi.berkeley.edu twill.ai lists.zx2c4.com aisle.com news.ycombinator.com daemonology.net cirruslabs.org notes.brooklynzelenka.com historytoday.com kotaku.com galsapir.github.io">
+  <span class="eyebrow">2026.04.11</span>
+  <h3>AI智能体领域正面临从能力扩张到质量管控的关键转折点，核心矛盾从“能否执行”转向“能否可靠、高效、透明地执行”，催生了内存结构化、系统化调试、基准可信度等底层基础设施的迫切需求。</h3>
+  <p>微软研究揭示了当前AI智能体发展的两大核心瓶颈：一是随着交互数据积累，非结构化记忆反而会降低智能体效能，凸显了内存质量（PlugMem）而非容量的重要性；二是智能体复杂性与自主性提升后，缺乏系统化调试工具（AgentRx）导致故障难以追溯，构成信任与部署障碍。 与此同时，行业基础设施面临普遍挑战：vLLM等推理引擎在追求广泛兼容性与极致性能间存在战略矛盾；AI智能体基准测试的可信度受到质疑，评估方法的脆弱性威胁着整个评估生态的健康。 新兴创业公司（如Twill.ai）试图将智能体能力产品化，但信息深度不足，而LiteRT等框架的宣传缺乏实质证据，反映出市场热度与信息透明度之间的差距。整体趋势表明，行业正从追求功能实现转向构建可靠、可解释、可评估的智能体系统工程体系。</p>
+  <div class="archive-meta" style="margin-top:12px;"><span class="tag alt">AI / Agent</span><span class="tag alt">AI × Electronics</span><span class="tag warm">github.com</span><span class="tag warm">huggingface.co</span><span class="tag">人工复核版</span></div>
+  <div class="archive-footer">
+    <span>89 topics · 89 items</span>
+    <a href="archives/2026-04-11/">打开日报</a>
+  </div>
+</article><article class="archive-card" data-domain="AI / Agent AI × Electronics" data-source="github.com huggingface.co api-docs.deepseek.com openai.com anthropic.com microsoft.com developers.googleblog.com platform.moonshot.cn developer.nvidia.com blog.openvino.ai twill.ai lists.zx2c4.com eclecticlight.co blog.gitbutler.com blog.samaltman.com nytimes.com dfarq.homeip.net daemonology.net ubuntu.com historytoday.com codeberg.org andonlabs.com">
+  <span class="eyebrow">2026.04.09</span>
+  <h3>AI Agent领域正从单纯的能力扩展转向解决规模化瓶颈，核心矛盾集中在记忆效率、系统透明度和部署成本三大关键挑战上。</h3>
+  <p>AI Agent的发展焦点正从模型能力竞赛转向解决实际部署中的系统性瓶颈。 微软研究提出两大框架：PlugMem旨在将海量、杂乱的交互日志转化为结构化知识以解决“记忆悖论”；AgentRx则试图为日益复杂的自主Agent建立系统化的调试机制以应对“透明度危机”。 同时，vLLM等项目致力于在推理吞吐量和内存效率之间取得平衡，以降低大规模部署的成本门槛。</p>
+  <div class="archive-meta" style="margin-top:12px;"><span class="tag alt">AI / Agent</span><span class="tag alt">AI × Electronics</span><span class="tag warm">github.com</span><span class="tag warm">huggingface.co</span><span class="tag">自动版</span></div>
+  <div class="archive-footer">
+    <span>90 topics · 90 items</span>
+    <a href="archives/2026-04-09/">打开日报</a>
+  </div>
+</article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Public reading site only. Operations diagnostics stay in the private ops dashboard.</p>
+    </footer>
+  </div>
+
+  <script>
+    (async function() {
+      const input = document.getElementById("site-search");
+      const results = document.getElementById("search-results");
+      const response = await fetch("./search-index.json");
+      const payload = await response.json();
+      const entries = payload.entries || [];
+
+      function render(list) {
+        if (!list.length) {
+          results.innerHTML = '<div class="search-hit"><h4>暂无结果</h4><p>换一个关键词试试。</p></div>';
+          return;
+        }
+        results.innerHTML = list.slice(0, 8).map((entry) => {
+          const tags = (entry.tags || []).slice(0, 3).map((tag) => `<span class="tag">${tag}</span>`).join("");
+          return `
+            <article class="search-hit">
+              <h4><a href="${entry.url}" target="_blank" rel="noopener">${entry.title}</a></h4>
+              <p>${entry.summary}</p>
+              <div class="archive-meta" style="margin-top:10px;">
+                <span class="tag alt">${entry.domain}</span>
+                <span class="tag warm">${entry.source}</span>
+                ${tags}
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      render(entries.slice(0, 6));
+      input.addEventListener("input", () => {
+        const query = input.value.trim().toLowerCase();
+        if (!query) {
+          render(entries.slice(0, 6));
+          return;
+        }
+        const filtered = entries.filter((entry) => {
+          const haystack = [
+            entry.title,
+            entry.summary,
+            entry.domain,
+            entry.source,
+            ...(entry.tags || [])
+          ].join(" ").toLowerCase();
+          return haystack.includes(query);
+        });
+        render(filtered);
+      });
+    })();
+  </script>
+</body>
+</html>

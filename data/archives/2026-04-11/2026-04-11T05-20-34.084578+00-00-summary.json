@@ -1,0 +1,2109 @@
+{
+  "meta": {
+    "generated_at": "2026-04-11T05:20:34.084578+00:00",
+    "timezone": "Asia/Shanghai",
+    "total_items": 95,
+    "total_topics": 95
+  },
+  "one_line_core": "AI Agent 领域正从基础能力构建转向解决规模化部署中的核心矛盾：在追求更高自主性、吞吐量和记忆的同时，必须攻克可调试性、人机协作与控制、以及知识结构化等系统性挑战。",
+  "executive_summary": [
+    "本期晨报聚焦 AI Agent 领域的基础设施与部署挑战。核心趋势显示，行业正从单纯提升模型能力，转向解决将 Agent 投入实际应用时涌现的系统性瓶颈。这包括：为高吞吐量推理优化内存效率（vLLM）、为复杂自主任务建立调试框架（AgentRx）、将海量交互日志转化为结构化知识（PlugMem），以及在 notebook 和云端环境中探索人机协作的新范式（Marimo pair, Twill.ai）。一个普遍的主题是，Agent 的‘智能’不仅取决于其决策能力，更取决于其运行环境的可观测性、可控性及知识管理效率。"
+  ],
+  "key_points": [
+    {
+      "title": "推理效率成为规模化瓶颈，vLLM 致力于解决内存与吞吐的根本矛盾",
+      "why_it_matters": "LLM 部署的核心矛盾在于模型巨大参数量与有限硬件资源之间的冲突。vLLM 作为关键基础设施，其价值在于通过内存优化技术，直接决定 AI 服务能否实现高并发、低延迟的商业化应用，是 Agent 大规模落地的算力基石。"
+    },
+    {
+      "title": "Agent 自主性提升催生‘可调试性鸿沟’，微软 AgentRx 试图建立系统化诊断标准",
+      "why_it_matters": "当 Agent 执行复杂、多步骤任务时，其失败模式（如幻觉）变得难以追溯和修复。AgentRx 框架的提出，标志着行业开始正视‘黑箱’自主系统的可靠性问题，这是将 Agent 用于关键业务（如云运维）的前提，关乎信任与安全。"
+    },
+    {
+      "title": "Agent 记忆从‘容量竞赛’转向‘结构优化’，PlugMem 旨在将数据负担转化为知识资产",
+      "why_it_matters": "简单地积累交互日志会拖累 Agent 性能，形成‘数据税’。PlugMem 的核心洞察是，记忆的价值在于其可检索和可复用性。这推动 Agent 设计范式从被动存储转向主动知识管理，是提升长期任务表现和持续学习能力的关键。"
+    },
+    {
+      "title": "人机协作界面成为创新焦点，探索从本地 Notebook 到云端工作流的集成模式",
+      "why_it_matters": "Marimo pair 和 Twill.ai 分别代表了两种协作路径：在开发者熟悉的交互式环境中嵌入代理，以及通过自然语言在协作工具中委派任务。它们的共同挑战是解决控制与信任问题，这决定了 AI 是作为真正的‘副驾驶’还是难以驾驭的‘自动化脚本’。"
+    }
+  ],
+  "key_insights": [
+    "AI Agent 的成熟度正从‘能做什么’转向‘如何可靠、高效、可控地做’。当前创新的主战场已从模型本身，转移到连接模型与真实世界的‘中间层’——包括推理引擎、调试框架、记忆系统和协作界面。",
+    "一个反直觉的规律是：更多（数据、记忆、自主性）并不总是更好。未经结构化的记忆会成为负担，过度的自主性会降低可调试性。下一阶段的竞争力将体现在对‘度’的把握和系统的‘负熵’（结构化）能力上。",
+    "人机协作的终极形态可能不是完全自主的 Agent，而是通过增强人类的‘杠杆率’来实现。无论是 Marimo 的交互式环境还是 Twill 的云端委派，成功的标志是让人能更高效地指导、纠正和放大 AI 的能力，而非被其替代。"
+  ],
+  "limitations": [
+    "关于 Google LiteRT 框架的信息严重不足，无法评估其在端侧 AI 框架竞争中的具体定位与技术优势，导致分析存在缺口。",
+    "所有分析基于公开的技术博客、论文和社区讨论，缺乏实际生产环境的性能数据、用户反馈和商业落地案例作为佐证。",
+    "对 Twill.ai 等初创公司的分析包含对其商业前景和技术挑战的推测，其实际产品成熟度和市场接受度有待验证。",
+    "GitHub repo failed: NVIDIA/cuda-cmake -> 404 Client Error: Not Found for url: https://api.github.com/repos/NVIDIA/cuda-cmake",
+    "HN: fetched 59 raw, filtered to 18 relevant (min_score=10)",
+    "RSS source failed: meta-ai-blog -> 404 Client Error: Not Found for url: https://ai.meta.com/blog/rss/",
+    "RSS source failed: arxiv-cs-ai -> 404 Client Error: Not Found for url: https://rss.arxiv.org/cs.AI",
+    "Website source failed: st-blog -> 404 Client Error: Not Found for url: https://blog.st.com/artificial-intelligence/",
+    "Website source failed: ti-e2e-blog -> 410 Client Error: Gone for url: https://e2e.ti.com/blogs_/artificial-intelligence"
+  ],
+  "actions": [
+    "对于技术选型者：应优先评估 vLLM 等推理引擎在目标硬件上的实际性能与成本，并将其与 Agent 的可观测性框架（如 AgentRx 理念）结合考虑，构建可维护的 Agent 系统。",
+    "对于 Agent 开发者：在设计长期运行的 Agent 时，需提前规划记忆的结构化与检索策略，避免陷入‘日志膨胀’陷阱，可参考 PlugMem 的思想进行架构设计。",
+    "对于产品与研发管理者：在引入 AI 编码助手或自动化工作流时，需明确人机职责边界，并建立相应的代码审查与验证流程，以管理 Twill.ai 等工具带来的效率提升与质量风险。"
+  ],
+  "analyses": [
+    {
+      "facts": [
+        "主题候选为Google发布的LiteRT框架，定位为通用端侧AI框架，属于AI-LLM-Agent领域，带有AI与电子设备融合标签，但提供的证据片段为空，无法获取具体技术细节、发布时间、性能指标、应用场景或竞争环境等信息。"
+      ],
+      "contradictions": [
+        "1. 主题重要性（基于标题和领域标签推断）与信息缺失（证据片段为空）之间的矛盾。2. 分析任务要求（输出结构化分析）与输入信息不充分（无法进行实质性情境锚定）之间的矛盾。3. 框架的“通用”宣称（标题暗示）与未知的具体技术实现和适用范围之间的矛盾。"
+      ],
+      "primary_contradiction": "分析任务要求与输入信息不充分之间的矛盾。",
+      "core_insight": "当前输入仅包含元数据标签和空证据，缺乏进行有效矛盾分析和核心洞察所需的实质性事实依据，任何基于此的深入分析都将高度依赖推测而非事实。",
+      "confidence": "low",
+      "title": "LiteRT: The Universal Framework for On-Device AI",
+      "url": "https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/",
+      "primary_domain": "ai-llm-agent"
+    },
+    {
+      "facts": [
+        "vLLM is a high-throughput and memory-efficient inference and serving engine for LLMs.",
+        "The project is associated with a wide range of tags including major AI models (GPT, Llama, Qwen, DeepSeek), hardware platforms (CUDA, AMD, TPU, Blackwell), and core concepts (inference, model-serving, MoE)."
+      ],
+      "contradictions": [
+        "High-throughput demands vs. Memory-efficiency constraints in LLM serving.",
+        "Support for diverse hardware (CUDA, AMD, TPU) vs. Optimization complexity for each platform.",
+        "Serving a wide array of model architectures (including MoE like DeepSeek-V3) vs. Maintaining generic, efficient engine design.",
+        "The need for rapid inference speed vs. The computational intensity of large language models."
+      ],
+      "primary_contradiction": "The core tension between achieving high-throughput (processing many requests fast) and maintaining memory-efficiency (managing the massive memory footprint of LLMs) during inference and serving.",
+      "core_insight": "vLLM's position as a critical infrastructure project stems from its focused attempt to resolve the fundamental bottleneck in LLM deployment: efficiently bridging the gap between the models' immense size and the practical need for fast, scalable serving.",
+      "confidence": "high",
+      "title": "vllm-project/vllm",
+      "url": "https://github.com/vllm-project/vllm",
+      "primary_domain": "ai-llm-agent"
+    },
+    {
+      "facts": [
+        "AI agents are transitioning from simple chatbots to autonomous systems capable of complex tasks like managing cloud incidents and executing multi-step API workflows.",
+        "A new challenge of transparency has emerged with this transition.",
+        "When a human makes a mistake, the logic can usually be traced, but when an AI agent fails (e.g., by hallucinating a tool output), the debugging process is not straightforward.",
+        "Microsoft Research is introducing the AgentRx framework to address the challenge of systematic debugging for AI agents."
+      ],
+      "contradictions": [
+        "Increasing autonomy and capability of AI agents vs. the decreasing transparency and debuggability of their failures.",
+        "The need for reliable, complex AI systems in production vs. the current lack of systematic tools to understand and fix their errors.",
+        "The expectation for AI agents to perform critical, multi-step workflows vs. the inherent risk of opaque failures like hallucinations."
+      ],
+      "primary_contradiction": "The increasing deployment of autonomous, high-stakes AI agents vs. the immature state of tools for systematically diagnosing and correcting their failures.",
+      "core_insight": "The evolution of AI agents into autonomous actors is creating a critical 'debuggability gap'—their failures are becoming both more consequential and less transparent, necessitating a new class of diagnostic frameworks like AgentRx to make their internal decision processes observable and correctable.",
+      "confidence": "high",
+      "title": "Systematic debugging for AI agents: Introducing the AgentRx framework",
+      "url": "https://www.microsoft.com/en-us/research/blog/systematic-debugging-for-ai-agents-introducing-the-agentrx-framework/",
+      "primary_domain": "ai-llm-agent"
+    },
+    {
+      "facts": [
+        "Marimo pair 是一个工具包，可将 AI 代理嵌入正在运行的 marimo notebook 会话中。",
+        "marimo notebook 是一个反应式 Python 运行时环境，可作为 AI 代理的工作记忆。",
+        "该工具旨在促进人类与 AI 代理在计算研究方面的协作。",
+        "该主题在 Hacker News 上发布，获得 125 分和 31 条评论，表明其受到技术社区关注。"
+      ],
+      "contradictions": [
+        "AI 代理的自主执行需求 vs. 人类对过程可控性和可理解性的需求。",
+        "Notebook 环境的交互式、探索性本质 vs. 代理自动化任务所需的稳定、可重复执行环境。",
+        "工具旨在促进人机协作 vs. 实际应用中可能出现的职责模糊或信任问题（例如，谁对代码输出负责？）。",
+        "将复杂计算任务委托给代理的效率提升潜力 vs. 设置、调试和确保代理行为符合预期的额外开销。"
+      ],
+      "primary_contradiction": "AI 代理的自主执行需求 vs. 人类对过程可控性和可理解性的需求。",
+      "core_insight": "Marimo pair 的核心创新点在于尝试将 AI 代理的自动化能力与人类熟悉的、交互式的 notebook 环境深度结合，其成功的关键在于能否有效解决人机协作中的控制与信任问题，而不仅仅是技术集成。",
+      "confidence": "medium",
+      "title": "Show HN: Marimo pair – Reactive Python notebooks as environments for agents",
+      "url": "https://github.com/marimo-team/marimo-pair",
+      "primary_domain": "ai-llm-agent"
+    },
+    {
+      "facts": [
+        "Twill.ai (YC S25) is launching a service that runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes.",
+        "Users can delegate work to it through Slack, GitHub, Linear, a web app, or a CLI.",
+        "The service is positioned to handle coding tasks and return results, presumably Pull Requests (PRs).",
+        "It is a Y Combinator S25 batch company.",
+        "The Hacker News post has 64 points and 56 comments, indicating significant initial engagement."
+      ],
+      "contradictions": [
+        "Promise of autonomous coding agent delegation vs. the current limitations of AI in understanding complex, nuanced business logic and requirements.",
+        "Desire for developer productivity gains vs. potential overhead of managing, reviewing, and correcting AI-generated code.",
+        "Value proposition of isolated cloud sandboxes for security and scalability vs. associated costs and latency compared to local execution.",
+        "Targeting broad delegation through multiple platforms (Slack, GitHub, etc.) vs. the challenge of maintaining context and quality across fragmented communication channels.",
+        "Early-stage startup agility and hype (YC-backed) vs. the need to prove robust, reliable, and enterprise-grade performance in a critical domain like code generation."
+      ],
+      "primary_contradiction": "Promise of autonomous coding agent delegation vs. the current limitations of AI in understanding complex, nuanced business logic and requirements.",
+      "core_insight": "Twill.ai's success hinges not on the technical deployment of AI coding agents, but on solving the fundamental 'last-mile' problem of translating vague human instructions into precise, correct, and context-aware code specifications—a gap where current AI often fails.",
+      "confidence": "medium",
+      "title": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs",
+      "url": "https://twill.ai",
+      "primary_domain": "ai-llm-agent"
+    },
+    {
+      "facts": [
+        "AI agents accumulate large, unstructured interaction logs over time",
+        "More memory can paradoxically reduce agent effectiveness due to search difficulty",
+        "Raw logs mix relevant and irrelevant content without structure",
+        "Microsoft Research proposes PlugMem to transform raw interactions into reusable knowledge"
+      ],
+      "contradictions": [
+        "Increasing memory capacity vs. decreasing agent effectiveness",
+        "Accumulating interaction data vs. deteriorating search performance",
+        "Raw, unstructured logs vs. need for structured, reusable knowledge",
+        "Agent learning from experience vs. experience becoming unusable clutter"
+      ],
+      "primary_contradiction": "Accumulating interaction data vs. deteriorating search performance",
+      "core_insight": "The fundamental problem is not memory capacity but memory structure—unstructured accumulation creates a 'data tax' that overwhelms agents, requiring transformation of raw interactions into organized, reusable knowledge.",
+      "confidence": "high",
+      "title": "PlugMem: Transforming raw agent interactions into reusable knowledge",
+      "url": "https://www.microsoft.com/en-us/research/blog/from-raw-interaction-to-reusable-knowledge-rethinking-memory-for-ai-agents/",
+      "primary_domain": "ai-llm-agent"
+    }
+  ],
+  "forecast": {
+    "best_case": "在短期内（3-6个月），AI Agent 基础设施层（推理、调试、记忆、协作）的创新加速收敛，形成初步的‘可部署性’标准。vLLM 等推理引擎在更多硬件平台上优化，降低部署成本；AgentRx 和 PlugMem 的理念被更多框架采纳，提升复杂 Agent 的可靠性与长期性能；Marimo pair 和 Twill.ai 等协作工具获得早期采用者验证，证明其在特定场景（如研究探索、重复性编码任务）能有效提升人机协作效率。整个领域呈现出从‘演示可行性’到‘工程化可用’的积极转变。",
+    "worst_case": "短期内，各技术路径暴露出其局限性并陷入瓶颈。vLLM 对不同硬件和新兴模型架构（如更大 MoE）的优化进展缓慢，未能显著降低推理成本。AgentRx 等调试框架被证明在复杂、开放环境中的实用性有限，Agent 的‘黑箱’问题依然突出。PlugMem 的结构化方法面临高昂的计算开销，难以实时应用。Marimo pair 和 Twill.ai 等协作工具因难以保证输出质量或集成复杂度高，未能跨越早期采用者鸿沟，市场反馈冷淡。领域热度仍在，但实际生产部署进展有限，出现‘期望膨胀期’后的回调迹象。",
+    "most_likely_case": "短期内，AI Agent 领域将延续当前‘分层解耦’与‘解决瓶颈’的态势，但进展不均且充满实验性。vLLM 作为相对成熟的基础设施，其优化和适配将继续是社区焦点，带来可度量的性能提升。AgentRx 和 PlugMem 所代表的‘可观测性’与‘记忆结构化’方向将引发大量讨论、原型和论文，但形成广泛采用的工业标准仍需较长时间。Marimo pair 和 Twill.ai 等应用层工具将在小众但高需求的场景（如数据科学探索、样板代码生成）中找到立足点，同时暴露出在需求理解、上下文保持方面的显著缺陷。整体而言，领域将在基础设施层面取得扎实但渐进的进步，而在涉及复杂人机交互与开放任务的应用层，则仍处于大量试错和模式探索阶段。",
+    "key_variables": [
+      "核心硬件（如NVIDIA/AMD/TPU）对推理引擎的优化支持与生态建设",
+      "大型云厂商（AWS/Azure/GCP）对Agent托管与调试服务的战略投入",
+      "主流AI框架（LangChain, LlamaIndex）对可调试性与记忆管理功能的集成进度",
+      "企业级用户对AI Agent在关键业务中可靠性的实际容忍度与验收标准",
+      "AI编码助手在真实项目中的采纳率与引发的代码质量/安全事件数据"
+    ],
+    "forecast_conclusion": "基于当前信息，短期（3-6个月）内，AI Agent 领域最可能的发展路径是：基础设施层（推理、内存优化）稳步改进，为规模化打下基础；而系统层（调试、记忆管理、人机协作）的创新将经历一个‘概念验证’与‘现实检验’并存的密集实验期，会涌现许多思路但尚未形成稳定范式。整个领域正从追求‘智能表现’转向构建‘可靠系统’，这一转变是必要但艰难的，短期难以出现颠覆性突破，而是为中长期的发展积累关键的工程经验与设计模式。",
+    "confidence": "medium"
+  },
+  "stage_status": {
+    "analysis": "ok",
+    "summary": "ok",
+    "forecast": "ok"
+  },
+  "highlights": [
+    "AI Agent 领域正从基础能力构建转向解决规模化部署中的核心矛盾：在追求更高自主性、吞吐量和记忆的同时，必须攻克可调试性、人机协作与控制、以及知识结构化等系统性挑战。",
+    "本轮共采集到 95 条原始信息，去重后保留 95 个主题。",
+    "当前覆盖 2 个领域，启用了 4 组来源配置。"
+  ],
+  "risks": [
+    "GitHub repo failed: NVIDIA/cuda-cmake -> 404 Client Error: Not Found for url: https://api.github.com/repos/NVIDIA/cuda-cmake",
+    "HN: fetched 59 raw, filtered to 18 relevant (min_score=10)",
+    "RSS source failed: meta-ai-blog -> 404 Client Error: Not Found for url: https://ai.meta.com/blog/rss/",
+    "RSS source failed: arxiv-cs-ai -> 404 Client Error: Not Found for url: https://rss.arxiv.org/cs.AI",
+    "Website source failed: st-blog -> 404 Client Error: Not Found for url: https://blog.st.com/artificial-intelligence/",
+    "Website source failed: ti-e2e-blog -> 410 Client Error: Gone for url: https://e2e.ti.com/blogs_/artificial-intelligence"
+  ],
+  "signals": [
+    {
+      "title": "Systematic debugging for AI agents: Introducing the AgentRx framework",
+      "url": "https://www.microsoft.com/en-us/research/blog/systematic-debugging-for-ai-agents-introducing-the-agentrx-framework/",
+      "summary": "<p>As AI agents transition from simple chatbots to autonomous systems capable of managing cloud incidents, navigating complex web interfaces, and executing multi-step API workflows, a new challenge has emerged: transparency. When a human makes a mistake, we can usually trace the logic. But when an AI agent fails, perhaps by hallucinating a tool output or [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/systematic-debugging-for-ai-agents-introducing-the-agentrx-framework/\">Systematic debugging for AI agents: Introducing the AgentRx framework</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 3.3,
+      "evidence_count": 1,
+      "tags": [
+        "Research Blog",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "LiteRT: The Universal Framework for On-Device AI",
+      "url": "https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 2.6,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "vllm-project/vllm",
+      "url": "https://github.com/vllm-project/vllm",
+      "summary": "A high-throughput and memory-efficient inference and serving engine for LLMs",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 2.5,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent",
+        "amd",
+        "blackwell",
+        "cuda",
+        "deepseek",
+        "deepseek-v3",
+        "gpt",
+        "gpt-oss",
+        "inference",
+        "kimi",
+        "llama",
+        "llm",
+        "llm-serving",
+        "model-serving",
+        "moe",
+        "openai",
+        "pytorch",
+        "qwen",
+        "qwen3",
+        "tpu",
+        "transformer"
+      ]
+    },
+    {
+      "title": "Show HN: Marimo pair – Reactive Python notebooks as environments for agents",
+      "url": "https://github.com/marimo-team/marimo-pair",
+      "summary": "Score: 125 | Comments: 31 | Text: Hi HN! We&#x27;re excited to share marimo pair [1] [2], a toolkit that drops AI agents into a running marimo notebook [3] session. This lets agents use marimo as working memory and a reactive Python runtime, while also making it easy for humans and agents to collaborate on computational research and",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 2.5,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news",
+        "show-hn"
+      ]
+    },
+    {
+      "title": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs",
+      "url": "https://twill.ai",
+      "summary": "Score: 64 | Comments: 56 | Text: Hey HN, we&#x27;re Willy and Dan, co-founders of Twill.ai (<a href=\"https:&#x2F;&#x2F;twill.ai&#x2F;\">https:&#x2F;&#x2F;twill.ai&#x2F;</a>). Twill runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 2.5,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news"
+      ]
+    },
+    {
+      "title": "PlugMem: Transforming raw agent interactions into reusable knowledge",
+      "url": "https://www.microsoft.com/en-us/research/blog/from-raw-interaction-to-reusable-knowledge-rethinking-memory-for-ai-agents/",
+      "summary": "<p>It seems counterintuitive: giving AI agents more memory can make them less effective. As interaction logs accumulate, they grow large, fill with irrelevant content, and become increasingly difficult to use. More memory means that agents must search through larger volumes of past interactions to find information relevant to the current task. Without structure, these records mix [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/from-raw-interaction-to-reusable-knowledge-rethinking-memory-for-ai-agents/\">PlugMem: Transforming raw agent interactions into reusable knowledge</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 2.5,
+      "evidence_count": 1,
+      "tags": [
+        "Research Blog",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "WireGuard makes new Windows release following Microsoft signing resolution",
+      "url": "https://lists.zx2c4.com/pipermail/wireguard/2026-April/009561.html",
+      "summary": "Score: 430 | Comments: 115 | Text: Recent and related: <i>Microsoft terminated the account VeraCrypt used to sign Windows drivers</i> - <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47686549\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47686549</a>",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news",
+        "trending"
+      ]
+    },
+    {
+      "title": "ALTK‑Evolve: On‑the‑Job Learning for AI Agents",
+      "url": "https://huggingface.co/blog/ibm-research/altk-evolve",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "AsgardBench: A benchmark for visually grounded interactive planning",
+      "url": "https://www.microsoft.com/en-us/research/blog/asgardbench-a-benchmark-for-visually-grounded-interactive-planning/",
+      "summary": "<p>Imagine a robot tasked with cleaning a kitchen. It needs to observe its environment, decide what to do, and adjust when things don&#8217;t go as expected, for example, when the mug it was tasked to wash is already clean, or the sink is full of other items. This is the domain of embodied AI: systems [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/asgardbench-a-benchmark-for-visually-grounded-interactive-planning/\">AsgardBench: A benchmark for visually grounded interactive planning</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "Research Blog",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力",
+      "url": "https://platform.moonshot.cn/blog/posts/k2-think",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Bringing AI Closer to the Edge and On-Device with Gemma 4",
+      "url": "https://developer.nvidia.com/blog/bringing-ai-closer-to-the-edge-and-on-device-with-gemma-4/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Build Next-Gen Physical AI with Edge‑First LLMs for Autonomous Vehicles and Robotics",
+      "url": "https://developer.nvidia.com/blog/build-next-gen-physical-ai-with-edge%e2%80%91first-llms-for-autonomous-vehicles-and-robotics/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Accelerating LLM and VLM Inference for Automotive and Robotics with NVIDIA TensorRT Edge-LLM",
+      "url": "https://developer.nvidia.com/blog/accelerating-llm-and-vlm-inference-for-automotive-and-robotics-with-nvidia-tensorrt-edge-llm/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Getting Started with Edge AI on NVIDIA Jetson: LLMs, VLMs, and Foundation Models for Robotics",
+      "url": "https://developer.nvidia.com/blog/getting-started-with-edge-ai-on-nvidia-jetson-llms-vlms-and-foundation-models-for-robotics/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "On-Device Function Calling in Google AI Edge Gallery",
+      "url": "https://developers.googleblog.com/on-device-function-calling-in-google-ai-edge-gallery/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "MediaTek NPU and LiteRT: Powering the next generation of on-device AI",
+      "url": "https://developers.googleblog.com/mediatek-npu-and-litert-powering-the-next-generation-of-on-device-ai/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Unlocking Peak Performance on Qualcomm NPU with LiteRT",
+      "url": "https://developers.googleblog.com/unlocking-peak-performance-on-qualcomm-npu-with-litert/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "On-device GenAI in Chrome, Chromebook Plus, and Pixel Watch with LiteRT-LM",
+      "url": "https://developers.googleblog.com/on-device-genai-in-chrome-chromebook-plus-and-pixel-watch-with-litert-lm/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Q3'25: Technology Update – Low Precision and Model Optimization",
+      "url": "https://blog.openvino.ai/blog-posts/q325-technology-update---low-precision-and-model-optimization",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Q2'25: Technology Update – Low Precision and Model Optimization",
+      "url": "https://blog.openvino.ai/blog-posts/q225-technology-update---low-precision-and-model-optimization",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.8,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "DeepSeek-V3.2 Release 2025/12/01",
+      "url": "https://api-docs.deepseek.com/news/news251201",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.1,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "DeepSeek-V3.2-Exp Release 2025/09/29",
+      "url": "https://api-docs.deepseek.com/news/news250929",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.1,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "DeepSeek V3.1 Release 2025/08/21",
+      "url": "https://api-docs.deepseek.com/news/news250821",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.1,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "DeepSeek-R1-0528 Release 2025/05/28",
+      "url": "https://api-docs.deepseek.com/news/news250528",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.1,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "DeepSeek-V3-0324 Release 2025/03/25",
+      "url": "https://api-docs.deepseek.com/news/news250325",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.1,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "DeepSeek-R1 Release 2025/01/20",
+      "url": "https://api-docs.deepseek.com/news/news250120",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.1,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "ollama/ollama",
+      "url": "https://github.com/ollama/ollama",
+      "summary": "Get up and running with Kimi-K2.5, GLM-5, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent",
+        "deepseek",
+        "gemma",
+        "gemma3",
+        "glm",
+        "go",
+        "golang",
+        "gpt-oss",
+        "llama",
+        "llama3",
+        "llm",
+        "llms",
+        "minimax",
+        "mistral",
+        "ollama",
+        "qwen"
+      ]
+    },
+    {
+      "title": "langchain-ai/langgraph",
+      "url": "https://github.com/langchain-ai/langgraph",
+      "summary": "Build resilient language agents as graphs.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "agents",
+        "ai",
+        "ai-agents",
+        "ai-llm-agent",
+        "chatgpt",
+        "deepagents",
+        "enterprise",
+        "framework",
+        "gemini",
+        "generative-ai",
+        "langchain",
+        "langgraph",
+        "llm",
+        "multiagent",
+        "open-source",
+        "openai",
+        "pydantic",
+        "python",
+        "rag"
+      ]
+    },
+    {
+      "title": "pytorch/executorch",
+      "url": "https://github.com/pytorch/executorch",
+      "summary": "On-device AI across mobile, embedded and edge for PyTorch",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent",
+        "deep-learning",
+        "embedded",
+        "gpu",
+        "machine-learning",
+        "mobile",
+        "neural-network",
+        "tensor"
+      ]
+    },
+    {
+      "title": "alibaba/MNN",
+      "url": "https://github.com/alibaba/MNN",
+      "summary": "MNN: A blazing-fast, lightweight inference engine battle-tested by Alibaba, powering high-performance on-device LLMs and Edge AI.",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent",
+        "arm",
+        "convolution",
+        "deep-learning",
+        "embedded-devices",
+        "llm",
+        "machine-learning",
+        "ml",
+        "mnn",
+        "transformer",
+        "vulkan",
+        "winograd-algorithm"
+      ]
+    },
+    {
+      "title": "tenstorrent/tt-metal",
+      "url": "https://github.com/tenstorrent/tt-metal",
+      "summary": ":metal: TT-NN operator library, and TT-Metalium low level kernel programming model.",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "accelerator",
+        "ai",
+        "ai-llm-agent",
+        "cuda",
+        "deepseek",
+        "gpu",
+        "img-gen",
+        "kernels",
+        "llama",
+        "llm",
+        "metal",
+        "scale-out",
+        "stable-diffusion",
+        "tenstorrent",
+        "video-gen"
+      ]
+    },
+    {
+      "title": "openai/swarm",
+      "url": "https://github.com/openai/swarm",
+      "summary": "Educational framework exploring ergonomic, lightweight multi-agent orchestration. Managed by OpenAI Solution team.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "mem0ai/mem0",
+      "url": "https://github.com/mem0ai/mem0",
+      "summary": "Universal memory layer for AI Agents",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "agents",
+        "ai",
+        "ai-agents",
+        "ai-llm-agent",
+        "application",
+        "chatbots",
+        "chatgpt",
+        "genai",
+        "llm",
+        "long-term-memory",
+        "memory",
+        "memory-management",
+        "python",
+        "rag",
+        "state-management"
+      ]
+    },
+    {
+      "title": "anthropics/claude-cookbooks",
+      "url": "https://github.com/anthropics/claude-cookbooks",
+      "summary": "A collection of notebooks/recipes showcasing some fun and effective ways of using Claude.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "onnx/onnx",
+      "url": "https://github.com/onnx/onnx",
+      "summary": "Open standard for machine learning interoperability",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "ai",
+        "ai-llm-agent",
+        "artificial-intelligence",
+        "deep-learning",
+        "deep-neural-networks",
+        "dnn",
+        "keras",
+        "machine-learning",
+        "ml",
+        "neural-network",
+        "onnx",
+        "pytorch",
+        "scikit-learn",
+        "tensorflow"
+      ]
+    },
+    {
+      "title": "jax-ml/jax",
+      "url": "https://github.com/jax-ml/jax",
+      "summary": "Composable transformations of Python+NumPy programs: differentiate, vectorize, JIT to GPU/TPU, and more",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent",
+        "jax"
+      ]
+    },
+    {
+      "title": "You can't trust macOS Privacy and Security settings",
+      "url": "https://eclecticlight.co/2026/04/10/why-you-cant-trust-privacy-security/",
+      "summary": "Score: 449 | Comments: 152",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news",
+        "trending"
+      ]
+    },
+    {
+      "title": "We've raised $17M to build what comes after Git",
+      "url": "https://blog.gitbutler.com/series-a",
+      "summary": "Score: 311 | Comments: 685",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news",
+        "trending"
+      ]
+    },
+    {
+      "title": "Sam Altman's response to Molotov cocktail incident",
+      "url": "https://blog.samaltman.com/2279512",
+      "summary": "Score: 249 | Comments: 518",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news",
+        "trending"
+      ]
+    },
+    {
+      "title": "AI assistance when contributing to the Linux kernel",
+      "url": "https://github.com/torvalds/linux/blob/master/Documentation/process/coding-assistants.rst",
+      "summary": "Score: 239 | Comments: 157",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news",
+        "trending"
+      ]
+    },
+    {
+      "title": "Molotov cocktail is hurled at home of Sam Altman",
+      "url": "https://www.nytimes.com/2026/04/10/us/open-ai-sam-altman-molotov-cocktail.html",
+      "summary": "Score: 214 | Comments: 518 | Text: <a href=\"https:&#x2F;&#x2F;archive.ph&#x2F;aoXIY\" rel=\"nofollow\">https:&#x2F;&#x2F;archive.ph&#x2F;aoXIY</a><p><a href=\"https:&#x2F;&#x2F;www.bbc.com&#x2F;news&#x2F;articles&#x2F;czx91rdxpyeo\" rel=\"nofollow\">https:&#x2F;&#x2F;www.bbc.com&#x2F;news&#x2F;articles&#x2F;czx91rdxpyeo</a><p><a href=\"https",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news",
+        "trending"
+      ]
+    },
+    {
+      "title": "Instant 1.0, a backend for AI-coded apps",
+      "url": "https://www.instantdb.com/essays/architecture",
+      "summary": "Score: 207 | Comments: 111",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news",
+        "trending"
+      ]
+    },
+    {
+      "title": "Intel 486 CPU announced April 10, 1989",
+      "url": "https://dfarq.homeip.net/intel-486-cpu-announced-april-10-1989/",
+      "summary": "Score: 153 | Comments: 146",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news"
+      ]
+    },
+    {
+      "title": "What is RISC-V and why it matters to Canonical",
+      "url": "https://ubuntu.com/blog/risc-v-101-what-is-it-and-what-does-it-mean-for-canonical",
+      "summary": "Score: 113 | Comments: 70",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news"
+      ]
+    },
+    {
+      "title": "HBO Obtains DMCA Subpoena to Unmask 'Euphoria' Spoiler Account on X",
+      "url": "https://torrentfreak.com/hbo-obtains-dmca-subpoena-to-unmask-euphoria-spoiler-account-on-x/",
+      "summary": "Score: 101 | Comments: 64",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news"
+      ]
+    },
+    {
+      "title": "DOJ Top Antitrust Litigators Exit After Ticketmaster Accord",
+      "url": "https://www.bloomberg.com/news/articles/2026-04-08/doj-top-antitrust-litigators-exit-after-ticketmaster-settlement",
+      "summary": "Score: 97 | Comments: 21",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news"
+      ]
+    },
+    {
+      "title": "Show HN: A WYSIWYG word processor in Python",
+      "url": "https://codeberg.org/chrisecker/miniword",
+      "summary": "Score: 68 | Comments: 27 | Text: Hi all,<p>Finding a good data structure for a word processor is a difficult problem. My notebook diaries on the problem go back 25 years when I was frustrated with using Word for my diploma thesis - it was slow and unstable at that time. I ended up getting pretty hooked on the problem.<p>Right now I",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news",
+        "show-hn"
+      ]
+    },
+    {
+      "title": "Italo Calvino: A traveller in a world of uncertainty",
+      "url": "https://www.historytoday.com/archive/portrait-author-historian/italo-calvino-traveller-world-uncertainty",
+      "summary": "Score: 53 | Comments: 11",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news"
+      ]
+    },
+    {
+      "title": "A security scanner as fast as a linter – written in Rust",
+      "url": "https://github.com/peaktwilight/foxguard",
+      "summary": "Score: 50 | Comments: 11",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news"
+      ]
+    },
+    {
+      "title": "C++: Freestanding Standard Library",
+      "url": "https://www.sandordargo.com/blog/2026/04/08/cpp-freestanding",
+      "summary": "Score: 44 | Comments: 9",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news"
+      ]
+    },
+    {
+      "title": "Why do we tell ourselves scary stories about AI?",
+      "url": "https://www.quantamagazine.org/why-do-we-tell-ourselves-scary-stories-about-ai-20260410/",
+      "summary": "Score: 39 | Comments: 96",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "hacker-news"
+      ]
+    },
+    {
+      "title": "Using custom GPTs",
+      "url": "https://openai.com/academy/custom-gpts",
+      "summary": "Learn how to build and use custom GPTs to automate workflows, maintain consistent outputs, and create purpose-built AI assistants.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "OpenAI Academy",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "ChatGPT for customer success teams",
+      "url": "https://openai.com/academy/customer-success",
+      "summary": "Learn how customer success teams use ChatGPT to manage accounts, improve communication, reduce churn, and drive adoption and renewals.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "OpenAI Academy",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Applications of AI at OpenAI",
+      "url": "https://openai.com/academy/applications-of-ai",
+      "summary": "Explore how OpenAI products like ChatGPT, Codex, and APIs bring AI into real-world use for work, development, and everyday tasks.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "OpenAI Academy",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Research with ChatGPT",
+      "url": "https://openai.com/academy/search-and-deep-research",
+      "summary": "Learn how to research with ChatGPT using search and deep research to find up-to-date information, analyze sources, and generate structured insights.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "OpenAI Academy",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Analyzing data with ChatGPT",
+      "url": "https://openai.com/academy/data-analysis",
+      "summary": "Learn how to analyze data with ChatGPT by exploring datasets, generating insights, creating visualizations, and turning findings into actionable decisions.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "OpenAI Academy",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Financial services",
+      "url": "https://openai.com/academy/financial-services",
+      "summary": "Explore AI resources for financial services, including prompt packs, GPTs, guides, and tools to help institutions deploy and scale AI securely.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "OpenAI Academy",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Responsible and safe use of AI",
+      "url": "https://openai.com/academy/responsible-and-safe-use",
+      "summary": "Learn how to use AI responsibly with best practices for safety, accuracy, and transparency when using tools like ChatGPT.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "OpenAI Academy",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Writing with ChatGPT",
+      "url": "https://openai.com/academy/writing",
+      "summary": "Learn how to use ChatGPT for writing to draft, revise, and refine content with clear structure, tone, and intent.",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "OpenAI Academy",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "New Future of Work: AI is driving rapid change, uneven benefits",
+      "url": "https://www.microsoft.com/en-us/research/blog/new-future-of-work-ai-is-driving-rapid-change-uneven-benefits/",
+      "summary": "<p>For the past five years, the New Future of Work report has captured how work is changing. This year, the shift feels especially sharp. Previous editions have focused on technology’s role in increasing productivity by automating tasks, accelerating communication, and expanding access to information, as well as the rise of remote work. Today, generative AI [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/new-future-of-work-ai-is-driving-rapid-change-uneven-benefits/\">New Future of Work: AI is driving rapid change, uneven benefits</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "Research Blog",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "ADeLe: Predicting and explaining AI performance across tasks",
+      "url": "https://www.microsoft.com/en-us/research/blog/adele-predicting-and-explaining-ai-performance-across-tasks/",
+      "summary": "<p>AI benchmarks report how large language models (LLMs) perform on specific tasks but provide little insight into their underlying capabilities that drive their performance. They do not explain failures or reliably predict outcomes on new tasks. To address this, Microsoft researchers in collaboration with Princeton University and&#160;Universitat&#160;Politècnica&#160;de València introduce ADeLe (opens in new tab) (AI [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/adele-predicting-and-explaining-ai-performance-across-tasks/\">ADeLe: Predicting and explaining AI performance across tasks</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "Research Blog",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "GroundedPlanBench: Spatially grounded long-horizon task planning for robot manipulation",
+      "url": "https://www.microsoft.com/en-us/research/blog/groundedplanbench-spatially-grounded-long-horizon-task-planning-for-robot-manipulation/",
+      "summary": "<p>Vision-language models (VLMs) use images and text to plan robot actions, but they still struggle to decide what actions to take and where to take them. Most systems split these decisions into two steps: a VLM generates a plan in natural language, and a separate model translates it into executable actions. This approach often breaks [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/groundedplanbench-spatially-grounded-long-horizon-task-planning-for-robot-manipulation/\">GroundedPlanBench: Spatially grounded long-horizon task planning for robot manipulation</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "tags": [
+        "Research Blog",
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Waypoint-1.5: Higher-Fidelity Interactive Worlds for Everyday GPUs",
+      "url": "https://huggingface.co/blog/waypoint-1-5",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Multimodal Embedding & Reranker Models with Sentence Transformers",
+      "url": "https://huggingface.co/blog/multimodal-sentence-transformers",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Safetensors is Joining the PyTorch Foundation",
+      "url": "https://huggingface.co/blog/safetensors-joins-pytorch-foundation",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Welcome Gemma 4: Frontier multimodal intelligence on device",
+      "url": "https://huggingface.co/blog/gemma4",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Holo3: Breaking the Computer Use Frontier",
+      "url": "https://huggingface.co/blog/Hcompany/holo3",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Falcon Perception",
+      "url": "https://huggingface.co/blog/tiiuae/falcon-perception",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Any Custom Frontend with Gradio's Backend",
+      "url": "https://huggingface.co/blog/introducing-gradio-server",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents",
+      "url": "https://huggingface.co/blog/ibm-granite/granite-4-vision",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Training mRNA Language Models Across 25 Species for $165",
+      "url": "https://huggingface.co/blog/OpenMed/training-mrna-models-25-species",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "TRL v1.0: Post-Training Library Built to Move with the Field",
+      "url": "https://huggingface.co/blog/trl-v1",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Liberate your OpenClaw",
+      "url": "https://huggingface.co/blog/liberate-your-openclaw",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Introducing Claude Sonnet 4.6",
+      "url": "https://www.anthropic.com/news/claude-sonnet-4-6",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Introducing Claude Opus 4.6",
+      "url": "https://www.anthropic.com/news/claude-opus-4-6",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Claude is a space to think",
+      "url": "https://www.anthropic.com/news/claude-is-a-space-to-think",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Anthropic expands partnership with Google and Broadcom for multiple gigawatts of next-generation compute",
+      "url": "https://www.anthropic.com/news/google-broadcom-partnership-compute",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Australian government and Anthropic sign MOU for AI safety and research",
+      "url": "https://www.anthropic.com/news/australia-MOU",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Introducing The Anthropic Institute",
+      "url": "https://www.anthropic.com/news/the-anthropic-institute",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Sydney will become Anthropic’s fourth office in Asia-Pacific",
+      "url": "https://www.anthropic.com/news/sydney-fourth-office-asia-pacific",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Partnering with Mozilla to improve Firefox’s security",
+      "url": "https://www.anthropic.com/news/mozilla-firefox-security",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "DeepSeek V3.1 Update 2025/09/22",
+      "url": "https://api-docs.deepseek.com/news/news250922",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "DeepSeek APP 2025/01/15",
+      "url": "https://api-docs.deepseek.com/news/news250115",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Kimi 开放平台：新功能发布记录",
+      "url": "https://platform.moonshot.cn/blog/posts/changelog",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Kimi K2 Turbo API 价格调整通知",
+      "url": "https://platform.moonshot.cn/blog/posts/k2-turbo-discount",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Kimi K2 官方高速版 API 开启 5 折特惠",
+      "url": "https://platform.moonshot.cn/blog/posts/k2-prom",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Kimi K2 模型更新，带来更强的代码能力、更快的 API",
+      "url": "https://platform.moonshot.cn/blog/posts/kimi-k2-0905",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Kimi K2 又又又提速了",
+      "url": "https://platform.moonshot.cn/blog/posts/k2-turbo-enhance",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-llm-agent"
+      ]
+    },
+    {
+      "title": "Accelerate AI Inference for Edge and Robotics with NVIDIA Jetson T4000 and NVIDIA JetPack 7.1",
+      "url": "https://developer.nvidia.com/blog/accelerate-ai-inference-for-edge-and-robotics-with-nvidia-jetson-t4000-and-nvidia-jetpack-7-1/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Making Robot Perception More Efficient on NVIDIA Jetson Thor",
+      "url": "https://developer.nvidia.com/blog/making-robot-perception-more-efficient-on-nvidia-jetson-thor/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Google AI Edge Gallery: Now with audio and on Google Play",
+      "url": "https://developers.googleblog.com/google-ai-edge-gallery-now-with-audio-and-on-google-play/",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Q4'25: Technology Update – Low Precision and Inference Optimizations",
+      "url": "https://blog.openvino.ai/blog-posts/q425-technology-update---low-precision-and-model-optimization",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "OpenVINO GenAI GGUF Feature Update",
+      "url": "https://blog.openvino.ai/blog-posts/openvino-genai-gguf-feature-update",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "OpenVINO GenAI Supports GGUF Models",
+      "url": "https://blog.openvino.ai/blog-posts/openvino-genai-supports-gguf-models",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    },
+    {
+      "title": "Dynamic shapes support in OpenVINO JIT compiler boosts inference performance by 40%",
+      "url": "https://blog.openvino.ai/blog-posts/dynamic-shapes-support-in-openvino-jit-compiler-boosts-inference-performance-by-40",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "tags": [
+        "ai-x-electronics"
+      ]
+    }
+  ],
+  "predictions": [
+    "基于当前信息，短期（3-6个月）内，AI Agent 领域最可能的发展路径是：基础设施层（推理、内存优化）稳步改进，为规模化打下基础；而系统层（调试、记忆管理、人机协作）的创新将经历一个‘概念验证’与‘现实检验’并存的密集实验期，会涌现许多思路但尚未形成稳定范式。整个领域正从追求‘智能表现’转向构建‘可靠系统’，这一转变是必要但艰难的，短期难以出现颠覆性突破，而是为中长期的发展积累关键的工程经验与设计模式。"
+  ],
+  "sources": {
+    "github": {
+      "sources": [
+        {
+          "id": "curated-agent-repos",
+          "enabled": true,
+          "mode": "curated_repositories",
+          "category_hint": "ai-llm-agent",
+          "repositories": [
+            "langchain-ai/langgraph",
+            "vllm-project/vllm",
+            "ollama/ollama"
+          ],
+          "max_items": 3
+        },
+        {
+          "id": "curated-edge-repos",
+          "enabled": true,
+          "mode": "curated_repositories",
+          "category_hint": "ai-x-electronics",
+          "repositories": [
+            "pytorch/executorch",
+            "alibaba/MNN",
+            "tenstorrent/tt-metal"
+          ],
+          "max_items": 3
+        },
+        {
+          "id": "curated-infra-repos",
+          "enabled": true,
+          "mode": "curated_repositories",
+          "category_hint": "ai-llm-agent",
+          "repositories": [
+            "openai/swarm",
+            "anthropics/anthropic-cookbook",
+            "mem0ai/mem0"
+          ],
+          "max_items": 3
+        },
+        {
+          "id": "curated-chip-ai-repos",
+          "enabled": true,
+          "mode": "curated_repositories",
+          "category_hint": "ai-x-electronics",
+          "repositories": [
+            "google/jax",
+            "NVIDIA/cuda-cmake",
+            "onnx/onnx"
+          ],
+          "max_items": 3
+        }
+      ]
+    },
+    "hacker_news": {
+      "enabled": true,
+      "max_items": 20,
+      "min_score": 10
+    },
+    "rss": {
+      "sources": [
+        {
+          "id": "huggingface-blog",
+          "enabled": true,
+          "url": "https://huggingface.co/blog/feed.xml",
+          "category_hint": "ai-llm-agent",
+          "max_items": 12
+        },
+        {
+          "id": "openai-news",
+          "enabled": true,
+          "url": "https://openai.com/news/rss.xml",
+          "category_hint": "ai-llm-agent",
+          "max_items": 8,
+          "exclude_title_patterns": [
+            "contest",
+            "terms & conditions"
+          ]
+        },
+        {
+          "id": "google-deepmind-blog",
+          "enabled": true,
+          "url": "https://deepmind.google/blog/?feed=atom",
+          "category_hint": "ai-llm-agent",
+          "max_items": 8
+        },
+        {
+          "id": "meta-ai-blog",
+          "enabled": true,
+          "url": "https://ai.meta.com/blog/rss/",
+          "category_hint": "ai-llm-agent",
+          "max_items": 6,
+          "exclude_title_patterns": [
+            "contest",
+            "hackathon"
+          ]
+        },
+        {
+          "id": "microsoft-research",
+          "enabled": true,
+          "url": "https://www.microsoft.com/en-us/research/blog/feed/",
+          "category_hint": "ai-llm-agent",
+          "max_items": 6,
+          "exclude_title_patterns": [
+            "job",
+            "hiring",
+            "career"
+          ]
+        },
+        {
+          "id": "arxiv-cs-ai",
+          "enabled": true,
+          "url": "https://rss.arxiv.org/cs.AI",
+          "category_hint": "ai-llm-agent",
+          "max_items": 10,
+          "exclude_title_patterns": [
+            "arXiv",
+            "comment",
+            "withdrawn"
+          ]
+        }
+      ]
+    },
+    "websites": {
+      "sources": [
+        {
+          "id": "anthropic-news",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://www.anthropic.com/news",
+          "category_hint": "ai-llm-agent",
+          "max_items": 8,
+          "link_selector": "a[href^='/news/']",
+          "include_url_patterns": [
+            "/news/"
+          ],
+          "exclude_url_patterns": [
+            "/jobs",
+            "/about",
+            "#"
+          ]
+        },
+        {
+          "id": "deepseek-updates",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://api-docs.deepseek.com/updates/",
+          "category_hint": "ai-llm-agent",
+          "max_items": 8,
+          "link_selector": "nav.menu a[href^='/news/']",
+          "include_url_patterns": [
+            "/news/"
+          ],
+          "exclude_url_patterns": [
+            "#"
+          ]
+        },
+        {
+          "id": "qwen-blog",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://qwenlm.github.io/blog/",
+          "category_hint": "ai-llm-agent",
+          "max_items": 6,
+          "link_selector": "a[href*='/blog/']",
+          "include_url_patterns": [
+            "/blog/"
+          ],
+          "exclude_url_patterns": [
+            "#"
+          ]
+        },
+        {
+          "id": "moonshot-blog",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://platform.moonshot.cn/blog",
+          "category_hint": "ai-llm-agent",
+          "max_items": 6,
+          "link_selector": "div.post-item a[href^='/blog/posts/']",
+          "include_url_patterns": [
+            "/blog/posts/"
+          ],
+          "exclude_url_patterns": [
+            "#"
+          ]
+        },
+        {
+          "id": "arm-news",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://newsroom.arm.com/news",
+          "category_hint": "ai-x-electronics",
+          "max_items": 6,
+          "link_selector": "a[href*='/news/']",
+          "include_url_patterns": [
+            "/news/"
+          ],
+          "exclude_url_patterns": [
+            "/about",
+            "#"
+          ]
+        },
+        {
+          "id": "qualcomm-onq",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://www.qualcomm.com/news/onq",
+          "category_hint": "ai-x-electronics",
+          "max_items": 6,
+          "link_selector": "a[href*='/news/onq/']",
+          "include_url_patterns": [
+            "/news/onq/"
+          ],
+          "exclude_url_patterns": [
+            "/support",
+            "#"
+          ]
+        },
+        {
+          "id": "nvidia-embedded",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://developer.nvidia.com/blog/tag/jetson/",
+          "category_hint": "ai-x-electronics",
+          "max_items": 6,
+          "link_selector": "a.carousel-row-slide__link[href*='/blog/']",
+          "include_url_patterns": [
+            "/blog/"
+          ],
+          "include_title_patterns": [
+            "jetson",
+            "edge",
+            "embedded",
+            "tensorrt",
+            "robotics",
+            "orin",
+            "jetpack",
+            "on-device"
+          ],
+          "exclude_url_patterns": [
+            "#"
+          ],
+          "exclude_title_patterns": [
+            "webinar",
+            "event",
+            "register"
+          ]
+        },
+        {
+          "id": "google-ai-edge",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://developers.googleblog.com/",
+          "category_hint": "ai-x-electronics",
+          "max_items": 6,
+          "link_selector": "div.glue-carousel__post-list a.glue-card[href^='/']",
+          "include_url_patterns": [
+            "developers.googleblog.com/"
+          ],
+          "include_title_patterns": [
+            "litert",
+            "on-device",
+            "google ai edge",
+            "npu",
+            "edge ai"
+          ],
+          "exclude_url_patterns": [
+            "#"
+          ],
+          "exclude_title_patterns": [
+            "event",
+            "register",
+            "partner"
+          ]
+        },
+        {
+          "id": "openvino-blog",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://blog.openvino.ai/",
+          "category_hint": "ai-x-electronics",
+          "max_items": 6,
+          "link_selector": "a.blog_heading-wrapper[href^='/blog-posts/']",
+          "include_url_patterns": [
+            "/blog-posts/"
+          ],
+          "include_title_patterns": [
+            "openvino",
+            "npu",
+            "ai pc",
+            "inference",
+            "deployment",
+            "optimization",
+            "edge",
+            "hardware",
+            "genai"
+          ],
+          "exclude_url_patterns": [
+            "#"
+          ],
+          "exclude_title_patterns": [
+            "webinar",
+            "event",
+            "register",
+            "white paper"
+          ]
+        },
+        {
+          "id": "nxp-edge-ai",
+          "enabled": false,
+          "mode": "article_listing",
+          "url": "https://www.nxp.com/company/about-nxp/smarter-world-blog",
+          "category_hint": "ai-x-electronics",
+          "max_items": 4,
+          "link_selector": "a[href*='/smarter-world-blog/']",
+          "include_url_patterns": [
+            "/smarter-world-blog/"
+          ],
+          "include_title_patterns": [
+            "edge ai",
+            "generative ai",
+            "eiq",
+            "genai flow",
+            "imx",
+            "embedded ai",
+            "npu"
+          ],
+          "exclude_url_patterns": [
+            "#"
+          ],
+          "exclude_title_patterns": [
+            "webinar",
+            "event",
+            "register",
+            "white paper"
+          ]
+        },
+        {
+          "id": "st-blog",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://blog.st.com/artificial-intelligence/",
+          "category_hint": "ai-x-electronics",
+          "max_items": 6,
+          "link_selector": "article.post-item a[href*='/artificial-intelligence/']",
+          "include_url_patterns": [
+            "/artificial-intelligence/"
+          ],
+          "include_title_patterns": [
+            "ai",
+            "stm32",
+            "mpu",
+            "neural",
+            "inference",
+            "edge",
+            "microcontroller"
+          ],
+          "exclude_url_patterns": [
+            "#",
+            "/page/"
+          ],
+          "exclude_title_patterns": [
+            "webinar",
+            "event",
+            "register",
+            "white paper"
+          ]
+        },
+        {
+          "id": "infineon-blog",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://www.infineon.com/cms/en/about-infineon/press/press-releases/",
+          "category_hint": "ai-x-electronics",
+          "max_items": 6,
+          "link_selector": "a[href*='/press/press-releases/']",
+          "include_url_patterns": [
+            "/press/press-releases/"
+          ],
+          "include_title_patterns": [
+            "ai",
+            "machine learning",
+            "semiconductor",
+            "power management",
+            "sensor",
+            "automotive",
+            "iot"
+          ],
+          "exclude_url_patterns": [
+            "#"
+          ],
+          "exclude_title_patterns": [
+            "webinar",
+            "event",
+            "register",
+            "invitation"
+          ]
+        },
+        {
+          "id": "ti-e2e-blog",
+          "enabled": true,
+          "mode": "article_listing",
+          "url": "https://e2e.ti.com/blogs_/artificial-intelligence",
+          "category_hint": "ai-x-electronics",
+          "max_items": 6,
+          "link_selector": "article.ti-blog-post a[href]",
+          "include_url_patterns": [
+            "e2e.ti.com/blogs_"
+          ],
+          "include_title_patterns": [
+            "ai",
+            "ml",
+            "tda4",
+            "jacinto",
+            "am62",
+            "processor",
+            "edge"
+          ],
+          "exclude_url_patterns": [
+            "#"
+          ],
+          "exclude_title_patterns": [
+            "webinar",
+            "event",
+            "register",
+            "training"
+          ]
+        }
+      ]
+    }
+  }
+}

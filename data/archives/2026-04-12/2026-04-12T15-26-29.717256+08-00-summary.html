@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自动情报快报（人工复核版）</title>
+<style>
+  :root {
+    --bg:#0d1117; --bg2:#161b22; --bg3:#1c2333; --border:#30363d;
+    --text:#e6edf3; --text2:#8b949e; --accent:#58a6ff; --green:#3fb950;
+    --orange:#d29922; --red:#f85149; --purple:#bc8cff; --radius:8px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;
+  }
+  * { box-sizing:border-box;margin:0;padding:0; }
+  body { background:var(--bg);color:var(--text);line-height:1.6; }
+  .wrap { max-width:960px;margin:0 auto;padding:24px 20px 48px; }
+  header { text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:32px; }
+  header h1 { font-size:1.8em;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  header .meta { color:var(--text2);font-size:.9em;margin-top:8px; }
+  header .stats { display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  header .stat-pill { background:var(--bg3);padding:4px 14px;border-radius:20px;font-size:.85em;color:var(--text2);border:1px solid var(--border); }
+  .stage-badges { display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  .stage-badge { background:var(--bg3);padding:3px 12px;border-radius:6px;font-size:.82em;border:1px solid var(--stage-color,#666);color:var(--text2); }
+  .section { margin-bottom:28px; }
+  .section-title { font-size:1.25em;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--accent); }
+  .judgment { font-size:1.35em;font-weight:700;text-align:center;padding:20px;background:var(--bg2);border-radius:var(--radius);border-left:4px solid var(--accent); }
+  .grid-2 { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px; }
+  .card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px; }
+  .card h4 { color:var(--accent);margin-bottom:10px;font-size:.95em; }
+  .card ul { padding-left:18px;color:var(--text2); }
+  .card li { margin-bottom:4px; }
+  .signal-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;transition:border-color .2s; }
+  .signal-card:hover { border-color:var(--accent); }
+  .signal-header { display:flex;justify-content:space-between;align-items:start;margin-bottom:10px; }
+  .signal-header h3 { font-size:1em;color:var(--text); }
+  .badge { font-size:.75em;padding:2px 10px;border-radius:12px;font-weight:600; }
+  .badge--high { background:#1a3a2a;color:var(--green); }
+  .badge--medium { background:#3a3020;color:var(--orange); }
+  .badge--low { background:#3a2220;color:var(--red); }
+  .signal-body p { margin:4px 0;color:var(--text2);font-size:.9em; }
+  .signal-link { display:inline-block;margin-top:10px;font-size:.85em;color:var(--accent);text-decoration:none; }
+  .signal-link:hover { text-decoration:underline; }
+  .forecast-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0; }
+  .forecast-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px; }
+  .forecast-card h4 { font-size:.9em;margin-bottom:8px; }
+  .forecast-card--best { border-left:3px solid var(--green); }
+  .forecast-card--worst { border-left:3px solid var(--red); }
+  .forecast-card--likely { border-left:3px solid var(--accent); }
+  .forecast-card p { font-size:.88em;color:var(--text2); }
+  .risk-note { background:#3a2220;border:1px solid var(--red);border-radius:var(--radius);padding:12px 16px;margin-top:12px;color:#fdaebb;font-size:.9em; }
+  .domain-tag { display:inline-block;font-size:.72em;background:var(--bg3);color:var(--text2);padding:1px 8px;border-radius:10px;margin-left:8px; }
+  table.signals-table { width:100%;border-collapse:collapse;margin-top:10px;font-size:.88em; }
+  .signals-table th,.signals-table td { padding:8px 12px;text-align:left;border-bottom:1px solid var(--border); }
+  .signals-table th { background:var(--bg3);color:var(--text2);font-weight:600;position:sticky;top:0; }
+  .signals-table tr:hover td { background:var(--bg2); }
+  footer { text-align:center;padding:24px 0;border-top:1px solid var(--border);margin-top:40px;color:var(--text2);font-size:.82em; }
+  @media(max-width:640px) { header h1 { font-size:1.4em; } .grid-2 { grid-template-columns:1fr; } .forecast-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>自动情报快报（人工复核版）</h1>
+    <div class="meta">生成时间：2026-04-12T15:26:29.717256+08:00</div>
+    <div class="stats">
+      <span class="stat-pill">📡 88 条原始信息</span>
+      <span class="stat-pill">🎯 88 个主题</span>
+      <span class="stat-pill">📊 3 个重点分析</span>
+    </div>
+    <div class="stage-badges"><span class="stage-badge" style="--stage-color:#10b981">analysis: ok</span><span class="stage-badge" style="--stage-color:#10b981">summary: ok</span><span class="stage-badge" style="--stage-color:#10b981">forecast: ok</span></div>
+  </header>
+
+  <section id="judgment" class="section">
+    <div class="judgment">AI Agent领域正从模型能力竞赛转向系统化工程挑战，核心矛盾在于日益增长的自主性与复杂性需求与当前在知识管理、透明调试及推理性能方面的系统性瓶颈之间的矛盾。</div>
+  </section>
+
+  <section id="executive-summary" class="section">
+    <h2 class="section-title">执行摘要</h2>
+    <ul><li>AI Agent领域的发展焦点正从单一模型能力转向系统工程，包括知识结构化、系统调试和推理优化。</li><li>Kimi发布K2 Thinking模型，宣称提升Agent与推理能力，但需独立验证；微软研究则揭示了Agent规模化面临的核心瓶颈：非结构化记忆积累反而降低效能，并提出了结构化知识转换（PlugMem）和系统化调试（AgentRx）的解决方案。</li><li>同时，vLLM等项目致力于通过软件层优化解决LLM推理的性能与成本瓶颈，反映了工程化驱动效率提升的趋势。</li><li>整体来看，行业正致力于构建更可靠、高效、可解释的Agent系统基础设施。</li></ul>
+  </section>
+
+  <section id="key-insights" class="section">
+    <h2 class="section-title">关键洞察</h2>
+    <ul><li>AI Agent的发展正经历从“模型能力”到“系统能力”的范式转移。当前的主要矛盾并非模型智能不足，而是缺乏将原始能力转化为稳定、可靠、可扩展的系统工程方法。</li><li>知识的结构化是Agent智能进化的下一个阶梯。未来的竞争可能不在于谁拥有更多交互数据，而在于谁能更高效地将数据转化为可检索、可推理、可复用的结构化知识。</li><li>透明度与可调试性正从“加分项”变为“必选项”。对于承担关键任务的自主Agent，系统化的调试和观测工具（如AgentRx）将成为与模型能力同等重要的核心组件。</li><li>硬件限制正倒逼软件层创新。在摩尔定律放缓的背景下，像vLLM这样的软件栈优化成为提升AI计算效率、降低推理成本的主要杠杆，工程优化的重要性日益凸显。</li></ul>
+  </section>
+
+  <section id="mainlines" class="section">
+    <h2 class="section-title">重点主线</h2>
+    <ul style="padding-left:20px;"><li><strong>Agent能力演进与验证缺口并存</strong> Kimi K2 Thinking等新模型宣称提升Agent能力，但缺乏独立基准验证，凸显了在快速迭代中建立可靠评估标准的重要性，以避免宣传与实际性能的脱节。</li>
+<li><strong>记忆管理成为Agent规模化的核心瓶颈</strong> 微软研究指出，原始交互日志的简单积累会因信息过载和检索困难而损害Agent效能。这揭示了Agent发展的关键转折点：从堆砌数据转向构建能提炼、结构化并高效复用经验的知识系统（如PlugMem）。</li>
+<li><strong>系统化调试是Agent可靠部署的前提</strong> 随着Agent承担更复杂、关键的任务（如云运维），其“黑箱”式失败变得不可接受。AgentRx框架的提出标志着行业开始正视并系统化解决Agent的可观测性与调试问题，这是其进入生产环境的必备基础设施。</li></ul>
+  </section>
+
+  <section id="memory" class="section">
+    <h2 class="section-title">跨日主线记忆</h2>
+    <ul style="padding-left:20px;"><li><strong>Systematic debugging for AI agents: Introducing the AgentRx framework</strong> <span class="domain-tag">verified</span> <span class="domain-tag">low</span> 已持续 3 天 · 1 source(s) | official | 2 related support</li><li><strong>LiteRT: The Universal Framework for On-Device AI</strong> <span class="domain-tag">rising</span> <span class="domain-tag">medium</span> 已持续 3 天 · 1 source(s) | official | 3 related support</li><li><strong>vllm-project/vllm</strong> <span class="domain-tag">verified</span> <span class="domain-tag">low</span> 已持续 3 天 · 1 source(s) | repo</li><li><strong>PlugMem: Transforming raw agent interactions into reusable knowledge</strong> <span class="domain-tag">verified</span> <span class="domain-tag">low</span> 已持续 3 天 · 1 source(s) | official</li><li><strong>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 3 天 · 1 source(s) | official | 3 related support</li></ul>
+  </section>
+
+  <section id="topics" class="section">
+    <h2 class="section-title">重点主题分析</h2>
+    <div class="signal-card">
+                <div class="signal-header">
+                  <h3>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>官方宣称的模型能力（全面提升）与外部可独立验证的证据缺失之间的矛盾</p>
+                  <p><strong>核心洞察：</strong>这是一则来自厂商的官方产品发布通告，其核心价值主张（全面提升Agent和推理能力）目前缺乏外部证据支撑，需后续独立评估验证。</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>low</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://platform.moonshot.cn/blog/posts/k2-turbo-discount" target="_blank" rel="noopener">Kimi K2 Turbo API 价格调整通知</a></li><li>official | <a href="https://platform.moonshot.cn/blog/posts/k2-turbo-enhance" target="_blank" rel="noopener">Kimi K2 又又又提速了</a></li><li>official | <a href="https://platform.moonshot.cn/blog/posts/k2-prom" target="_blank" rel="noopener">Kimi K2 官方高速版 API 开启 5 折特惠</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://platform.moonshot.cn/blog/posts/k2-think" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>PlugMem: Transforming raw agent interactions into reusable knowledge</h3>
+                  <span class="badge badge--medium">medium</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>The accumulation of raw, unstructured interaction data (intended to enhance agent capability) vs. the resulting degradation in agent effectiveness due to search and relevance challenges.</p>
+                  <p><strong>核心洞察：</strong>The fundamental bottleneck for AI agent scaling is not memory capacity itself, but the lack of a mechanism to distill raw experiences into structured, retrievable knowledge, turning data accumulation from a liability into an asset.</p>
+                  <p><strong>生命周期：</strong>verified</p>
+                  <p><strong>风险等级：</strong>low</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>暂无</li></ul>
+                </div>
+                <a class="signal-link" href="https://www.microsoft.com/en-us/research/blog/from-raw-interaction-to-reusable-knowledge-rethinking-memory-for-ai-agents/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>Systematic debugging for AI agents: Introducing the AgentRx framework</h3>
+                  <span class="badge badge--medium">medium</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>The increasing autonomy and complexity of AI agents vs. the lack of transparency and systematic methods to debug their failures.</p>
+                  <p><strong>核心洞察：</strong>The evolution of AI agents into autonomous operators for critical tasks is creating a fundamental operational gap: the need for a new class of debugging and observability tools specifically designed for agentic systems, moving beyond model interpretability to workflow and reasoning traceability.</p>
+                  <p><strong>生命周期：</strong>verified</p>
+                  <p><strong>风险等级：</strong>low</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 2 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://huggingface.co/blog/ibm-research/altk-evolve" target="_blank" rel="noopener">ALTK‑Evolve: On‑the‑Job Learning for AI Agents</a></li><li>official | <a href="https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/" target="_blank" rel="noopener">LiteRT: The Universal Framework for On-Device AI</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://www.microsoft.com/en-us/research/blog/systematic-debugging-for-ai-agents-introducing-the-agentrx-framework/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+  </section>
+
+
+      <section id="forecast" class="section">
+        <h2 class="section-title">📈 短期推演</h2>
+        <div class="forecast-grid">
+          <div class="forecast-card forecast-card--best"><h4>乐观情景</h4><p>在短期内（未来3-6个月），AI Agent领域将出现显著的工程化进展。Kimi K2 Thinking等新模型在独立基准测试中证实其推理能力提升，推动Agent在复杂任务上的表现迈上新台阶。PlugMem和AgentRx等系统化方案获得早期采用者的积极反馈，证明能有效解决记忆过载和调试难题，加速可靠Agent系统的部署。vLLM等推理优化技术的普及进一步降低应用门槛。行业形成“模型创新+系统工程”双轮驱动的共识，资本和人才向基础设施层倾斜，整体发展节奏加快。</p></div>
+          <div class="forecast-card forecast-card--worst"><h4>悲观情景</h4><p>短期内出现“宣传高于实质”的泡沫迹象。Kimi K2 Thinking等模型在第三方严格评估中表现未达预期，引发对Agent能力进展的质疑。PlugMem、AgentRx等框架被证明在真实复杂场景中实施困难、效果有限，未能解决核心瓶颈。由于缺乏有效的调试和知识管理工具，一些激进部署的复杂Agent在生产环境中出现代价高昂的失败案例，打击市场信心。同时，推理成本居高不下，制约规模化应用。行业进展低于预期，进入一个短暂的验证与调整期。</p></div>
+          <div class="forecast-card forecast-card--likely"><h4>最可能情景</h4><p>短期（未来3-6个月）内，AI Agent领域将延续“探索与夯实并存”的路径。一方面，Kimi K2 Thinking等新模型会引发社区关注和初步测试，但其“全面提升”的宣称需要更长时间和更多样化的任务来验证，不会立即改变竞争格局。另一方面，对系统瓶颈的共识将更加明确。PlugMem所代表的知识结构化理念和AgentRx强调的可调试性，将获得学术界和工业界越来越多的讨论与实验性采纳，但成为主流实践尚需时日。vLLM等推理优化工具因其明确的工程价值，渗透率会稳步提升。整体而言，领域重心可感知地向工程化、可靠性方向偏移，但实质性突破仍集中在局部和特定场景，不会出现全局性、颠覆性的变化。</p></div>
+        </div>
+        <p><strong>关键变量：</strong></p>
+        <ul><li>Kimi K2 Thinking模型的独立基准测试结果</li><li>PlugMem/AgentRx框架在真实场景中的早期应用案例与效果</li><li>复杂AI Agent在生产环境中的故障率与影响程度</li><li>高性能推理引擎（如vLLM）的采用增长曲线</li><li>行业对Agent系统可靠性与调试需求的资本投入力度</li></ul>
+        <p><strong>结论：</strong>基于当前信息，短期（3-6个月）内最可能的前景是：AI Agent领域的发展将呈现“务实工程化”主导的态势。模型层面的宣称会经历市场验证，但不会立即引发剧变；而围绕记忆管理、系统调试和推理性能的工程性解决方案将获得更多关注、讨论与初步实践。行业整体在喧嚣中向构建更稳定、高效、可解释的Agent系统基础设施扎实迈进，但重大突破性进展的概率较低。</p>
+      </section>
+
+  <section id="limitations" class="section">
+    <h2 class="section-title">局限性</h2>
+    <ul><li>关于Kimi K2 Thinking模型和Google LiteRT框架的信息主要基于官方发布，缺乏第三方性能基准测试和深入技术分析的验证。</li><li>PlugMem和AgentRx框架均来自微软研究博客，属于前瞻性研究或方案介绍，其实际效果、通用性和大规模应用案例尚待观察。</li><li>部分主题（如“How We Broke Top AI Agent Benchmarks”）和LiteRT框架因提供的证据深度不足，分析受到限制，结论的确定性较低。</li><li>本摘要基于给定的主题分析列表，未涵盖AI Agent领域的所有最新进展，视角可能不够全面。</li></ul>
+  </section>
+
+  <p class="risk-note">⚠️ 关于Kimi K2 Thinking模型和Google LiteRT框架的信息主要基于官方发布，缺乏第三方性能基准测试和深入技术分析的验证。</p>
+
+  <section id="actions" class="section">
+    <h2 class="section-title">行动建议</h2>
+    <ul><li>关注并等待对Kimi K2 Thinking等新发布模型的独立基准测试报告，以验证其宣称的Agent与推理能力提升。</li><li>深入研究如PlugMem等知识结构化方案，评估其在不同类型Agent任务中的应用潜力和实施路径。</li><li>在规划和部署复杂AI Agent系统时，优先考虑集成或开发类似AgentRx的调试与可观测性工具，以保障系统可靠性。</li><li>在构建AI应用基础设施时，评估采用vLLM等高性能推理引擎，以优化服务性能和成本效益。</li></ul>
+  </section>
+
+  <section id="all-signals" class="section">
+    <h2 class="section-title">全部信号</h2>
+    <table class="signals-table"><thead><tr><th>信号</th><th>评分</th><th>证据数</th><th>来源</th></tr></thead><tbody><tr><td>Systematic debugging for AI agents: Introducing the AgentRx framework<span class="domain-tag">ai-llm-agent</span></td><td>3.3</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/systematic-debugging-for-ai-agents-introducing-the-agentrx-framework/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>How We Broke Top AI Agent Benchmarks: And What Comes Next<span class="domain-tag">ai-llm-agent</span></td><td>3.3</td><td>1</td><td><a href="https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>LiteRT: The Universal Framework for On-Device AI<span class="domain-tag">ai-llm-agent</span></td><td>2.6</td><td>1</td><td><a href="https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>vllm-project/vllm<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>PlugMem: Transforming raw agent interactions into reusable knowledge<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/from-raw-interaction-to-reusable-knowledge-rethinking-memory-for-ai-agents/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://platform.moonshot.cn/blog/posts/k2-think" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Bringing AI Closer to the Edge and On-Device with Gemma 4<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/bringing-ai-closer-to-the-edge-and-on-device-with-gemma-4/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Build Next-Gen Physical AI with Edge‑First LLMs for Autonomous Vehicles and Robotics<span class="domain-tag">ai-x-electronics</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/build-next-gen-physical-ai-with-edge%e2%80%91first-llms-for-autonomous-vehicles-and-robotics/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Accelerating LLM and VLM Inference for Automotive and Robotics with NVIDIA TensorRT Edge-LLM<span class="domain-tag">ai-x-electronics</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/accelerating-llm-and-vlm-inference-for-automotive-and-robotics-with-nvidia-tensorrt-edge-llm/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Getting Started with Edge AI on NVIDIA Jetson: LLMs, VLMs, and Foundation Models for Robotics<span class="domain-tag">ai-x-electronics</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/getting-started-with-edge-ai-on-nvidia-jetson-llms-vlms-and-foundation-models-for-robotics/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>On-Device Function Calling in Google AI Edge Gallery<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developers.googleblog.com/on-device-function-calling-in-google-ai-edge-gallery/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>MediaTek NPU and LiteRT: Powering the next generation of on-device AI<span class="domain-tag">ai-x-electronics</span></td><td>1.8</td><td>1</td><td><a href="https://developers.googleblog.com/mediatek-npu-and-litert-powering-the-next-generation-of-on-device-ai/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Unlocking Peak Performance on Qualcomm NPU with LiteRT<span class="domain-tag">ai-x-electronics</span></td><td>1.8</td><td>1</td><td><a href="https://developers.googleblog.com/unlocking-peak-performance-on-qualcomm-npu-with-litert/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>On-device GenAI in Chrome, Chromebook Plus, and Pixel Watch with LiteRT-LM<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developers.googleblog.com/on-device-genai-in-chrome-chromebook-plus-and-pixel-watch-with-litert-lm/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Q3&#x27;25: Technology Update – Low Precision and Model Optimization<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://blog.openvino.ai/blog-posts/q325-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">链接 →</a></td></tr></tbody></table>
+  </section>
+
+  <footer>
+    <p>VS_AI 情报采集系统自动生成 · 数据来源：RSS / GitHub / 官方网站</p>
+  </footer>
+</div>
+</body>
+</html>

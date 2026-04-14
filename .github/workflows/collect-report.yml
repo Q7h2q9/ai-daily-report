@@ -1,0 +1,216 @@
+name: Collect And Report
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "data/**"
+  workflow_dispatch:
+    inputs:
+      push_enabled:
+        description: "Send PushPlus notification for this manual run"
+        required: false
+        default: false
+        type: boolean
+      publication_mode:
+        description: "Publication track for this manual run"
+        required: false
+        default: auto
+        type: choice
+        options:
+          - auto
+          - reviewed
+      reviewer:
+        description: "Optional reviewer name for reviewed publication"
+        required: false
+        default: ""
+        type: string
+      review_note:
+        description: "Optional review note for reviewed publication"
+        required: false
+        default: ""
+        type: string
+  schedule:
+    - cron: "13 23 * * *"
+
+concurrency:
+  group: collect-report-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  workflow-guard:
+    uses: ./.github/workflows/reusable-workflow-guard.yml
+
+  test:
+    needs: workflow-guard
+    uses: ./.github/workflows/reusable-python-test.yml
+
+  collect:
+    needs: workflow-guard
+    uses: ./.github/workflows/reusable-collect.yml
+    secrets: inherit
+
+  analyze:
+    needs: collect
+    uses: ./.github/workflows/reusable-analyze.yml
+    secrets: inherit
+
+  report:
+    needs: analyze
+    uses: ./.github/workflows/reusable-report.yml
+    with:
+      auto_push_enabled: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.push_enabled == true) }}
+      publication_mode: ${{ github.event_name == 'workflow_dispatch' && inputs.publication_mode || 'auto' }}
+      reviewer: ${{ github.event_name == 'workflow_dispatch' && inputs.reviewer || '' }}
+      review_note: ${{ github.event_name == 'workflow_dispatch' && inputs.review_note || '' }}
+      scheduler_trigger_kind: ${{ github.event_name == 'schedule' && 'schedule' || github.event_name == 'workflow_dispatch' && 'manual' || 'push' }}
+      scheduler_compensation_run: false
+    secrets: inherit
+
+  deploy-pages:
+    needs: report
+    uses: ./.github/workflows/reusable-pages.yml
+    secrets: inherit
+
+  ops-dashboard:
+    needs: report
+    uses: ./.github/workflows/reusable-ops-dashboard.yml
+    secrets: inherit
+
+  review-queue:
+    needs: report
+    uses: ./.github/workflows/reusable-review-queue.yml
+    secrets: inherit
+
+  reliability-issue:
+    needs: report
+    if: always() && needs.report.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Download final report artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: final-report
+          path: data/
+
+      - name: Open issue for reliability regressions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const status = JSON.parse(fs.readFileSync("data/state/run-status.json", "utf8"));
+            const failed = status.delivery_results?.failed_channels || [];
+            const successful = status.delivery_results?.successful_channels || [];
+            const skipped = status.delivery_results?.skipped_channels || [];
+            const riskLevel = String(status.risk_level || "low");
+            const stageStatus = status.stage_status || {};
+            const allChannelsFailed = failed.length > 0 && successful.length === 0;
+            const highRiskReport = riskLevel === "high";
+            if (!allChannelsFailed && !highRiskReport) {
+              core.info("No reliability issue needed");
+              return;
+            }
+
+            const reasons = [];
+            if (allChannelsFailed) reasons.push("all delivery channels failed");
+            if (highRiskReport) reasons.push("high risk report detected");
+            const stageSummary = Object.entries(stageStatus)
+              .map(([stage, value]) => `${stage}=${value}`)
+              .join(", ") || "-";
+            const title = `[V7 reliability] ${reasons.join(" + ")} (${status.generated_at || "unknown"})`;
+            const body = [
+              `Detected ${reasons.join(" and ")}.`,
+              "",
+              `Generated at: ${status.generated_at || "unknown"}`,
+              `Trigger: ${status.scheduler?.trigger_kind || "unknown"}`,
+              `Compensation run: ${status.scheduler?.compensation_run ? "true" : "false"}`,
+              `Risk level: ${riskLevel}`,
+              `Successful channels: ${successful.join(", ") || "-"}`,
+              `Failed channels: ${failed.join(", ") || "-"}`,
+              `Skipped channels: ${skipped.join(", ") || "-"}`,
+              `Stage status: ${stageSummary}`,
+            ].join("\n");
+
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
+              ...context.repo,
+              state: "open",
+              creator: "github-actions[bot]",
+            });
+            if (openIssues.some((issue) => issue.title === title)) {
+              core.info("Issue already exists");
+              return;
+            }
+
+            await github.rest.issues.create({
+              ...context.repo,
+              title,
+              body,
+              labels: [
+                "reliability",
+                ...(allChannelsFailed ? ["delivery-failure"] : []),
+                ...(highRiskReport ? ["risk-high"] : []),
+              ],
+            });
+
+  review-issue:
+    needs: review-queue
+    if: always() && needs.review-queue.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Download review queue artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: review-queue
+          path: out/review-queue/
+
+      - name: Open issues for high-value review queue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const path = "out/review-queue/review-issues.json";
+            if (!fs.existsSync(path)) {
+              core.info("No review queue artifact found");
+              return;
+            }
+
+            const payload = JSON.parse(fs.readFileSync(path, "utf8"));
+            const issues = Array.isArray(payload.issues) ? payload.issues : [];
+            if (issues.length === 0) {
+              core.info("No review queue issues needed");
+              return;
+            }
+
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
+              ...context.repo,
+              state: "open",
+            });
+
+            for (const candidate of issues) {
+              const title = String(candidate.title || "").trim();
+              if (!title) {
+                continue;
+              }
+              if (!title.startsWith("[V7 review]")) {
+                core.info(`Skip non-review issue payload: ${title}`);
+                continue;
+              }
+              if (openIssues.some((issue) => issue.title === title)) {
+                core.info(`Issue already exists: ${title}`);
+                continue;
+              }
+
+              await github.rest.issues.create({
+                ...context.repo,
+                title,
+                body: String(candidate.body || ""),
+                labels: Array.isArray(candidate.labels) ? candidate.labels : ["review", "high-value"],
+              });
+            }

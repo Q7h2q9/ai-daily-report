@@ -1,0 +1,78 @@
+# 自动情报快报
+
+生成时间：2026-04-14T01:10:25.988800+00:00
+
+## 一句话判断
+本轮采集到 6 个主题，覆盖 0 个信息源（0高置信/0中置信）。
+
+## 执行摘要
+- 重点关注：Exploiting the most prominent AI agent benchmarks
+- Systematic debugging for AI agents: Introducing the AgentRx framework
+- LiteRT: The Universal Framework for On-Device AI
+
+## 关键洞察
+- Exploiting the most prominent AI agent benchmarks appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.
+- Systematic debugging for AI agents: Introducing the AgentRx framework appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.
+- LiteRT: The Universal Framework for On-Device AI appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.
+
+## 重点主线
+- Exploiting the most prominent AI agent benchmarks：Exploiting the most prominent AI agent benchmarks appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.
+- Systematic debugging for AI agents: Introducing the AgentRx framework：Systematic debugging for AI agents: Introducing the AgentRx framework appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.
+- LiteRT: The Universal Framework for On-Device AI：LiteRT: The Universal Framework for On-Device AI appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.
+
+## 跨日主线记忆
+- Systematic debugging for AI agents: Introducing the AgentRx framework：verified / low / 已持续 5 天 / 1 source(s) | official | 2 related support
+- LiteRT: The Universal Framework for On-Device AI：rising / medium / 已持续 5 天 / 1 source(s) | official | 3 related support
+- vllm-project/vllm：verified / low / 已持续 5 天 / 1 source(s) | repo
+- PlugMem: Transforming raw agent interactions into reusable knowledge：verified / low / 已持续 5 天 / 1 source(s) | official
+- Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力：rising / low / 已持续 5 天 / 1 source(s) | official | 3 related support
+
+## 重点主题分析
+### Exploiting the most prominent AI agent benchmarks
+- 主领域：ai-llm-agent
+- 主要矛盾：signal visibility vs evidence depth (evidence=1, sources=1)
+- 核心洞察：Exploiting the most prominent AI agent benchmarks appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.
+- 置信度：low
+- 生命周期：rising
+- 风险等级：high
+- 交叉印证：1 source(s) | community
+- 链接：https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/
+
+### Systematic debugging for AI agents: Introducing the AgentRx framework
+- 主领域：ai-llm-agent
+- 主要矛盾：signal visibility vs evidence depth (evidence=1, sources=1)
+- 核心洞察：Systematic debugging for AI agents: Introducing the AgentRx framework appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.
+- 置信度：low
+- 生命周期：verified
+- 风险等级：low
+- 交叉印证：1 source(s) | official | 2 related support
+- 链接：https://www.microsoft.com/en-us/research/blog/systematic-debugging-for-ai-agents-introducing-the-agentrx-framework/
+
+- 佐证：official | ALTK‑Evolve: On‑the‑Job Learning for AI Agents | https://huggingface.co/blog/ibm-research/altk-evolve
+- 佐证：official | LiteRT: The Universal Framework for On-Device AI | https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/
+
+### LiteRT: The Universal Framework for On-Device AI
+- 主领域：ai-llm-agent
+- 主要矛盾：signal visibility vs evidence depth (evidence=1, sources=1)
+- 核心洞察：LiteRT: The Universal Framework for On-Device AI appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.
+- 置信度：low
+- 生命周期：rising
+- 风险等级：medium
+- 交叉印证：1 source(s) | official | 3 related support
+- 链接：https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/
+
+- 佐证：official | MediaTek NPU and LiteRT: Powering the next generation of on-device AI | https://developers.googleblog.com/mediatek-npu-and-litert-powering-the-next-generation-of-on-device-ai/
+- 佐证：official | Bringing AI Closer to the Edge and On-Device with Gemma 4 | https://developer.nvidia.com/blog/bringing-ai-closer-to-the-edge-and-on-device-with-gemma-4/
+- 佐证：official | On-Device Function Calling in Google AI Edge Gallery | https://developers.googleblog.com/on-device-function-calling-in-google-ai-edge-gallery/
+
+## 短期推演
+- 观察：Exploiting the most prominent AI agent benchmarks 等主题将在未来数天内继续出现在多个信息源中，建议保持监控并关注官方后续发布。
+- 结论：本轮预测阶段已回退（无AI分析），结论基于规则模式匹配。启用 DeepSeek API 可获得更精准预测。
+
+## 局限性
+- AI 总结阶段失败或被跳过，以下为规则引擎生成的摘要。
+- 建议检查 DeepSeek API 配置和网络连通性。
+
+## 行动建议
+- 优先检查来源页面与模型响应。
+- 确认 API Key 有效性后重试以获得 AI 增强分析。
