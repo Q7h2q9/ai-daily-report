@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026.06.03 | VS_AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #eef4fb;
+    --muted: #9fb2c8;
+    --line: rgba(255,255,255,0.10);
+    --surface: rgba(6, 18, 31, 0.78);
+    --surface-strong: #08192a;
+    --accent: #7be0d6;
+    --accent-2: #f3b562;
+    --accent-3: #7ca6ff;
+    --bg: #03101d;
+    --hero: linear-gradient(135deg, #061c31 0%, #0f3a52 42%, #174a49 72%, #80603a 100%);
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+    font-family: "Space Grotesk", "IBM Plex Sans", "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 12% 0%, rgba(123, 224, 214, 0.18), transparent 24%),
+      radial-gradient(circle at 100% 20%, rgba(243, 181, 98, 0.14), transparent 28%),
+      linear-gradient(180deg, #020b14 0%, var(--bg) 100%);
+  }
+  a { color: inherit; }
+  .site-shell { max-width: 1200px; margin: 0 auto; padding: 0 20px 56px; }
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .brand-mark {
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 18px rgba(123, 224, 214, 0.55);
+  }
+  .nav-links {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .hero {
+    position: relative;
+    min-height: calc(100svh - 72px);
+    display: grid;
+    align-items: end;
+    padding: 72px 28px 36px;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    background: var(--hero);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(130deg, rgba(255,255,255,0.04), transparent 35%),
+      linear-gradient(0deg, rgba(2,11,20,0.58), rgba(2,11,20,0.18));
+    pointer-events: none;
+  }
+  .hero-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 24px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(238,244,251,0.72);
+  }
+  .hero h1 {
+    margin: 0;
+    max-width: 9ch;
+    font-size: clamp(42px, 9vw, 96px);
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+  }
+  .hero-copy {
+    max-width: 620px;
+    color: rgba(238,244,251,0.84);
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(2,11,20,0.18);
+    color: rgba(238,244,251,0.78);
+    font-size: 13px;
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+  }
+  .chip:hover { background: rgba(2,11,20,0.28); }
+  .section {
+    margin-top: 28px;
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    background: var(--surface);
+    backdrop-filter: blur(14px);
+  }
+  .section-title {
+    margin: 0 0 18px;
+    font-size: 21px;
+    letter-spacing: -0.02em;
+  }
+  .subtle { color: var(--muted); }
+  .stats-grid,
+  .signal-grid,
+  .archive-grid,
+  .summary-grid {
+    display: grid;
+    gap: 16px;
+  }
+  .stats-grid { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+  .summary-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .signal-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .archive-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .stat, .signal, .archive-card, .summary-card, .topic-card {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: rgba(4, 15, 28, 0.54);
+  }
+  .stat strong, .summary-card strong {
+    display: block;
+    margin-top: 8px;
+    font-size: 30px;
+    letter-spacing: -0.04em;
+  }
+  .signal h3, .archive-card h3, .topic-card h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+  .signal p, .archive-card p, .summary-card p, .topic-card p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.72;
+  }
+  .signal-tags, .filter-group, .archive-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    display: inline-flex;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(123, 224, 214, 0.08);
+    color: var(--accent);
+    font-size: 12px;
+  }
+  .tag.alt {
+    background: rgba(124, 166, 255, 0.10);
+    color: #9bb7ff;
+  }
+  .tag.warm {
+    background: rgba(243, 181, 98, 0.10);
+    color: #ffd089;
+  }
+  .signal-footer, .archive-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .signal a, .archive-card a, .feed-links a {
+    text-decoration: none;
+  }
+  .signal a:hover, .archive-card a:hover, .feed-links a:hover {
+    color: var(--accent);
+  }
+  .search-shell {
+    display: grid;
+    gap: 16px;
+  }
+  .search-shell input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: rgba(1, 9, 17, 0.56);
+    color: var(--ink);
+    font: inherit;
+  }
+  .search-results {
+    display: grid;
+    gap: 12px;
+  }
+  .search-hit {
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(4, 15, 28, 0.48);
+  }
+  .search-hit h4 {
+    margin: 0 0 8px;
+    font-size: 16px;
+  }
+  .search-hit p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .feed-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .archive-filters {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .filter-group button {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    cursor: pointer;
+  }
+  .filter-group button.is-active,
+  .filter-group button:hover {
+    color: var(--ink);
+    border-color: rgba(123, 224, 214, 0.32);
+    background: rgba(123, 224, 214, 0.08);
+  }
+  .footer {
+    margin-top: 28px;
+    padding: 24px 0 8px;
+    color: var(--muted);
+    text-align: center;
+    font-size: 13px;
+  }
+  @media (max-width: 760px) {
+    .site-shell { padding: 0 14px 40px; }
+    .hero { min-height: auto; padding: 56px 18px 24px; border-radius: 24px; }
+    .section { padding: 18px; border-radius: 20px; }
+    .topbar { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="../../"><span class="brand-mark"></span><span>VS_AI</span></a>
+      <nav class="nav-links">
+        <a href="../">Archives</a>
+        <a href="../../weekly/">Weekly</a>
+        <a href="../../special/">Special</a>
+        <a href="../../">Home</a>
+      </nav>
+    </header>
+
+    <section class="section">
+      <div class="eyebrow">2026.06.03</div>
+      <h1 class="section-title" style="font-size:34px;">AI Agent 领域正经历从‘大模型驱动’到‘系统级优化’的范式转移，开源与设备端推理成为关键战场，但多数新发布缺乏第三方性能验证。</h1>
+      <p class="subtle">Moonshot AI 开源了 Kimi K2 Thinking 模型，旨在提升 Agent 和推理能力，但其实际性能尚未得到第三方基准测试的验证，市场反应取决于后续评测和开发者生态。 微软研究院发布了 MagenticLite、MagenticBrain 和 Fara1.5 三个组件，通过系统架构创新为小型模型优化智能体体验，标志着智能体技术向‘系统级优化’的范式转移。 Google 发布了 LiteRT-LM，一种用于在设备上运行生成式 AI 模型的新运行时，宣称能实现‘极快’的设备端推理，但其成功关键在于能否在有限硬件上实现延迟、功耗和精度的平衡。</p>
+      <div class="archive-meta" style="margin-top:14px;">
+        <span class="tag alt">85 topics</span>
+        <span class="tag warm">89 raw items</span>
+        <span class="tag">自动版</span>
+        <span class="tag">2026-06-03T02:12:40.894614+00:00</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Briefing Mainlines</h2>
+      <div class="summary-grid">
+        <article class="summary-card">
+  <h3>Kimi K2 Thinking 开源发布，但性能存疑</h3>
+  <p>这是 Moonshot AI 在 Agent 和推理赛道上的战略卡位，但缺乏公开基准测试数据，其实际竞争力尚未被验证，开发者社区需谨慎评估。</p>
+</article><article class="summary-card">
+  <h3>微软通过系统架构创新弥合小型模型与 Agent 的鸿沟</h3>
+  <p>这标志着智能体技术从‘大模型驱动’向‘系统级优化’的范式转移，为在资源受限设备上部署复杂 Agent 提供了新路径。</p>
+</article><article class="summary-card">
+  <h3>Google LiteRT-LM 推动生成式 AI 下沉到终端</h3>
+  <p>设备端推理是 AI 普及的关键，但 LiteRT-LM 的成功取决于其能否在移动和 IoT 设备的算力、功耗限制下实现可用的性能，否则将难以落地。</p>
+</article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Deep Reads</h2>
+      <div class="summary-grid">
+        <article class="topic-card">
+  <h3>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</h3>
+  <p>Kimi K2 Thinking 的开源发布是 Moonshot AI 在 Agent 和推理赛道上的战略卡位，但其实际竞争力尚未被第三方证据验证，市场反应将取决于后续性能评测和开发者生态的建立。</p>
+  <div class="archive-meta" style="margin-top:12px;">
+    <span class="tag alt">AI / Agent</span>
+    <span class="tag warm">low</span>
+  </div>
+</article><article class="topic-card">
+  <h3>MagenticLite, MagenticBrain, Fara1.5: An agentic experience optimized for small models</h3>
+  <p>微软正试图通过系统架构创新（而非单纯依赖模型规模）来弥合小型模型与智能体应用之间的能力鸿沟，这标志着智能体技术从‘大模型驱动’向‘系统级优化’的范式转移。</p>
+  <div class="archive-meta" style="margin-top:12px;">
+    <span class="tag alt">AI / Agent</span>
+    <span class="tag warm">high</span>
+  </div>
+</article><article class="topic-card">
+  <h3>Blazing fast on-device GenAI with LiteRT-LM</h3>
+  <p>LiteRT-LM 的核心价值在于将生成式 AI 从云端下沉到终端，但其成功的关键不在于速度本身，而在于能否在有限硬件上实现可用的延迟、功耗和模型精度平衡，否则将沦为又一个无法落地的技术演示。</p>
+  <div class="archive-meta" style="margin-top:12px;">
+    <span class="tag alt">AI / Agent</span>
+    <span class="tag warm">medium</span>
+  </div>
+</article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">All Signals</h2>
+      <div class="signal-grid">
+        <article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>vllm-project/vllm</h3>
+  <p>A high-throughput and memory-efficient inference and serving engine for LLMs</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span><span class="tag">amd</span><span class="tag">blackwell</span></div>
+  <div class="signal-footer">
+    <span>github.com · 2.5</span>
+    <a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Now AI agents need what RSS does</h3>
+  <p>Score: 60 | Comments: 51</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>julienreszka.com · 2.5</span>
+    <a href="https://julienreszka.com/blog/rss-is-back-ai-agents-are-reading-it/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>LLMs are not the black box you were promised</h3>
+  <p>Score: 45 | Comments: 26</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>jay.ai · 2.5</span>
+    <a href="https://www.jay.ai/blog/llms-are-not-a-black-box" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>MagenticLite, MagenticBrain, Fara1.5: An agentic experience optimized for small models</h3>
+  <p>MagenticLite is an agentic system for small models that works across the browser and local file system in a single workflow. It combines specialized models and orchestration to support efficient agentic performance on everyday tasks. The post MagenticLite, MagenticBrain, Fara1.5: An agentic experience optimized for small models appeared first on Microsoft Research .</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Research Blog</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>microsoft.com · 2.5</span>
+    <a href="https://www.microsoft.com/en-us/research/blog/magenticlite-magenticbrain-fara1-5-an-agentic-experience-optimized-for-small-models/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Blazing fast on-device GenAI with LiteRT-LM</h3>
+  <p>来源共 2 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developers.googleblog.com · 2.1</span>
+    <a href="https://developers.googleblog.com/blazing-fast-on-device-genai-with-litert-lm/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>platform.moonshot.cn · 1.8</span>
+    <a href="https://platform.moonshot.cn/blog/posts/k2-think" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developer.nvidia.com · 1.8</span>
+    <a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Bringing AI Closer to the Edge and On-Device with Gemma 4</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developer.nvidia.com · 1.8</span>
+    <a href="https://developer.nvidia.com/blog/bringing-ai-closer-to-the-edge-and-on-device-with-gemma-4/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI × Electronics</span>
+  <h3>Build Next-Gen Physical AI with Edge‑First LLMs for Autonomous Vehicles and Robotics</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developer.nvidia.com · 1.8</span>
+    <a href="https://developer.nvidia.com/blog/build-next-gen-physical-ai-with-edge%e2%80%91first-llms-for-autonomous-vehicles-and-robotics/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI × Electronics</span>
+  <h3>Accelerating LLM and VLM Inference for Automotive and Robotics with NVIDIA TensorRT Edge-LLM</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developer.nvidia.com · 1.8</span>
+    <a href="https://developer.nvidia.com/blog/accelerating-llm-and-vlm-inference-for-automotive-and-robotics-with-nvidia-tensorrt-edge-llm/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Q3&#x27;25: Technology Update – Low Precision and Model Optimization</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>blog.openvino.ai · 1.8</span>
+    <a href="https://blog.openvino.ai/blog-posts/q325-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Q2&#x27;25: Technology Update – Low Precision and Model Optimization</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>blog.openvino.ai · 1.8</span>
+    <a href="https://blog.openvino.ai/blog-posts/q225-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Holo3.1: Fast &amp; Local Computer Use Agents</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 1.8</span>
+    <a href="https://huggingface.co/blog/Hcompany/holo31" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Beyond LLMs: Why Scalable Enterprise AI Adoption Depends on Agent Logic</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 1.8</span>
+    <a href="https://huggingface.co/blog/ibm-research/agent-logic-and-scalable-ai-adoption" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Harness, Scaffold, and the AI Agent Terms Worth Getting Right</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 1.8</span>
+    <a href="https://huggingface.co/blog/agent-glossary" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>langchain-ai/langgraph</h3>
+  <p>Build resilient agents.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">agents</span><span class="tag">ai</span><span class="tag">ai-agents</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/langchain-ai/langgraph" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>ollama/ollama</h3>
+  <p>Get up and running with Kimi-K2.5, GLM-5, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span><span class="tag">deepseek</span><span class="tag">gemma</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/ollama/ollama" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI × Electronics</span>
+  <h3>pytorch/executorch</h3>
+  <p>On-device AI across mobile, embedded and edge for PyTorch</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span><span class="tag">deep-learning</span><span class="tag">embedded</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/pytorch/executorch" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI × Electronics</span>
+  <h3>alibaba/MNN</h3>
+  <p>MNN: A blazing-fast, lightweight inference engine battle-tested by Alibaba, powering high-performance on-device LLMs and Edge AI.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span><span class="tag">arm</span><span class="tag">convolution</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/alibaba/MNN" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI × Electronics</span>
+  <h3>tenstorrent/tt-metal</h3>
+  <p>:metal: TT-NN operator library, and TT-Metalium low level kernel programming model.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">accelerator</span><span class="tag">ai</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/tenstorrent/tt-metal" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>openai/swarm</h3>
+  <p>Educational framework exploring ergonomic, lightweight multi-agent orchestration. Managed by OpenAI Solution team.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/openai/swarm" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>mem0ai/mem0</h3>
+  <p>Universal memory layer for AI Agents</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">agents</span><span class="tag">ai</span><span class="tag">ai-agents</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/mem0ai/mem0" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>anthropics/claude-cookbooks</h3>
+  <p>A collection of notebooks/recipes showcasing some fun and effective ways of using Claude.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/anthropics/claude-cookbooks" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>onnx/onnx</h3>
+  <p>Open standard for machine learning interoperability</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai</span><span class="tag">ai-llm-agent</span><span class="tag">artificial-intelligence</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/onnx/onnx" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>jax-ml/jax</h3>
+  <p>Composable transformations of Python+NumPy programs: differentiate, vectorize, JIT to GPU/TPU, and more</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span><span class="tag">jax</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/jax-ml/jax" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Gmail thinks I&#x27;m stupid, so I left</h3>
+  <p>Score: 629 | Comments: 395</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span><span class="tag">hot</span><span class="tag">trending</span></div>
+  <div class="signal-footer">
+    <span>moddedbear.com · 1.0</span>
+    <a href="https://moddedbear.com/gmail-thinks-im-stupid-so-i-left" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Adafruit receives demand letter from Fenwick legal counsel on behalf of Flux.ai</h3>
+  <p>Score: 625 | Comments: 254</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span><span class="tag">hot</span><span class="tag">trending</span></div>
+  <div class="signal-footer">
+    <span>blog.adafruit.com · 1.0</span>
+    <a href="https://blog.adafruit.com/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>MAI-Code-1-Flash</h3>
+  <p>Score: 390 | Comments: 178 | Text: https://microsoft.ai/models/mai-code-1-flash/ https://microso</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span><span class="tag">trending</span></div>
+  <div class="signal-footer">
+    <span>microsoft.ai · 1.0</span>
+    <a href="https://microsoft.ai/news/introducingmai-code-1-flash/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>A walking tour of surveillance infrastructure in Seattle (2020)</h3>
+  <p>Score: 377 | Comments: 248</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span><span class="tag">trending</span></div>
+  <div class="signal-footer">
+    <span>coveillance.org · 1.0</span>
+    <a href="https://coveillance.org/a-walking-tour-of-surveillance-infrastructure-in-seattle/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Three Ways to Get Paid (2018)</h3>
+  <p>Score: 201 | Comments: 134</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span><span class="tag">trending</span></div>
+  <div class="signal-footer">
+    <span>jasonzweig.com · 1.0</span>
+    <a href="https://jasonzweig.com/three-ways-to-get-paid/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Trump signs downsized AI order after weeks of reversals</h3>
+  <p>Score: 176 | Comments: 122 | Text: https://www.whitehouse.gov/presidential-actions/2026/06/prom... &lt;a href=&quot;https:&amp;</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>politico.com · 1.0</span>
+    <a href="https://www.politico.com/news/2026/06/02/trump-signs-downsized-ai-order-00946389" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>MAI-Thinking-1</h3>
+  <p>Score: 174 | Comments: 74 | Text: https://microsoft.ai/wp-content/uploads/2026/06/main_2026060... Launching seven new MAI models: &lt;a href=&quot;https://microsof</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>microsoft.ai · 1.0</span>
+    <a href="https://microsoft.ai/news/introducing-mai-thinking-1/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Use your Nvidia GPU&#x27;s VRAM as swap space on Linux</h3>
+  <p>Score: 136 | Comments: 42</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/c0dejedi/nbd-vram" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Different attitudes towards AI in California&#x27;s university system</h3>
+  <p>Score: 102 | Comments: 89 | Text: https://archive.ph/TNLUr</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>nytimes.com · 1.0</span>
+    <a href="https://www.nytimes.com/2026/06/01/magazine/ai-university-college-california.html" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>GitHub Copilot App</h3>
+  <p>Score: 99 | Comments: 68</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/features/preview/github-app" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>AI outperforms law professors in Stanford Law study</h3>
+  <p>Score: 98 | Comments: 85 | Text: https://law.stanford.edu/wp-content/uploads/2026/06/salinas_...</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>law.stanford.edu · 1.0</span>
+    <a href="https://law.stanford.edu/press/ai-outperforms-law-professors-in-stanford-law-study/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Open Repair Data Standard – Open Repair Alliance</h3>
+  <p>Score: 91 | Comments: 3</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>openrepair.org · 1.0</span>
+    <a href="https://openrepair.org/open-data/open-standard/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>How we index images for RAG</h3>
+  <p>Score: 90 | Comments: 14</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>kapa.ai · 1.0</span>
+    <a href="https://www.kapa.ai/blog/how-we-index-images-for-rag" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Bringing Up DeepSeek-V4-Flash on AMD MI300X</h3>
+  <p>Score: 80 | Comments: 7</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>fergusfinn.com · 1.0</span>
+    <a href="https://fergusfinn.com/blog/deepseek-v4-flash-mi300x/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>QBE – Compiler Backend – 1.3</h3>
+  <p>Score: 78 | Comments: 28</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>c9x.me · 1.0</span>
+    <a href="https://c9x.me/compile/release/qbe-1.3.html" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>More than 6 out of 10 people turn to AI for psychological support</h3>
+  <p>Score: 52 | Comments: 42</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>axa.com · 1.0</span>
+    <a href="https://www.axa.com/en/press/press-releases/2026-mind-health-report" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Show HN: RePlaya – self-hosted browser session replay with live tailing</h3>
+  <p>Score: 38 | Comments: 6 | Text: Hi HN, I&#x27;m one of the founders of s2.dev. RePlaya ( https://github.com/s2-streamstore/replaya ) is a self-hosted browser session replay tool using rrweb (&lt;a href=&quot;https://githu</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span><span class="tag">show-hn</span></div>
+  <div class="signal-footer">
+    <span>github.com · 1.0</span>
+    <a href="https://github.com/s2-streamstore/replaya" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Launch HN: Rudus (YC P26) – AI for concrete contractors</h3>
+  <p>Score: 32 | Comments: 16 | Text: Hi HN, we’re Rishi and Sahil. We’ve developed Rudus ( https://www.rudus.ai/ ), an AI-powered takeoff and estimation platform built for concrete subcontractors. Takeoff is the process of measuring and quantifying materials from concret</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <div class="signal-footer">
+    <span>news.ycombinator.com · 1.0</span>
+    <a href="https://news.ycombinator.com/item?id=48374528" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Travelers deploys AI-powered claims countrywide with OpenAI</h3>
+  <p>Travelers built an AI-powered Claim Assistant with OpenAI to guide customers through filing claims, provide 24/7 support, and scale operations during peak demand.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>openai.com · 1.0</span>
+    <a href="https://openai.com/index/travelers" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Codex for every role, tool, and workflow</h3>
+  <p>Discover new Codex plugins, sites, and annotations that help analysts, marketers, designers, investors, and other teams get more done with AI.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Product</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>openai.com · 1.0</span>
+    <a href="https://openai.com/index/codex-for-every-role-tool-workflow" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Advancing youth safety and opportunity through global leadership</h3>
+  <p>OpenAI calls for global action on youth AI safety, proposing an international institute to strengthen safeguards, standards, and opportunities for young people.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Global Affairs</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>openai.com · 1.0</span>
+    <a href="https://openai.com/index/advancing-youth-safety-and-opportunity-through-global-leadership" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Codex is becoming a productivity tool for everyone</h3>
+  <p>The Next Era of Knowledge Work report explores how Codex is transforming productivity through AI-powered research, data analysis, workflow automation, and content creation.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Global Affairs</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>openai.com · 1.0</span>
+    <a href="https://openai.com/index/codex-for-knowledge-work" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Our views on AI policy and political advocacy</h3>
+  <p>Our approach to AI policy and political advocacy, transparency, support for thoughtful regulation and AI safety, and that no outside political group speaks on the company’s behalf.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Global Affairs</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>openai.com · 1.0</span>
+    <a href="https://openai.com/index/our-views-on-ai-policy-and-political-advocacy" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Building the infrastructure for the Intelligence Age in Michigan</h3>
+  <p>OpenAI breaks ground on a 1GW data center project in Michigan as part of Stargate, building AI infrastructure to expand access, create jobs, and support communities.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Global Affairs</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>openai.com · 1.0</span>
+    <a href="https://openai.com/index/stargate-michigan-data-center" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>OpenAI frontier models and Codex are now available on AWS</h3>
+  <p>OpenAI frontier models and Codex are now generally available on AWS, giving enterprises a new path to build with OpenAI through the AWS environments, controls, and procurement workflows they already use. Customers can get started with OpenAI on AWS and move faster from evaluation to production.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Product</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>openai.com · 1.0</span>
+    <a href="https://openai.com/index/openai-frontier-models-and-codex-are-now-available-on-aws" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Boston Children’s uses AI to unlock new diagnoses</h3>
+  <p>Boston Children’s Hospital uses OpenAI technology to improve patient care, reduce operational burden, and help diagnose more than 40 rare disease cases.</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>openai.com · 1.0</span>
+    <a href="https://openai.com/index/boston-childrens-hospital" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Data Formulator 0.7: AI-powered data analytics for enterprise data</h3>
+  <p>Data Formulator introduces AI-powered analytics for enterprise data workflows. Data teams can easily bring enterprise data into an AI-ready workspace where users can explore, analyze, and visualize data with AI agents to turn raw data into actionable insights. The post Data Formulator 0.7: AI-powered data analytics for enterprise data appeared first on Microsoft Research .</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Research Blog</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>microsoft.com · 1.0</span>
+    <a href="https://www.microsoft.com/en-us/research/blog/data-formulator-0-7-ai-powered-data-analytics-for-enterprise-data/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Extending Human Intelligence Through AI</h3>
+  <p>Understanding AI as an extension of human intelligence—not a replacement for it—offers a more grounded path for building trustworthy AI systems. The post Extending Human Intelligence Through AI appeared first on Microsoft Research .</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Research Blog</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>microsoft.com · 1.0</span>
+    <a href="https://www.microsoft.com/en-us/research/blog/extending-human-intelligence-through-ai/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Vega: Zero-knowledge proofs for digital identity in the age of AI</h3>
+  <p>Vega turns a full credential into a single proof, sharing only what is needed and nothing more, with performance that works in real apps. The post Vega: Zero-knowledge proofs for digital identity in the age of AI appeared first on Microsoft Research .</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Research Blog</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>microsoft.com · 1.0</span>
+    <a href="https://www.microsoft.com/en-us/research/blog/vega-zero-knowledge-proofs-for-digital-identity-in-the-age-of-ai/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Further Notes on Our Recent Research on AI Delegation and Long-Horizon Reliability</h3>
+  <p>Our recent paper, “LLMs Corrupt Your Documents When You Delegate”, has generated discussion about the reliability of AI systems in delegated workflows. We appreciate the interest in this work and want to clarify several important points about what the paper does—and does not—claim. The research aims to develop robust evaluation methods for long-horizon delegated and […] The post Further Notes on Our Recent Research on AI Delegation and Long-Horizon Reliability appeared first on Microsoft Research .</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Research Blog</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>microsoft.com · 1.0</span>
+    <a href="https://www.microsoft.com/en-us/research/blog/further-notes-on-our-recent-research-on-ai-delegation-and-long-horizon-reliability/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>mimalloc: A new, high-performance, scalable memory allocator for the modern era</h3>
+  <p>mimalloc is an open-source, modern, scalable memory allocator that is a drop-in replacement for malloc and free. It is relatively small (~12K lines), with clear internal data structures, and is easy to build and integrate into other projects. It provides bounded worst-case allocation times (up to OS primitives), bounded space overhead, low internal fragmentation, and minimal contention by relying almost exclusively on atomic operations. The post mimalloc: A new, high-performance, scalable memory allocator for the modern era appeared first on Microsoft Research .</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Research Blog</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>microsoft.com · 1.0</span>
+    <a href="https://www.microsoft.com/en-us/research/blog/mimalloc-a-high-performance-scalable-memory-allocator-for-the-modern-era/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Introducing Claude Opus 4.8</h3>
+  <p>来源共 2 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>anthropic.com · 0.6</span>
+    <a href="https://www.anthropic.com/news/claude-opus-4-8" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>A Smarter Google AI Edge Gallery: MCP integration, notifications, and session conti…</h3>
+  <p>来源共 2 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developers.googleblog.com · 0.6</span>
+    <a href="https://developers.googleblog.com/a-smarter-google-ai-edge-gallery-mcp-integration-notifications-and-session-continuity/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Google Tensor SDK Beta with LiteRT</h3>
+  <p>来源共 2 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developers.googleblog.com · 0.6</span>
+    <a href="https://developers.googleblog.com/google-tensor-sdk-beta-with-litert/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Introducing Claude Design by Anthropic Labs</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>anthropic.com · 0.3</span>
+    <a href="https://www.anthropic.com/news/claude-design-anthropic-labs" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Claude is a space to think</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>anthropic.com · 0.3</span>
+    <a href="https://www.anthropic.com/news/claude-is-a-space-to-think" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Expanding Project Glasswing</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>anthropic.com · 0.3</span>
+    <a href="https://www.anthropic.com/news/expanding-project-glasswing" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Anthropic confidentially submits draft S-1 to the SEC</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>anthropic.com · 0.3</span>
+    <a href="https://www.anthropic.com/news/confidential-draft-s1-sec" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Anthropic raises $65B in Series H funding at $965B post-money valuation</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>anthropic.com · 0.3</span>
+    <a href="https://www.anthropic.com/news/series-h" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Anthropic opens Milan office to support Italian enterprise, research, and developers</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>anthropic.com · 0.3</span>
+    <a href="https://www.anthropic.com/news/milan-office-opening" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Kimi 开放平台：新功能发布记录</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>platform.moonshot.cn · 0.3</span>
+    <a href="https://platform.moonshot.cn/blog/posts/changelog" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Kimi K2 Turbo API 价格调整通知</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>platform.moonshot.cn · 0.3</span>
+    <a href="https://platform.moonshot.cn/blog/posts/k2-turbo-discount" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Kimi K2 官方高速版 API 开启 5 折特惠</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>platform.moonshot.cn · 0.3</span>
+    <a href="https://platform.moonshot.cn/blog/posts/k2-prom" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Kimi K2 模型更新，带来更强的代码能力、更快的 API</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>platform.moonshot.cn · 0.3</span>
+    <a href="https://platform.moonshot.cn/blog/posts/kimi-k2-0905" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Kimi K2 又又又提速了</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>platform.moonshot.cn · 0.3</span>
+    <a href="https://platform.moonshot.cn/blog/posts/k2-turbo-enhance" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Maximizing Memory Efficiency to Run Bigger Models on NVIDIA Jetson</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developer.nvidia.com · 0.3</span>
+    <a href="https://developer.nvidia.com/blog/maximizing-memory-efficiency-to-run-bigger-models-on-nvidia-jetson/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI × Electronics</span>
+  <h3>Accelerate AI Inference for Edge and Robotics with NVIDIA Jetson T4000 and NVIDIA JetPack 7.1</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>developer.nvidia.com · 0.3</span>
+    <a href="https://developer.nvidia.com/blog/accelerate-ai-inference-for-edge-and-robotics-with-nvidia-jetson-t4000-and-nvidia-jetpack-7-1/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Q4&#x27;25: Technology Update – Low Precision and Inference Optimizations</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>blog.openvino.ai · 0.3</span>
+    <a href="https://blog.openvino.ai/blog-posts/q425-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>OpenVINO GenAI GGUF Feature Update</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>blog.openvino.ai · 0.3</span>
+    <a href="https://blog.openvino.ai/blog-posts/openvino-genai-gguf-feature-update" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>OpenVINO GenAI Supports GGUF Models</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>blog.openvino.ai · 0.3</span>
+    <a href="https://blog.openvino.ai/blog-posts/openvino-genai-supports-gguf-models" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Dynamic shapes support in OpenVINO JIT compiler boosts inference performance by 40%</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-x-electronics</span></div>
+  <div class="signal-footer">
+    <span>blog.openvino.ai · 0.3</span>
+    <a href="https://blog.openvino.ai/blog-posts/dynamic-shapes-support-in-openvino-jit-compiler-boosts-inference-performance-by-40" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Introducing Mellum2: A 12B Mixture-of-Experts Model by JetBrains</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 0.3</span>
+    <a href="https://huggingface.co/blog/JetBrains/mellum2-launch" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Welcome NVIDIA Cosmos 3: The First Open Omni-model for Physical AI Reasoning and Action</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 0.3</span>
+    <a href="https://huggingface.co/blog/nvidia/cosmos-3-for-physical-ai" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Profiling in PyTorch (Part 1): A Beginner&#x27;s Guide to torch.profiler</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 0.3</span>
+    <a href="https://huggingface.co/blog/torch-profiler" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Reachy Mini goes fully local</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 0.3</span>
+    <a href="https://huggingface.co/blog/local-reachy-mini-conversation" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Shipping a Trillion Parameters With a Hub Bucket: Delta Weight Sync in TRL</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 0.3</span>
+    <a href="https://huggingface.co/blog/delta-weight-sync" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Specialization Beats Scale: A Strategic Variable Most AI Procurement Decisions Overlook</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 0.3</span>
+    <a href="https://huggingface.co/blog/Dharma-AI/specialization-beats-scale" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>OlmoEarth v1.1: A more efficient family of Earth observation models</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 0.3</span>
+    <a href="https://huggingface.co/blog/allenai/olmoearth-v1-1" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>Introducing the Ettin Reranker Family</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 0.3</span>
+    <a href="https://huggingface.co/blog/ettin-reranker" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI / Agent</span>
+  <h3>PaddleOCR 3.5: Running OCR and Document Parsing Tasks with a Transformers Backend</h3>
+  <p>来源共 1 条，等待后续 AI 深度摘要。</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>huggingface.co · 0.3</span>
+    <a href="https://huggingface.co/blog/PaddlePaddle/paddleocr-transformers" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
