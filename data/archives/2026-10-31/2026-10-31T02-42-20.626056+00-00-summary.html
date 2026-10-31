@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自动情报快报</title>
+<style>
+  :root {
+    --bg:#0d1117; --bg2:#161b22; --bg3:#1c2333; --border:#30363d;
+    --text:#e6edf3; --text2:#8b949e; --accent:#58a6ff; --green:#3fb950;
+    --orange:#d29922; --red:#f85149; --purple:#bc8cff; --radius:8px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;
+  }
+  * { box-sizing:border-box;margin:0;padding:0; }
+  body { background:var(--bg);color:var(--text);line-height:1.6; }
+  .wrap { max-width:960px;margin:0 auto;padding:24px 20px 48px; }
+  header { text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:32px; }
+  header h1 { font-size:1.8em;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  header .meta { color:var(--text2);font-size:.9em;margin-top:8px; }
+  header .stats { display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  header .stat-pill { background:var(--bg3);padding:4px 14px;border-radius:20px;font-size:.85em;color:var(--text2);border:1px solid var(--border); }
+  .stage-badges { display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  .stage-badge { background:var(--bg3);padding:3px 12px;border-radius:6px;font-size:.82em;border:1px solid var(--stage-color,#666);color:var(--text2); }
+  .section { margin-bottom:28px; }
+  .section-title { font-size:1.25em;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--accent); }
+  .judgment { font-size:1.35em;font-weight:700;text-align:center;padding:20px;background:var(--bg2);border-radius:var(--radius);border-left:4px solid var(--accent); }
+  .grid-2 { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px; }
+  .card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px; }
+  .card h4 { color:var(--accent);margin-bottom:10px;font-size:.95em; }
+  .card ul { padding-left:18px;color:var(--text2); }
+  .card li { margin-bottom:4px; }
+  .signal-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;transition:border-color .2s; }
+  .signal-card:hover { border-color:var(--accent); }
+  .signal-header { display:flex;justify-content:space-between;align-items:start;margin-bottom:10px; }
+  .signal-header h3 { font-size:1em;color:var(--text); }
+  .badge { font-size:.75em;padding:2px 10px;border-radius:12px;font-weight:600; }
+  .badge--high { background:#1a3a2a;color:var(--green); }
+  .badge--medium { background:#3a3020;color:var(--orange); }
+  .badge--low { background:#3a2220;color:var(--red); }
+  .signal-body p { margin:4px 0;color:var(--text2);font-size:.9em; }
+  .signal-link { display:inline-block;margin-top:10px;font-size:.85em;color:var(--accent);text-decoration:none; }
+  .signal-link:hover { text-decoration:underline; }
+  .forecast-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0; }
+  .forecast-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px; }
+  .forecast-card h4 { font-size:.9em;margin-bottom:8px; }
+  .forecast-card--best { border-left:3px solid var(--green); }
+  .forecast-card--worst { border-left:3px solid var(--red); }
+  .forecast-card--likely { border-left:3px solid var(--accent); }
+  .forecast-card p { font-size:.88em;color:var(--text2); }
+  .risk-note { background:#3a2220;border:1px solid var(--red);border-radius:var(--radius);padding:12px 16px;margin-top:12px;color:#fdaebb;font-size:.9em; }
+  .domain-tag { display:inline-block;font-size:.72em;background:var(--bg3);color:var(--text2);padding:1px 8px;border-radius:10px;margin-left:8px; }
+  table.signals-table { width:100%;border-collapse:collapse;margin-top:10px;font-size:.88em; }
+  .signals-table th,.signals-table td { padding:8px 12px;text-align:left;border-bottom:1px solid var(--border); }
+  .signals-table th { background:var(--bg3);color:var(--text2);font-weight:600;position:sticky;top:0; }
+  .signals-table tr:hover td { background:var(--bg2); }
+  footer { text-align:center;padding:24px 0;border-top:1px solid var(--border);margin-top:40px;color:var(--text2);font-size:.82em; }
+  @media(max-width:640px) { header h1 { font-size:1.4em; } .grid-2 { grid-template-columns:1fr; } .forecast-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>自动情报快报</h1>
+    <div class="meta">生成时间：2026-10-31T02:42:20.626056+00:00</div>
+    <div class="stats">
+      <span class="stat-pill">📡 88 条原始信息</span>
+      <span class="stat-pill">🎯 82 个主题</span>
+      <span class="stat-pill">📊 3 个重点分析</span>
+    </div>
+    <div class="stage-badges"><span class="stage-badge" style="--stage-color:#10b981">analysis: ok</span><span class="stage-badge" style="--stage-color:#10b981">summary: ok</span><span class="stage-badge" style="--stage-color:#10b981">forecast: ok</span></div>
+  </header>
+
+  <section id="judgment" class="section">
+    <div class="judgment">今日 AI 情报聚焦边缘推理、持续学习与 Agent 训练基础设施，但多数厂商声明缺乏独立验证，需谨慎对待性能数字。</div>
+  </section>
+
+  <section id="executive-summary" class="section">
+    <h2 class="section-title">执行摘要</h2>
+    <ul><li>NVIDIA 宣称 TensorRT Edge-LLM 在 Jetson AGX Thor 上 MLPerf Edge Agentic 基准测试快 6.4 倍，但仅凭官方博客单源，未披露基线、精度与功耗条件，应视为营销声明。</li><li>Google Research 提出 Sleep framework，借鉴生物睡眠机制缓解 LLM 持续学习中的灾难性遗忘，有 arXiv 论文支撑但社区讨论有限，工业落地性待验证。</li><li>微软研究院发布 Agent Lightning v1.0，一个约 3,500 行的轻量级 agentic RL 框架，旨在免重建接入现有 agent，但效果与适配成本缺乏独立证据。</li><li>Hacker News 上 AI agent 群体在 Minecraft/Mindustry 中的实验获得高关注（397 分），以及 YC 孵化的 Simantic 固件模拟项目，反映 agent 应用与基础设施创业活跃。</li><li>vLLM 作为高吞吐 LLM 推理引擎持续作为基础工具被关注，但今日无新增实质信息。</li></ul>
+  </section>
+
+  <section id="key-insights" class="section">
+    <h2 class="section-title">关键洞察</h2>
+    <ul><li>今日多个 AI 进展均来自厂商或研究机构官方博客，且证据片段极少，性能数字（如 6.4 倍）在缺少基线、精度与功耗披露时应视为待验证声明，晨报读者需保持审慎。</li><li>边缘 Agentic LLM、持续学习与 agentic RL 训练框架共同指向一个趋势：AI agent 正从演示走向工程化，但工程化瓶颈（功耗、遗忘、训练适配）仍是主要矛盾。</li><li>社区信号（Hacker News 高分、YC 新项目）与官方研究发布形成互补，但高关注度不等于高证据强度，需区分「热度」与「可验证性」。</li></ul>
+  </section>
+
+  <section id="mainlines" class="section">
+    <h2 class="section-title">重点主线</h2>
+    <ul style="padding-left:20px;"><li><strong>NVIDIA 边缘 Agentic LLM 性能声明：6.4 倍加速但证据单薄</strong> 若属实将显著提升边缘设备运行 Agentic LLM 的可行性，但当前仅有厂商单方面声明，缺少基线配置、模型规模、精度损失与功耗约束等关键测试条件，读者不应将其视为可复现事实。</li>
+<li><strong>Google Sleep framework：用睡眠机制对抗灾难性遗忘</strong> 持续学习是 LLM 落地的核心瓶颈之一，Sleep framework 提供了一种仿生思路，有学术论文支撑，但社区热度与证据深度有限，其实际效果与工业可复现性仍需论文细节和独立验证。</li>
+<li><strong>微软 Agent Lightning v1.0：轻量级 agentic RL 框架</strong> 试图以约 3,500 行代码解耦 agent 与 RL 训练，降低真实 harness 下的训练门槛，但轻量承诺与复杂 agent 系统集成深度之间存在张力，效果与适配成本尚无独立基准数据。</li></ul>
+  </section>
+
+  <section id="memory" class="section">
+    <h2 class="section-title">跨日主线记忆</h2>
+    <ul style="padding-left:20px;"><li><strong>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 204 天 · 1 source(s) | official | 3 related support</li><li><strong>Q3&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 204 天 · 1 source(s) | official | 2 related support</li><li><strong>Q2&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 204 天 · 1 source(s) | official | 2 related support</li><li><strong>Kimi 开放平台：新功能发布记录</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 204 天 · 1 source(s) | official</li><li><strong>Kimi K2 Turbo API 价格调整通知</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 204 天 · 1 source(s) | official | 3 related support</li></ul>
+  </section>
+
+  <section id="topics" class="section">
+    <h2 class="section-title">重点主题分析</h2>
+    <div class="signal-card">
+                <div class="signal-header">
+                  <h3>TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>NVIDIA 官方单方面发布的 6.4x 性能声明 vs 缺乏可独立验证的测试条件与第三方复现证据</p>
+                  <p><strong>核心洞察：</strong>这是 NVIDIA 围绕 Jetson AGX Thor 的边缘 AI 叙事营销，6.4x 数字在缺少基线、精度与功耗披露的情况下应视为厂商声明而非可验证事实，晨报宜标注来源单一并提示待独立验证。</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://developer.nvidia.com/blog/frontier-reasoning-reaches-the-edge-how-to-deploy-and-optimize-models-on-nvidia-jetson/" target="_blank" rel="noopener">Frontier Reasoning Reaches the Edge: How to Deploy and Optimize Models on NVIDIA Jetson</a></li><li>official | <a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2</a></li><li>official | <a href="https://developer.nvidia.com/blog/maximizing-memory-efficiency-to-run-bigger-models-on-nvidia-jetson/" target="_blank" rel="noopener">Maximizing Memory Efficiency with Agent Skills to Run Bigger Models on NVIDIA Jetson</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>Sleep framework: A new way for LLMs to retain knowledge in continual learning</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>持续学习中「吸收新知识」与「保留旧知识」之间的根本张力——即灾难性遗忘问题，Sleep framework 正是针对这一矛盾提出的解法</p>
+                  <p><strong>核心洞察：</strong>Sleep framework 试图用类似生物睡眠的记忆巩固机制，调和 LLM 持续学习中「学新」与「不忘旧」的核心矛盾，但其实际效果与工业可落地性仍需论文细节和更多独立验证支撑</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | community | 1 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://huggingface.co/blog/allenai/novelty-bench" target="_blank" rel="noopener">Can we trust LLMs to judge whether a research idea is novel?</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>框架宣称的轻量、免重建、易接入 vs 真实 agent 系统接入 RL 训练所需的实际适配复杂度和未经验证的效果</p>
+                  <p><strong>核心洞察：</strong>Agent Lightning v1.0 试图用轻量解耦层降低 agentic RL 的接入门槛，但其真实价值取决于能否在不重建 agent 的前提下处理真实 harness 的复杂性，目前仅有官方单片段证据，效果与适配成本仍需独立验证</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 1 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://huggingface.co/blog/microsoft/thinkingbox-training" target="_blank" rel="noopener">Turning Database Grading into RL Rewards: Post-Training Agents with ThinkingBox</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+  </section>
+
+  <section id="forecast" class="section">
+        <h2 class="section-title">📈 短期推演</h2>
+        <div class="forecast-grid">
+          <div class="forecast-card forecast-card--best"><h4>乐观情景</h4><p>未来1-3个月内，NVIDIA 的 6.4x 声明获得 MLPerf 官方结果或第三方复现的独立验证，Sleep framework 的 arXiv 论文公开完整实验设置并显示可复现的遗忘率改善，Agent Lightning v1.0 获得社区试用反馈与基准对比，边缘 Agentic LLM 与 agentic RL 工程化叙事得到实质数据支撑。</p></div>
+          <div class="forecast-card forecast-card--worst"><h4>悲观情景</h4><p>厂商性能声明持续缺乏独立验证却被市场与媒体放大为既成事实，导致基于未验证数字的采购或技术选型决策；Sleep framework 与 Agent Lightning 停留在官方博客层面，无后续论文细节或社区复现，边缘 Agentic LLM 的功耗、内存带宽与精度约束在真实部署中暴露，叙事热度回落。</p></div>
+          <div class="forecast-card forecast-card--likely"><h4>最可能情景</h4><p>短期内（1-3个月）多数声明仍维持单源官方博客状态：NVIDIA 6.4x 数字在 MLPerf 官方榜单或第三方复现出现前被标注为待验证；Sleep framework 论文细节逐步公开但工业落地性仍待观察；Agent Lightning 获得少量社区试用但缺基准数据；agent 应用与仿真基础设施（Minecraft 实验、Simantic）维持开发者社区热度，不构成可验证的产业拐点。</p></div>
+        </div>
+        <p><strong>关键变量：</strong></p>
+        <ul><li>MLPerf 官方是否发布对应 Edge Agentic 基准结果及 NVIDIA 提交的测试配置</li><li>是否有第三方独立复现 NVIDIA 6.4x 声明并披露基线、模型规模、精度与功耗条件</li><li>Sleep framework 的 arXiv 论文（2606.03979）实验设置、基线对比与遗忘率指标的可复现性</li><li>Agent Lightning v1.0 是否出现社区试用反馈、基准测试或与 LangChain/AutoGen 等框架的集成成本评估</li><li>边缘设备（Jetson AGX Thor）在内存带宽、散热与功耗上的物理约束对 Agentic LLM 实际部署的影响</li><li>Hacker News 等社区信号（Minecraft/Mindustry 实验、Simantic）是否转化为有技术细节的公开项目或融资进展</li></ul>
+        <p><strong>结论：</strong>短期情报价值在于识别「厂商声明 vs 可验证事实」的差距，而非采信性能数字。最可能情景是多数声明维持单源未验证状态，建议将 NVIDIA 6.4x、Sleep framework 与 Agent Lightning 均标注为待独立验证，跟踪 MLPerf 官方结果、arXiv 论文细节与社区复现作为关键验证节点；边缘 Agentic LLM 与 agentic RL 工程化是真实趋势，但当前证据强度不足以支撑确定性判断。</p>
+      </section>
+
+  <section id="limitations" class="section">
+    <h2 class="section-title">局限性</h2>
+    <ul><li>NVIDIA 6.4 倍性能声明仅来自官方开发者博客单源，无第三方复现或原始测试数据，基线、模型规模、精度损失与功耗约束均未披露。</li><li>Sleep framework 仅有 1 条证据片段和 17 条评论，论文细节未展开，工业可落地性未知。</li><li>Agent Lightning v1.0 仅有微软官方博客单片段，无基准数据或对比结果，真实 harness 适配成本未经验证。</li><li>Minecraft/Mindustry agent 群体实验与 Simantic 项目仅有 Hacker News 单条信号，缺乏技术细节与独立分析。</li><li>vLLM 仅有仓库描述，无当日新增实质信息。</li></ul>
+  </section>
+
+  <p class="risk-note">⚠️ NVIDIA 6.4 倍性能声明仅来自官方开发者博客单源，无第三方复现或原始测试数据，基线、模型规模、精度损失与功耗约束均未披露。</p>
+
+  <section id="actions" class="section">
+    <h2 class="section-title">行动建议</h2>
+    <ul><li>对 NVIDIA 6.4 倍声明，建议追踪 MLPerf 官方结果发布或第三方复现报告，在未获独立验证前避免将其作为决策依据。</li><li>对 Sleep framework，建议查阅 arXiv 论文（2606.03979）全文，重点关注实验设置、基线对比与遗忘率指标。</li><li>对 Agent Lightning v1.0，建议关注社区试用反馈与基准测试结果，评估其与现有 agent 框架（如 LangChain、AutoGen）的集成成本。</li><li>对 AI agent 群体实验与 Simantic，可进一步查看项目原文与 HN 讨论，判断其技术新颖性与创业方向参考价值。</li><li>将 vLLM 列为持续跟踪的基础设施项目，关注其版本更新与性能基准。</li></ul>
+  </section>
+
+  <section id="all-signals" class="section">
+    <h2 class="section-title">全部信号</h2>
+    <table class="signals-table"><thead><tr><th>信号</th><th>评分</th><th>证据数</th><th>来源</th></tr></thead><tbody><tr><td>Sleep framework: A new way for LLMs to retain knowledge in continual learning<span class="domain-tag">ai-llm-agent</span></td><td>3.3</td><td>1</td><td><a href="https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses<span class="domain-tag">ai-llm-agent</span></td><td>3.3</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor<span class="domain-tag">ai-llm-agent</span></td><td>2.6</td><td>1</td><td><a href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>vllm-project/vllm<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>We ran AI agent swarms in Minecraft and Mindustry<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://labs.ycombinator.com/projects/games/index.html" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Launch HN: Simantic (YC F26) – Firmware Simulation for AI Agents<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://news.ycombinator.com/item?id=50291116" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://platform.moonshot.cn/blog/posts/k2-think" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Post-Train NVIDIA Cosmos 3 Edge for On-Device Robot Control<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/post-train-nvidia-cosmos-3-edge-for-on-device-robot-control/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>NVIDIA JetPack 7.2.1 Adds Agentic Video Skills and T3000 Emulation<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/nvidia-jetpack-7-2-1-adds-agentic-video-skills-and-t3000-emulation/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Maximizing Memory Efficiency with Agent Skills to Run Bigger Models on NVIDIA Jetson<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/maximizing-memory-efficiency-to-run-bigger-models-on-nvidia-jetson/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Unifying Edge AI: How Coral NPU’s open standard brings portable, energy-viable inte…<span class="domain-tag">ai-x-electronics</span></td><td>1.8</td><td>1</td><td><a href="https://developers.googleblog.com/unifying-edge-ai-how-coral-npus-open-standard-brings-portable-energy-viable-intelligence-from-model-to-silicon/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Q3&#x27;25: Technology Update – Low Precision and Model Optimization<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://blog.openvino.ai/blog-posts/q325-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Q2&#x27;25: Technology Update – Low Precision and Model Optimization<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://blog.openvino.ai/blog-posts/q225-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Can we trust LLMs to judge whether a research idea is novel?<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://huggingface.co/blog/allenai/novelty-bench" target="_blank" rel="noopener">链接 →</a></td></tr></tbody></table>
+  </section>
+
+  <footer>
+    <p>VS_AI 情报采集系统自动生成 · 数据来源：RSS / GitHub / 官方网站</p>
+  </footer>
+</div>
+</body>
+</html>
