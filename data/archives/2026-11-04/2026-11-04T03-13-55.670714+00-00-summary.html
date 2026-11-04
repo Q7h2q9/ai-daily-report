@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自动情报快报</title>
+<style>
+  :root {
+    --bg:#0d1117; --bg2:#161b22; --bg3:#1c2333; --border:#30363d;
+    --text:#e6edf3; --text2:#8b949e; --accent:#58a6ff; --green:#3fb950;
+    --orange:#d29922; --red:#f85149; --purple:#bc8cff; --radius:8px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;
+  }
+  * { box-sizing:border-box;margin:0;padding:0; }
+  body { background:var(--bg);color:var(--text);line-height:1.6; }
+  .wrap { max-width:960px;margin:0 auto;padding:24px 20px 48px; }
+  header { text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:32px; }
+  header h1 { font-size:1.8em;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  header .meta { color:var(--text2);font-size:.9em;margin-top:8px; }
+  header .stats { display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  header .stat-pill { background:var(--bg3);padding:4px 14px;border-radius:20px;font-size:.85em;color:var(--text2);border:1px solid var(--border); }
+  .stage-badges { display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  .stage-badge { background:var(--bg3);padding:3px 12px;border-radius:6px;font-size:.82em;border:1px solid var(--stage-color,#666);color:var(--text2); }
+  .section { margin-bottom:28px; }
+  .section-title { font-size:1.25em;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--accent); }
+  .judgment { font-size:1.35em;font-weight:700;text-align:center;padding:20px;background:var(--bg2);border-radius:var(--radius);border-left:4px solid var(--accent); }
+  .grid-2 { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px; }
+  .card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px; }
+  .card h4 { color:var(--accent);margin-bottom:10px;font-size:.95em; }
+  .card ul { padding-left:18px;color:var(--text2); }
+  .card li { margin-bottom:4px; }
+  .signal-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;transition:border-color .2s; }
+  .signal-card:hover { border-color:var(--accent); }
+  .signal-header { display:flex;justify-content:space-between;align-items:start;margin-bottom:10px; }
+  .signal-header h3 { font-size:1em;color:var(--text); }
+  .badge { font-size:.75em;padding:2px 10px;border-radius:12px;font-weight:600; }
+  .badge--high { background:#1a3a2a;color:var(--green); }
+  .badge--medium { background:#3a3020;color:var(--orange); }
+  .badge--low { background:#3a2220;color:var(--red); }
+  .signal-body p { margin:4px 0;color:var(--text2);font-size:.9em; }
+  .signal-link { display:inline-block;margin-top:10px;font-size:.85em;color:var(--accent);text-decoration:none; }
+  .signal-link:hover { text-decoration:underline; }
+  .forecast-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0; }
+  .forecast-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px; }
+  .forecast-card h4 { font-size:.9em;margin-bottom:8px; }
+  .forecast-card--best { border-left:3px solid var(--green); }
+  .forecast-card--worst { border-left:3px solid var(--red); }
+  .forecast-card--likely { border-left:3px solid var(--accent); }
+  .forecast-card p { font-size:.88em;color:var(--text2); }
+  .risk-note { background:#3a2220;border:1px solid var(--red);border-radius:var(--radius);padding:12px 16px;margin-top:12px;color:#fdaebb;font-size:.9em; }
+  .domain-tag { display:inline-block;font-size:.72em;background:var(--bg3);color:var(--text2);padding:1px 8px;border-radius:10px;margin-left:8px; }
+  table.signals-table { width:100%;border-collapse:collapse;margin-top:10px;font-size:.88em; }
+  .signals-table th,.signals-table td { padding:8px 12px;text-align:left;border-bottom:1px solid var(--border); }
+  .signals-table th { background:var(--bg3);color:var(--text2);font-weight:600;position:sticky;top:0; }
+  .signals-table tr:hover td { background:var(--bg2); }
+  footer { text-align:center;padding:24px 0;border-top:1px solid var(--border);margin-top:40px;color:var(--text2);font-size:.82em; }
+  @media(max-width:640px) { header h1 { font-size:1.4em; } .grid-2 { grid-template-columns:1fr; } .forecast-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>自动情报快报</h1>
+    <div class="meta">生成时间：2026-11-04T03:13:55.670714+00:00</div>
+    <div class="stats">
+      <span class="stat-pill">📡 88 条原始信息</span>
+      <span class="stat-pill">🎯 82 个主题</span>
+      <span class="stat-pill">📊 3 个重点分析</span>
+    </div>
+    <div class="stage-badges"><span class="stage-badge" style="--stage-color:#10b981">analysis: ok</span><span class="stage-badge" style="--stage-color:#10b981">summary: ok</span><span class="stage-badge" style="--stage-color:#10b981">forecast: ok</span></div>
+  </header>
+
+  <section id="judgment" class="section">
+    <div class="judgment">AI 竞争正从模型能力宣称转向可验证的端侧部署、Agent 训练基础设施与生态卡位，但多数信号仍为厂商单方叙事，证据强度不足。</div>
+  </section>
+
+  <section id="executive-summary" class="section">
+    <h2 class="section-title">执行摘要</h2>
+    <ul><li>Kimi K2 Thinking 以开源方式发布，官方宣称全面提升 Agent 与推理能力，但仅有标题级信息、无基准数据，能力主张无法独立检验。</li><li>NVIDIA 连发两条端侧机器人/边缘推理内容：Cosmos 3 Edge 后训练面向设备端机器人控制，TensorRT Edge-LLM 宣称在 Jetson AGX Thor 上 MLPerf Edge Agentic 基准快 6.4 倍，均为厂商自证、缺乏第三方复现。</li><li>微软研究院发布 Agent Lightning v1.0，以约 3,500 行轻量框架把现有 Agent 接入 RL 训练流程，降低训练门槛，是本期证据强度相对最高的信号。</li><li>Momentic（YC W24）与 vllm 项目仅有一条来源级信息，信号可见但证据深度不足，需后续验证。</li><li>整体看，边缘 Agentic 推理加速、Agent 训练基础设施与开源生态卡位是三条并行主线，但营销叙事强度普遍高于证据强度。</li></ul>
+  </section>
+
+  <section id="key-insights" class="section">
+    <h2 class="section-title">关键洞察</h2>
+    <ul><li>本期多条信号呈现同一模式：厂商叙事强度与证据强度不匹配——开源发布、性能倍数、能力宣称均缺乏第三方复现或基准细节，晨报应统一按「趋势信号」而非「既成事实」处理。</li><li>竞争焦点正从「模型能力宣称」下移到「端侧部署效率 + Agent 训练基础设施 + 开源生态卡位」三层，NVIDIA 与微软分别从硬件推理栈和训练框架两端卡位。</li><li>Agent 训练的关键矛盾是运行框架的复杂托管性与 RL 所需的状态可控、可观测性之间的张力；Agent Lightning 的轻量接入路线若成立，将显著降低 Agent 后训练门槛。</li><li>端侧机器人控制的核心约束是低延迟、低功耗、高可靠性与基础模型后训练高算力、长迭代周期之间的结构性矛盾，端侧算力效率与后训练成本能否同时满足决定该方向成败。</li></ul>
+  </section>
+
+  <section id="mainlines" class="section">
+    <h2 class="section-title">重点主线</h2>
+    <ul style="padding-left:20px;"><li><strong>Kimi K2 Thinking 开源发布，主打 Agent 与推理能力提升</strong> 以开源为杠杆的生态卡位动作，真实影响取决于第三方可复现的 Agent 与推理评测，而非发布声明本身；当前仅有标题级信息，置信度低。</li>
+<li><strong>NVIDIA Cosmos 3 Edge 后训练面向端侧机器人控制</strong> 把机器人基础模型竞争从云端训练推向端侧后训练与部署闭环，但端侧实时性、算力与后训练成本之间的结构性矛盾尚未被证据化解。</li>
+<li><strong>TensorRT Edge-LLM 宣称 MLPerf Edge Agentic 基准快 6.4 倍</strong> 方向性信号明确——边缘 Agentic LLM 推理加速正成为竞争焦点；但 6.4x 为未经第三方验证的官方口径，宜作趋势信号而非既成事实。</li></ul>
+  </section>
+
+  <section id="memory" class="section">
+    <h2 class="section-title">跨日主线记忆</h2>
+    <ul style="padding-left:20px;"><li><strong>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 208 天 · 1 source(s) | official | 3 related support</li><li><strong>Q3&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 208 天 · 1 source(s) | official | 2 related support</li><li><strong>Q2&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 208 天 · 1 source(s) | official | 2 related support</li><li><strong>Kimi 开放平台：新功能发布记录</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 208 天 · 1 source(s) | official</li><li><strong>Kimi K2 Turbo API 价格调整通知</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 208 天 · 1 source(s) | official | 3 related support</li></ul>
+  </section>
+
+  <section id="topics" class="section">
+    <h2 class="section-title">重点主题分析</h2>
+    <div class="signal-card">
+                <div class="signal-header">
+                  <h3>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>官方能力宣称与可验证证据之间的落差——在仅有标题级信息、无基准数据和实测片段的情况下，能力主张无法被独立检验</p>
+                  <p><strong>核心洞察：</strong>这是一次以开源为杠杆的生态卡位动作，其真实影响取决于第三方可复现的 Agent 与推理评测，而非发布声明本身</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>low</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://platform.moonshot.cn/blog/posts/k2-turbo-discount" target="_blank" rel="noopener">Kimi K2 Turbo API 价格调整通知</a></li><li>official | <a href="https://platform.moonshot.cn/blog/posts/k2-turbo-enhance" target="_blank" rel="noopener">Kimi K2 又又又提速了</a></li><li>official | <a href="https://platform.moonshot.cn/blog/posts/k2-prom" target="_blank" rel="noopener">Kimi K2 官方高速版 API 开启 5 折特惠</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://platform.moonshot.cn/blog/posts/k2-think" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>Post-Train NVIDIA Cosmos 3 Edge for On-Device Robot Control</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>端侧机器人控制对低延迟、低功耗、高可靠性的硬约束 vs 基础模型后训练与部署所需的高算力、大数据与长迭代周期之间的结构性矛盾</p>
+                  <p><strong>核心洞察：</strong>NVIDIA 正把机器人基础模型竞争从云端训练推向端侧后训练与部署闭环，但该方向能否成立取决于端侧算力效率与后训练成本能否同时满足机器人实时控制的硬约束，当前仅有厂商单方叙事、缺乏可验证证据。</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>low</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://developer.nvidia.com/blog/frontier-reasoning-reaches-the-edge-how-to-deploy-and-optimize-models-on-nvidia-jetson/" target="_blank" rel="noopener">Frontier Reasoning Reaches the Edge: How to Deploy and Optimize Models on NVIDIA Jetson</a></li><li>official | <a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2</a></li><li>official | <a href="https://developer.nvidia.com/blog/maximizing-memory-efficiency-to-run-bigger-models-on-nvidia-jetson/" target="_blank" rel="noopener">Maximizing Memory Efficiency with Agent Skills to Run Bigger Models on NVIDIA Jetson</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://developer.nvidia.com/blog/post-train-nvidia-cosmos-3-edge-for-on-device-robot-control/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>NVIDIA 官方单源宣称的 6.4x 性能领先 vs 缺乏独立可复现的基准证据与口径透明度——即营销叙事强度与证据强度之间的不匹配</p>
+                  <p><strong>核心洞察：</strong>这是一条厂商自证的边缘 AI 性能里程碑，方向性信号明确（边缘 Agentic LLM 推理加速正在成为竞争焦点），但 6.4x 目前只是未经第三方验证的官方口径，晨报宜作为&#x27;趋势信号&#x27;而非&#x27;既成事实&#x27;处理。</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://developer.nvidia.com/blog/frontier-reasoning-reaches-the-edge-how-to-deploy-and-optimize-models-on-nvidia-jetson/" target="_blank" rel="noopener">Frontier Reasoning Reaches the Edge: How to Deploy and Optimize Models on NVIDIA Jetson</a></li><li>official | <a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2</a></li><li>official | <a href="https://developer.nvidia.com/blog/maximizing-memory-efficiency-to-run-bigger-models-on-nvidia-jetson/" target="_blank" rel="noopener">Maximizing Memory Efficiency with Agent Skills to Run Bigger Models on NVIDIA Jetson</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+  </section>
+
+  <section id="forecast" class="section">
+        <h2 class="section-title">📈 短期推演</h2>
+        <div class="forecast-grid">
+          <div class="forecast-card forecast-card--best"><h4>乐观情景</h4><p>第三方基准与开发者实测在未来数周内验证 Kimi K2 Thinking 的 Agent 与推理能力提升，TensorRT Edge-LLM 的 6.4x 获得 MLPerf 官方结果页或独立复现支持，Agent Lightning 出现主流 Agent 框架的适配案例，边缘 Agentic 推理与 Agent 训练基础设施两条主线形成可验证的加速叙事。</p></div>
+          <div class="forecast-card forecast-card--worst"><h4>悲观情景</h4><p>厂商单方叙事持续缺乏第三方复现，Kimi K2 Thinking 的「全面提升」主张被实测证伪或显著打折，TensorRT Edge-LLM 的 6.4x 因口径不透明无法复现，Cosmos 3 Edge 无落地案例，Agent Lightning 的轻量适配层难以穿透复杂 harness，市场对边缘 Agentic 与 Agent RL 的短期预期回落。</p></div>
+          <div class="forecast-card forecast-card--likely"><h4>最可能情景</h4><p>未来 1-3 个月内，Kimi K2 Thinking 出现部分第三方评测但结论分化，TensorRT Edge-LLM 的 6.4x 仍以官方口径传播、独立复现有限，Agent Lightning 获得小范围社区适配但训练效果上限待验证，整体维持「趋势信号强于既成事实」的格局，边缘推理加速与 Agent 训练基础设施继续作为并行主线被跟踪。</p></div>
+        </div>
+        <p><strong>关键变量：</strong></p>
+        <ul><li>Kimi K2 Thinking 第三方 Agent/推理基准与开发者实测反馈</li><li>TensorRT Edge-LLM 6.4x 的独立复现或 MLPerf 官方结果页及基准口径（模型、batch、精度、功耗）</li><li>Cosmos 3 Edge 的机器人厂商落地案例与端侧延迟/功耗实测数据</li><li>Agent Lightning 对主流 Agent 框架的适配案例与训练效果上限</li><li>Momentic 与 vllm 的多源交叉验证进展</li><li>厂商营销叙事强度与证据强度之间的差距是否收敛</li></ul>
+        <p><strong>结论：</strong>短期（1-3 个月）内，本期信号大概率维持「方向明确、证据不足」状态：边缘 Agentic 推理加速、Agent 训练基础设施与开源生态卡位三条主线继续被跟踪，但多数能力与性能主张仍停留在厂商单方叙事，尚不足以支撑既成事实判断；建议按趋势信号处理并优先跟踪第三方基准与独立复现。</p>
+      </section>
+
+  <section id="limitations" class="section">
+    <h2 class="section-title">局限性</h2>
+    <ul><li>Kimi K2 Thinking、Cosmos 3 Edge、TensorRT Edge-LLM 三条均为厂商官方单源内容，证据片段为空，缺乏第三方基准与实测数据。</li><li>TensorRT Edge-LLM 的 6.4x 未说明模型、batch、精度、功耗口径，MLPerf Edge 场景与实际生产负载之间存在代表性差距。</li><li>Momentic 与 vllm 各仅一条来源级信息，无法进行矛盾检测与深度分析。</li><li>本期无跨源交叉验证，整体置信度以 low 为主，仅 Agent Lightning 为 medium。</li></ul>
+  </section>
+
+  <p class="risk-note">⚠️ Kimi K2 Thinking、Cosmos 3 Edge、TensorRT Edge-LLM 三条均为厂商官方单源内容，证据片段为空，缺乏第三方基准与实测数据。</p>
+
+  <section id="actions" class="section">
+    <h2 class="section-title">行动建议</h2>
+    <ul><li>对 Kimi K2 Thinking 跟踪第三方 Agent/推理基准与开发者实测反馈，验证「全面提升」主张。</li><li>对 TensorRT Edge-LLM 的 6.4x 寻找独立复现或 MLPerf 官方结果页，核实基准口径与功耗条件。</li><li>对 Cosmos 3 Edge 关注是否有机器人厂商落地案例与端侧延迟/功耗实测数据。</li><li>对 Agent Lightning 跟踪社区适配案例，验证轻量适配层对主流 Agent 框架的穿透能力与训练效果上限。</li><li>对 Momentic 与 vllm 补充多源信息后再纳入正式分析，当前仅作信号记录。</li></ul>
+  </section>
+
+  <section id="all-signals" class="section">
+    <h2 class="section-title">全部信号</h2>
+    <table class="signals-table"><thead><tr><th>信号</th><th>评分</th><th>证据数</th><th>来源</th></tr></thead><tbody><tr><td>Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses<span class="domain-tag">ai-llm-agent</span></td><td>3.3</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor<span class="domain-tag">ai-llm-agent</span></td><td>2.6</td><td>1</td><td><a href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>vllm-project/vllm<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Launch HN: Momentic (YC W24) – Agents that catch bugs by using your app<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://momentic.ai/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://platform.moonshot.cn/blog/posts/k2-think" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Post-Train NVIDIA Cosmos 3 Edge for On-Device Robot Control<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/post-train-nvidia-cosmos-3-edge-for-on-device-robot-control/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>NVIDIA JetPack 7.2.1 Adds Agentic Video Skills and T3000 Emulation<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/nvidia-jetpack-7-2-1-adds-agentic-video-skills-and-t3000-emulation/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Maximizing Memory Efficiency with Agent Skills to Run Bigger Models on NVIDIA Jetson<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/maximizing-memory-efficiency-to-run-bigger-models-on-nvidia-jetson/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Unifying Edge AI: How Coral NPU’s open standard brings portable, energy-viable inte…<span class="domain-tag">ai-x-electronics</span></td><td>1.8</td><td>1</td><td><a href="https://developers.googleblog.com/unifying-edge-ai-how-coral-npus-open-standard-brings-portable-energy-viable-intelligence-from-model-to-silicon/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Q3&#x27;25: Technology Update – Low Precision and Model Optimization<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://blog.openvino.ai/blog-posts/q325-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Q2&#x27;25: Technology Update – Low Precision and Model Optimization<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://blog.openvino.ai/blog-posts/q225-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Turning Database Grading into RL Rewards: Post-Training Agents with ThinkingBox<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://huggingface.co/blog/microsoft/thinkingbox-training" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Announcements<span class="domain-tag">ai-llm-agent</span></td><td>1.5</td><td>5</td><td><a href="https://www.anthropic.com/news/announcements" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>langchain-ai/langgraph<span class="domain-tag">ai-llm-agent</span></td><td>1.0</td><td>1</td><td><a href="https://github.com/langchain-ai/langgraph" target="_blank" rel="noopener">链接 →</a></td></tr></tbody></table>
+  </section>
+
+  <footer>
+    <p>VS_AI 情报采集系统自动生成 · 数据来源：RSS / GitHub / 官方网站</p>
+  </footer>
+</div>
+</body>
+</html>
