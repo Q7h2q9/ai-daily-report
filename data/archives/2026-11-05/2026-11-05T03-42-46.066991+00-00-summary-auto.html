@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自动情报快报</title>
+<style>
+  :root {
+    --bg:#0d1117; --bg2:#161b22; --bg3:#1c2333; --border:#30363d;
+    --text:#e6edf3; --text2:#8b949e; --accent:#58a6ff; --green:#3fb950;
+    --orange:#d29922; --red:#f85149; --purple:#bc8cff; --radius:8px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;
+  }
+  * { box-sizing:border-box;margin:0;padding:0; }
+  body { background:var(--bg);color:var(--text);line-height:1.6; }
+  .wrap { max-width:960px;margin:0 auto;padding:24px 20px 48px; }
+  header { text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:32px; }
+  header h1 { font-size:1.8em;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  header .meta { color:var(--text2);font-size:.9em;margin-top:8px; }
+  header .stats { display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  header .stat-pill { background:var(--bg3);padding:4px 14px;border-radius:20px;font-size:.85em;color:var(--text2);border:1px solid var(--border); }
+  .stage-badges { display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  .stage-badge { background:var(--bg3);padding:3px 12px;border-radius:6px;font-size:.82em;border:1px solid var(--stage-color,#666);color:var(--text2); }
+  .section { margin-bottom:28px; }
+  .section-title { font-size:1.25em;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--accent); }
+  .judgment { font-size:1.35em;font-weight:700;text-align:center;padding:20px;background:var(--bg2);border-radius:var(--radius);border-left:4px solid var(--accent); }
+  .grid-2 { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px; }
+  .card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px; }
+  .card h4 { color:var(--accent);margin-bottom:10px;font-size:.95em; }
+  .card ul { padding-left:18px;color:var(--text2); }
+  .card li { margin-bottom:4px; }
+  .signal-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;transition:border-color .2s; }
+  .signal-card:hover { border-color:var(--accent); }
+  .signal-header { display:flex;justify-content:space-between;align-items:start;margin-bottom:10px; }
+  .signal-header h3 { font-size:1em;color:var(--text); }
+  .badge { font-size:.75em;padding:2px 10px;border-radius:12px;font-weight:600; }
+  .badge--high { background:#1a3a2a;color:var(--green); }
+  .badge--medium { background:#3a3020;color:var(--orange); }
+  .badge--low { background:#3a2220;color:var(--red); }
+  .signal-body p { margin:4px 0;color:var(--text2);font-size:.9em; }
+  .signal-link { display:inline-block;margin-top:10px;font-size:.85em;color:var(--accent);text-decoration:none; }
+  .signal-link:hover { text-decoration:underline; }
+  .forecast-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0; }
+  .forecast-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px; }
+  .forecast-card h4 { font-size:.9em;margin-bottom:8px; }
+  .forecast-card--best { border-left:3px solid var(--green); }
+  .forecast-card--worst { border-left:3px solid var(--red); }
+  .forecast-card--likely { border-left:3px solid var(--accent); }
+  .forecast-card p { font-size:.88em;color:var(--text2); }
+  .risk-note { background:#3a2220;border:1px solid var(--red);border-radius:var(--radius);padding:12px 16px;margin-top:12px;color:#fdaebb;font-size:.9em; }
+  .domain-tag { display:inline-block;font-size:.72em;background:var(--bg3);color:var(--text2);padding:1px 8px;border-radius:10px;margin-left:8px; }
+  table.signals-table { width:100%;border-collapse:collapse;margin-top:10px;font-size:.88em; }
+  .signals-table th,.signals-table td { padding:8px 12px;text-align:left;border-bottom:1px solid var(--border); }
+  .signals-table th { background:var(--bg3);color:var(--text2);font-weight:600;position:sticky;top:0; }
+  .signals-table tr:hover td { background:var(--bg2); }
+  footer { text-align:center;padding:24px 0;border-top:1px solid var(--border);margin-top:40px;color:var(--text2);font-size:.82em; }
+  @media(max-width:640px) { header h1 { font-size:1.4em; } .grid-2 { grid-template-columns:1fr; } .forecast-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>自动情报快报</h1>
+    <div class="meta">生成时间：2026-11-05T03:42:46.066991+00:00</div>
+    <div class="stats">
+      <span class="stat-pill">📡 88 条原始信息</span>
+      <span class="stat-pill">🎯 82 个主题</span>
+      <span class="stat-pill">📊 3 个重点分析</span>
+    </div>
+    <div class="stage-badges"><span class="stage-badge" style="--stage-color:#10b981">analysis: ok</span><span class="stage-badge" style="--stage-color:#10b981">summary: ok</span><span class="stage-badge" style="--stage-color:#10b981">forecast: ok</span></div>
+  </header>
+
+  <section id="judgment" class="section">
+    <div class="judgment">今日情报以边缘 AI 性能宣称与智能体框架发布为主，但六条主题均缺乏独立验证，宜作待验证信号跟踪而非行业结论。</div>
+  </section>
+
+  <section id="executive-summary" class="section">
+    <h2 class="section-title">执行摘要</h2>
+    <ul><li>NVIDIA 宣称 TensorRT Edge-LLM 在 Jetson AGX Thor 上完成 MLPerf Edge Agentic 基准并快 6.4 倍，但未披露基线配置与精度条件，属厂商单方面性能营销。</li><li>Ripple-65B Preview 自称美国开源权重智能体编程 SOTA，仅靠 Hacker News 热度支撑，许可证、训练数据与第三方基准均缺失。</li><li>微软 Agent Lightning v1.0 以约 3,500 行轻量框架切入 agentic RL，核心价值在于能否桥接异构 agent harness 与 RL 训练回路，而非代码规模。</li><li>Qualcomm Cloud AI 100 Ultra、DoorDash AI agent 使用率、vLLM 三条信号证据深度不足，仅能作为关注线索。</li><li>整体证据链薄弱：六条主题中五条为单一来源、全部 confidence 为 low，晨报应明确标注验证缺口。</li></ul>
+  </section>
+
+  <section id="key-insights" class="section">
+    <h2 class="section-title">关键洞察</h2>
+    <ul><li>今日六条主题全部为 low confidence 且多为单一来源，情报价值在于『信号发现』而非『结论确认』，晨报应把验证缺口本身作为核心输出。</li><li>厂商自测性能宣称（NVIDIA 6.4x、Ripple SOTA）与第三方可复现验证之间的鸿沟，是当前 AI 硬件与模型发布叙事的结构性特征，读者需默认打折。</li><li>Agent Lightning 的洞察具有跨主题共性：agentic 系统的瓶颈正从模型能力转向 harness 兼容性与奖励信号工程，这与边缘部署的功耗/成本约束、DoorDash 的低采用率共同指向『落地摩擦』这一主线。</li><li>边缘 AI 加速（Jetson、Qualcomm）与 agentic RL 训练框架同时升温，暗示行业正从『模型发布』转向『部署与训练基础设施』竞争，但两条线均缺乏独立基准。</li></ul>
+  </section>
+
+  <section id="mainlines" class="section">
+    <h2 class="section-title">重点主线</h2>
+    <ul style="padding-left:20px;"><li><strong>NVIDIA TensorRT Edge-LLM 宣称 MLPerf Edge Agentic 基准快 6.4 倍</strong> 若属实，将强化 Jetson AGX Thor 在边缘智能体部署的算力叙事；但基线、模型规模与精度未披露，且无第三方复现，当前只能作为厂商动态提示，不能作为边缘 AI 性能的行业结论引用。</li>
+<li><strong>Ripple-65B Preview 自称美国开源权重智能体编程 SOTA</strong> 高热度发布可能影响开源权重模型竞争格局认知，但 SOTA 主张仅有厂商自述与 HN 讨论支撑，许可证与安全对齐细节未披露，应定位为待验证发布并优先追踪第三方基准。</li>
+<li><strong>微软 Agent Lightning v1.0 发布轻量级 agentic RL 框架</strong> 试图用统一抽象降低现有 agent 接入 RL 训练的门槛，其成败取决于真实 harness 的兼容性与奖励信号可得性；若落地顺利，可能推动 agent 从静态部署转向持续 RL 优化。</li></ul>
+  </section>
+
+  <section id="memory" class="section">
+    <h2 class="section-title">跨日主线记忆</h2>
+    <ul style="padding-left:20px;"><li><strong>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 209 天 · 1 source(s) | official | 3 related support</li><li><strong>Q3&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 209 天 · 1 source(s) | official | 2 related support</li><li><strong>Q2&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 209 天 · 1 source(s) | official | 2 related support</li><li><strong>Kimi 开放平台：新功能发布记录</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 209 天 · 1 source(s) | official</li><li><strong>Kimi K2 Turbo API 价格调整通知</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 209 天 · 1 source(s) | official | 3 related support</li></ul>
+  </section>
+
+  <section id="topics" class="section">
+    <h2 class="section-title">重点主题分析</h2>
+    <div class="signal-card">
+                <div class="signal-header">
+                  <h3>TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>厂商单方面性能宣称 vs 可复现、可比的第三方验证缺失</p>
+                  <p><strong>核心洞察：</strong>这是 NVIDIA 围绕 Jetson AGX Thor 的边缘 AI 性能营销节点，6.4 倍加速缺乏基线细节与独立验证，晨报宜作为厂商动态提示而非行业结论引用。</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://developer.nvidia.com/blog/frontier-reasoning-reaches-the-edge-how-to-deploy-and-optimize-models-on-nvidia-jetson/" target="_blank" rel="noopener">Frontier Reasoning Reaches the Edge: How to Deploy and Optimize Models on NVIDIA Jetson</a></li><li>official | <a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2</a></li><li>official | <a href="https://developer.nvidia.com/blog/maximizing-memory-efficiency-to-run-bigger-models-on-nvidia-jetson/" target="_blank" rel="noopener">Maximizing Memory Efficiency with Agent Skills to Run Bigger Models on NVIDIA Jetson</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>Ripple-65B Preview: U.S. Open-Weight SOTA on Agentic Coding</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>厂商宣称的『美国开源权重 SOTA 智能体编程』定位 vs 证据链仅有 Hacker News 单一热度信号、缺乏独立基准与复现验证</p>
+                  <p><strong>核心洞察：</strong>这是一条高热度但证据薄弱的模型发布信号：Ripple-65B 的 SOTA 主张目前只有厂商自述与 HN 讨论支撑，晨报应将其定位为『值得关注的待验证发布』而非已确立的行业事实，并优先追踪第三方基准与许可证细节。</p>
+                  <p><strong>生命周期：</strong>new</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | community | 2 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://huggingface.co/blog/anydecisionmodel" target="_blank" rel="noopener">Introducing AnySpeechRecognizer and AnyDecisionModel: Open Models for Speech and Decisions on Apple Platforms</a></li><li>official | <a href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://www.ricursive.com/ripple" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>框架宣称的『轻量、即插即用』与真实 agent harness 的复杂性、异构性之间的矛盾——这决定了其通用性和实际落地成本是否被低估</p>
+                  <p><strong>核心洞察：</strong>Agent Lightning v1.0 的真正价值不在 3,500 行的轻量本身，而在于能否用统一抽象桥接异构 agent 框架与 RL 训练回路；其成败取决于真实 harness 接入的兼容性与奖励信号可得性，而非代码规模</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>high</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>暂无</li></ul>
+                </div>
+                <a class="signal-link" href="https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+  </section>
+
+  <section id="forecast" class="section">
+        <h2 class="section-title">📈 短期推演</h2>
+        <div class="forecast-grid">
+          <div class="forecast-card forecast-card--best"><h4>乐观情景</h4><p>未来数周内，NVIDIA 披露 TensorRT Edge-LLM 的基线配置与精度条件，Ripple-65B 发布许可证与第三方基准复现结果，微软 Agent Lightning 出现真实 harness 接入案例；三条厂商信号获得独立验证，边缘 AI 与 agentic RL 的部署叙事得到实证支撑，行业对『落地摩擦』的判断从猜测转为可量化。</p></div>
+          <div class="forecast-card forecast-card--worst"><h4>悲观情景</h4><p>所有厂商宣称均未获第三方复现：NVIDIA 6.4 倍加速被证明依赖特定基线或精度妥协，Ripple-65B 的 SOTA 主张在独立评测中不成立且许可证存在限制，Agent Lightning 在异构 harness 上改造成本远超预期；同时 DoorDash 的低采用率被证实为行业普遍现象，agentic 落地预期整体下修，单一来源信号被市场过度解读后反转。</p></div>
+          <div class="forecast-card forecast-card--likely"><h4>最可能情景</h4><p>短期内（1-3 个月）多数信号维持『厂商宣称、待验证』状态：NVIDIA 与 Ripple 不会主动披露不利基线细节，第三方复现滞后；Agent Lightning 出现少量早期接入案例但缺乏规模化证据；Qualcomm、DoorDash、vLLM 三条线索仍停留在热度层面。行业叙事继续由厂商营销驱动，验证缺口本身成为晨报的稳定输出项。</p></div>
+        </div>
+        <p><strong>关键变量：</strong></p>
+        <ul><li>NVIDIA 是否披露 TensorRT Edge-LLM 的基线配置、模型规模与精度条件</li><li>Ripple-65B 的许可证条款、训练数据披露与第三方基准复现进展</li><li>Agent Lightning 在真实异构 harness 上的接入案例数量与奖励信号可得性</li><li>是否有独立评测机构对上述厂商宣称进行交叉验证</li><li>DoorDash AI agent 采用率是否出现第二来源与样本口径确认</li><li>边缘 AI 加速卡（Jetson、Qualcomm）的独立实测数据与功耗/成本约束披露</li></ul>
+        <p><strong>结论：</strong>今日六条主题全部为低置信度、多为单一来源，短期预测的核心不是判断哪条宣称成立，而是判断验证缺口能否被填补。最可能情景是厂商营销继续领先于独立验证，信号维持待验证状态；建议晨报将『验证缺口』作为结构性输出，对 NVIDIA 6.4x 与 Ripple SOTA 默认打折引用，优先追踪基线披露、许可证与第三方复现三类可验证节点。</p>
+      </section>
+
+  <section id="limitations" class="section">
+    <h2 class="section-title">局限性</h2>
+    <ul><li>六条主题中五条仅有单一来源，全部 confidence 为 low，无一条具备交叉验证。</li><li>NVIDIA 6.4 倍加速未披露基线配置、模型规模与精度条件，无法判断可比性。</li><li>Ripple-65B 的 SOTA 主张、许可证条款、训练数据与安全对齐细节均未在证据中出现。</li><li>Agent Lightning 仅有微软官方博客单一片段，无第三方评测、基准对比或失败案例。</li><li>Qualcomm、DoorDash、vLLM 三条仅有 HN 分数/评论数或仓库描述，缺乏实质内容证据。</li><li>HN 热度与评论数不能等同于技术有效性，且评论中的质疑与实测分歧未被呈现。</li></ul>
+  </section>
+
+  <p class="risk-note">⚠️ 六条主题中五条仅有单一来源，全部 confidence 为 low，无一条具备交叉验证。</p>
+
+  <section id="actions" class="section">
+    <h2 class="section-title">行动建议</h2>
+    <ul><li>将 NVIDIA 6.4x 与 Ripple-65B SOTA 标注为『厂商宣称、待验证』，在晨报中避免作为行业结论引用。</li><li>优先追踪 Ripple-65B 的许可证条款、第三方基准与复现结果，以及 NVIDIA 的基线配置披露。</li><li>对 Agent Lightning 关注真实 harness 接入案例与奖励信号设计，评估其跨框架兼容性是否被高估。</li><li>对 Qualcomm Cloud AI 100 Ultra 补充规格表与独立实测数据后再纳入竞争分析。</li><li>对 DoorDash AI agent 采用率寻找第二来源与样本口径，确认是否为行业普遍现象。</li><li>建立『单一来源低置信度』标签机制，在后续晨报中持续跟踪上述信号的验证进展。</li></ul>
+  </section>
+
+  <section id="all-signals" class="section">
+    <h2 class="section-title">全部信号</h2>
+    <table class="signals-table"><thead><tr><th>信号</th><th>评分</th><th>证据数</th><th>来源</th></tr></thead><tbody><tr><td>Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses<span class="domain-tag">ai-llm-agent</span></td><td>3.3</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor<span class="domain-tag">ai-llm-agent</span></td><td>2.6</td><td>1</td><td><a href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>vllm-project/vllm<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Ripple-65B Preview: U.S. Open-Weight SOTA on Agentic Coding<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://www.ricursive.com/ripple" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Qualcomm Cloud AI 100 Ultra – 150W AI Accelerator Card with 128GB at 548GB/s<span class="domain-tag">ai-x-electronics</span></td><td>2.5</td><td>1</td><td><a href="https://www.qualcomm.com/data-center/products/cloud-ai-100-ultra" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Basically no one is using AI agents for their DoorDash orders<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://arstechnica.com/ai/2026/10/doordash-says-outside-ai-agents-have-only-led-to-hundreds-of-orders-so-far/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>YC&#x27;s Garry Tan uses AI agents so much, he spends up to $200K a year on tokens<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://techcrunch.com/2026/11/02/y-combinators-garry-tan-uses-ai-agents-so-much-he-spends-up-to-200k-a-year-on-tokens/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>You&#x27;ll need nerves of steel to work with AI agents<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://orchidfiles.com/youll-need-nerves-of-steel-to-work-with-ai-agents/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://platform.moonshot.cn/blog/posts/k2-think" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Post-Train NVIDIA Cosmos 3 Edge for On-Device Robot Control<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/post-train-nvidia-cosmos-3-edge-for-on-device-robot-control/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>NVIDIA JetPack 7.2.1 Adds Agentic Video Skills and T3000 Emulation<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/nvidia-jetpack-7-2-1-adds-agentic-video-skills-and-t3000-emulation/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Maximizing Memory Efficiency with Agent Skills to Run Bigger Models on NVIDIA Jetson<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/maximizing-memory-efficiency-to-run-bigger-models-on-nvidia-jetson/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Unifying Edge AI: How Coral NPU’s open standard brings portable, energy-viable inte…<span class="domain-tag">ai-x-electronics</span></td><td>1.8</td><td>1</td><td><a href="https://developers.googleblog.com/unifying-edge-ai-how-coral-npus-open-standard-brings-portable-energy-viable-intelligence-from-model-to-silicon/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Q3&#x27;25: Technology Update – Low Precision and Model Optimization<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://blog.openvino.ai/blog-posts/q325-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">链接 →</a></td></tr></tbody></table>
+  </section>
+
+  <footer>
+    <p>VS_AI 情报采集系统自动生成 · 数据来源：RSS / GitHub / 官方网站</p>
+  </footer>
+</div>
+</body>
+</html>
