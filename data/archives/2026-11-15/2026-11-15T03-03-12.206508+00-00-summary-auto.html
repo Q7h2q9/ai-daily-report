@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自动情报快报</title>
+<style>
+  :root {
+    --bg:#0d1117; --bg2:#161b22; --bg3:#1c2333; --border:#30363d;
+    --text:#e6edf3; --text2:#8b949e; --accent:#58a6ff; --green:#3fb950;
+    --orange:#d29922; --red:#f85149; --purple:#bc8cff; --radius:8px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;
+  }
+  * { box-sizing:border-box;margin:0;padding:0; }
+  body { background:var(--bg);color:var(--text);line-height:1.6; }
+  .wrap { max-width:960px;margin:0 auto;padding:24px 20px 48px; }
+  header { text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:32px; }
+  header h1 { font-size:1.8em;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  header .meta { color:var(--text2);font-size:.9em;margin-top:8px; }
+  header .stats { display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  header .stat-pill { background:var(--bg3);padding:4px 14px;border-radius:20px;font-size:.85em;color:var(--text2);border:1px solid var(--border); }
+  .stage-badges { display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  .stage-badge { background:var(--bg3);padding:3px 12px;border-radius:6px;font-size:.82em;border:1px solid var(--stage-color,#666);color:var(--text2); }
+  .section { margin-bottom:28px; }
+  .section-title { font-size:1.25em;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--accent); }
+  .judgment { font-size:1.35em;font-weight:700;text-align:center;padding:20px;background:var(--bg2);border-radius:var(--radius);border-left:4px solid var(--accent); }
+  .grid-2 { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px; }
+  .card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px; }
+  .card h4 { color:var(--accent);margin-bottom:10px;font-size:.95em; }
+  .card ul { padding-left:18px;color:var(--text2); }
+  .card li { margin-bottom:4px; }
+  .signal-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;transition:border-color .2s; }
+  .signal-card:hover { border-color:var(--accent); }
+  .signal-header { display:flex;justify-content:space-between;align-items:start;margin-bottom:10px; }
+  .signal-header h3 { font-size:1em;color:var(--text); }
+  .badge { font-size:.75em;padding:2px 10px;border-radius:12px;font-weight:600; }
+  .badge--high { background:#1a3a2a;color:var(--green); }
+  .badge--medium { background:#3a3020;color:var(--orange); }
+  .badge--low { background:#3a2220;color:var(--red); }
+  .signal-body p { margin:4px 0;color:var(--text2);font-size:.9em; }
+  .signal-link { display:inline-block;margin-top:10px;font-size:.85em;color:var(--accent);text-decoration:none; }
+  .signal-link:hover { text-decoration:underline; }
+  .forecast-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0; }
+  .forecast-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px; }
+  .forecast-card h4 { font-size:.9em;margin-bottom:8px; }
+  .forecast-card--best { border-left:3px solid var(--green); }
+  .forecast-card--worst { border-left:3px solid var(--red); }
+  .forecast-card--likely { border-left:3px solid var(--accent); }
+  .forecast-card p { font-size:.88em;color:var(--text2); }
+  .risk-note { background:#3a2220;border:1px solid var(--red);border-radius:var(--radius);padding:12px 16px;margin-top:12px;color:#fdaebb;font-size:.9em; }
+  .domain-tag { display:inline-block;font-size:.72em;background:var(--bg3);color:var(--text2);padding:1px 8px;border-radius:10px;margin-left:8px; }
+  table.signals-table { width:100%;border-collapse:collapse;margin-top:10px;font-size:.88em; }
+  .signals-table th,.signals-table td { padding:8px 12px;text-align:left;border-bottom:1px solid var(--border); }
+  .signals-table th { background:var(--bg3);color:var(--text2);font-weight:600;position:sticky;top:0; }
+  .signals-table tr:hover td { background:var(--bg2); }
+  footer { text-align:center;padding:24px 0;border-top:1px solid var(--border);margin-top:40px;color:var(--text2);font-size:.82em; }
+  @media(max-width:640px) { header h1 { font-size:1.4em; } .grid-2 { grid-template-columns:1fr; } .forecast-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>自动情报快报</h1>
+    <div class="meta">生成时间：2026-11-15T03:03:12.206508+00:00</div>
+    <div class="stats">
+      <span class="stat-pill">📡 89 条原始信息</span>
+      <span class="stat-pill">🎯 83 个主题</span>
+      <span class="stat-pill">📊 3 个重点分析</span>
+    </div>
+    <div class="stage-badges"><span class="stage-badge" style="--stage-color:#10b981">analysis: ok</span><span class="stage-badge" style="--stage-color:#10b981">summary: ok</span><span class="stage-badge" style="--stage-color:#10b981">forecast: ok</span></div>
+  </header>
+
+  <section id="judgment" class="section">
+    <div class="judgment">AI基础设施与安全领域今日呈现&#x27;能力扩展与风险同步放大&#x27;的双主线：厂商密集发布跨节点推理、端侧加速与TTS产品宣称，同时微软披露Lazarus后门揭示AI代理的工具权限正成为新的攻击面。</div>
+  </section>
+
+  <section id="executive-summary" class="section">
+    <h2 class="section-title">执行摘要</h2>
+    <ul><li>NVIDIA集中释放三项性能信号：vLLM跨双DGX Station服务GLM-5.3达607.8 tok/s、TensorRT Edge-LLM在Jetson AGX Thor上宣称MLPerf Edge Agentic基准6.4倍加速，均为厂商单方基准，缺乏第三方复现与生产负载验证。</li><li>Hugging Face发布Phonon TTS，宣称端侧高质量语音合成并基准领先，但证据链单薄（单一来源、无数据片段），宜定位为待验证的发布动态。</li><li>微软研究院披露Lazarus后门技术，可重编程模型休眠神经元，使AI代理在隐藏触发器下静默执行恶意命令，对具备工具/终端访问权限的代理威胁尤为严重。</li><li>开源侧vLLM仓库与Show HN项目Agweb（面向代理的浏览器）构成中等热度信号，但证据深度不足，仅作趋势观察。</li><li>整体判断：今日信息以厂商公告为主，性能数字亮眼但可复现性存疑；安全侧Lazarus提供了从输出过滤转向权重与激活路径完整性审计的明确方向。</li></ul>
+  </section>
+
+  <section id="key-insights" class="section">
+    <h2 class="section-title">关键洞察</h2>
+    <ul><li>今日性能类公告（607.8 tok/s、6.4x、基准领先）高度集中于厂商官方渠道，形成&#x27;数字亮眼但证据单薄&#x27;的共同模式——晨报应统一以&#x27;厂商宣称&#x27;标注，并追踪后续第三方复现。</li><li>Lazarus与边缘/跨节点推理形成对照：AI能力扩展（工具权限、终端访问、端侧部署）与攻击面扩大是同一枚硬币的两面，安全评估需从输出层前移到权重与激活路径层。</li><li>跨节点推理与端侧加速共同指向&#x27;单GPU不够用&#x27;的现实约束，但两条路径（纵向堆叠节点 vs 横向下沉边缘）的成本结构与适用场景截然不同，选型需以TCO和可复现性而非峰值吞吐为锚。</li><li>开源侧信号（vLLM、Agweb）热度中等但证据深度低，说明当前AI代理生态仍处于工具层快速试错阶段，尚未形成可被晨报当作结论的稳定趋势。</li></ul>
+  </section>
+
+  <section id="mainlines" class="section">
+    <h2 class="section-title">重点主线</h2>
+    <ul style="padding-left:20px;"><li><strong>NVIDIA跨节点推理演示：607.8 tok/s服务GLM-5.3</strong> 验证了GLM-5.3在双DGX Station+vLLM上的跨节点可行性，但该数字是理想基准，与真实生产负载的首token延迟、并发稳定性及两台DGX Station的高昂TCO之间存在显著落差，中小团队难以直接复现。</li>
+<li><strong>TensorRT Edge-LLM宣称Jetson AGX Thor上6.4倍加速</strong> 若成立将显著提升边缘端Agentic LLM的可行性，但仅有NVIDIA官方单一来源，未披露基线配置、模型规模与功耗约束，6.4x应视为厂商宣称而非既成事实。</li>
+<li><strong>微软Lazarus后门：重编程休眠神经元攻击AI代理</strong> 揭示后门可寄生于模型既有但未激活的神经元，使&#x27;正常行为&#x27;与&#x27;恶意潜能&#x27;共存，常规行为测试难以发现；AI代理的工具/终端访问能力越强，触发后破坏越大，安全重心需转向模型权重与激活路径的完整性审计。</li></ul>
+  </section>
+
+  <section id="memory" class="section">
+    <h2 class="section-title">跨日主线记忆</h2>
+    <ul style="padding-left:20px;"><li><strong>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 219 天 · 1 source(s) | official | 3 related support</li><li><strong>Q3&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 219 天 · 1 source(s) | official | 2 related support</li><li><strong>Q2&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 219 天 · 1 source(s) | official | 2 related support</li><li><strong>Kimi 开放平台：新功能发布记录</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 219 天 · 1 source(s) | official</li><li><strong>Kimi K2 Turbo API 价格调整通知</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 219 天 · 1 source(s) | official | 3 related support</li></ul>
+  </section>
+
+  <section id="topics" class="section">
+    <h2 class="section-title">重点主题分析</h2>
+    <div class="signal-card">
+                <div class="signal-header">
+                  <h3>Serving GLM-5.3 at 607.8 tok/s across two Nvidia DGX stations with vLLM</h3>
+                  <span class="badge badge--medium">medium</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>厂商展示的跨节点高吞吐性能指标 vs 实际部署中的成本、复杂度与可复现性之间的落差</p>
+                  <p><strong>核心洞察：</strong>这是一篇厂商技术演示，核心价值在于验证GLM-5.3跨双DGX Station+vLLM的可行性，但607.8 tok/s是理想基准数字，读者需警惕其与真实生产负载之间的差距</p>
+                  <p><strong>生命周期：</strong>new</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | community | 1 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>A Closer Look at Phonon TTS. Launching High-Quality On-Device Speech That Tops the Benchmarks.</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>宣称的基准领先与端侧高质量 vs 证据链缺失（无片段、单一来源、无第三方验证）</p>
+                  <p><strong>核心洞察：</strong>这是一条仅有厂商单方声明的产品发布信息，核心主张尚未被证据支撑，晨报宜以&#x27;待验证的发布动态&#x27;定位而非当作已确立的技术结论</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/" target="_blank" rel="noopener">On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery</a></li><li>official | <a href="https://huggingface.co/blog/qvac/botpsy" target="_blank" rel="noopener">BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model</a></li><li>official | <a href="https://developer.nvidia.com/blog/post-train-nvidia-cosmos-3-edge-for-on-device-robot-control/" target="_blank" rel="noopener">Post-Train NVIDIA Cosmos 3 Edge for On-Device Robot Control</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://huggingface.co/blog/phonon-tts" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</h3>
+                  <span class="badge badge--medium">medium</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>AI代理的能力扩展（工具/终端访问）与其攻击面扩大之间的矛盾：能力越强，一旦被后门触发造成的破坏越大，而休眠神经元的可重编程性使后门更隐蔽、更难在部署前发现</p>
+                  <p><strong>核心洞察：</strong>Lazarus表明后门可寄生于模型既有但未激活的神经元中，使“正常行为”与“恶意潜能”共存，AI代理安全重心需从输出过滤转向对模型权重与激活路径的完整性审计</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 2 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/" target="_blank" rel="noopener">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a></li><li>official | <a href="https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/" target="_blank" rel="noopener">On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+  </section>
+
+  <section id="forecast" class="section">
+        <h2 class="section-title">📈 短期推演</h2>
+        <div class="forecast-grid">
+          <div class="forecast-card forecast-card--best"><h4>乐观情景</h4><p>NVIDIA 的两项性能宣称（607.8 tok/s 跨双 DGX Station、Jetson AGX Thor 上 6.4x）在数周内获得社区独立复现，vLLM 生态出现可参考的生产负载基准；Phonon TTS 发布可复现 demo 并通过第三方评测；Lazarus 后门披露推动主流推理框架与模型托管平台快速上线权重完整性校验与代理最小权限模板，安全实践从输出过滤前移到激活路径审计。</p></div>
+          <div class="forecast-card forecast-card--worst"><h4>悲观情景</h4><p>厂商基准数字被证明仅在理想配置下成立，跨节点通信开销与边缘功耗约束使实际吞吐大幅缩水，中小团队按宣传选型后遭遇 TCO 与稳定性问题；Phonon TTS 的&#x27;基准领先&#x27;主张长期无第三方验证，市场对其信任度下降；Lazarus 类技术被攻击者快速武器化，出现针对具备终端权限的 AI 代理的真实入侵事件，而防御侧仍缺乏可操作的权重审计工具，导致企业暂缓代理部署。</p></div>
+          <div class="forecast-card forecast-card--likely"><h4>最可能情景</h4><p>短期内（1-3个月）NVIDIA 两项性能宣称维持&#x27;厂商单方基准&#x27;状态，社区讨论集中于复现难度与基线配置缺失，尚无系统性第三方验证；Phonon TTS 保持低证据热度，仅作为发布动态被引用；Lazarus 成为 AI 代理安全讨论的参考案例，推动部分团队在部署前增加模型来源审查与最小权限配置，但权重级完整性审计工具尚未成熟；vLLM 与 Agweb 维持中等热度、低频观察。整体呈现&#x27;能力宣称先行、验证与防御滞后&#x27;的格局。</p></div>
+        </div>
+        <p><strong>关键变量：</strong></p>
+        <ul><li>NVIDIA 是否披露 607.8 tok/s 与 6.4x 的基线配置、模型规模与功耗约束，以及社区/MLPerf 官方是否出现独立复现</li><li>vLLM 社区与生产用户是否发布跨节点部署的真实负载数据（首 token 延迟、并发稳定性、TCO）</li><li>Phonon TTS 是否发布可复现 demo 或第三方评测数据</li><li>Lazarus 后门技术是否出现公开 PoC、被武器化的迹象，以及主流模型托管平台是否上线权重完整性校验</li><li>具备工具/终端权限的 AI 代理部署方是否采纳最小权限与运行时行为监控</li><li>边缘端 Agentic LLM 的实际功耗、散热与成本约束是否被独立测试量化</li></ul>
+        <p><strong>结论：</strong>今日信号以厂商单方性能宣称与防御方安全披露为主，短期最可能的走向是&#x27;宣称先行、验证滞后&#x27;：NVIDIA 的 607.8 tok/s 与 6.4x 在缺乏第三方复现前应统一标注为未经独立验证的厂商宣称，不宜作为选型依据；Phonon TTS 维持待验证状态；Lazarus 则提供了明确且可操作的安全方向——将 AI 代理安全重心从输出过滤前移至模型权重与激活路径的完整性审计，并对具备终端权限的代理实施最小权限。建议对性能类公告建立&#x27;待复现&#x27;跟踪项，对安全类披露立即纳入部署前检查清单。</p>
+      </section>
+
+  <section id="limitations" class="section">
+    <h2 class="section-title">局限性</h2>
+    <ul><li>NVIDIA两项性能公告（607.8 tok/s、6.4x）均为厂商单方基准，无第三方复现、无基线配置与测试细节披露，数字可信度与生产可复现性存疑。</li><li>Phonon TTS证据片段为空、仅单一来源，&#x27;高质量&#x27;&#x27;基准领先&#x27;等强主张均未在材料中提供数据支撑。</li><li>Lazarus后门信息来自微软研究院博客，属防御方披露，攻击可行性、影响范围与现有模型的易感程度未量化。</li><li>vLLM与Agweb仅有单条元数据（仓库描述、HN分数），缺乏功能细节与用户反馈，不足以支撑深度判断。</li><li>所有主题均集中于ai-llm-agent单一领域，缺乏跨领域交叉验证，晨报覆盖面有限。</li></ul>
+  </section>
+
+  <p class="risk-note">⚠️ NVIDIA两项性能公告（607.8 tok/s、6.4x）均为厂商单方基准，无第三方复现、无基线配置与测试细节披露，数字可信度与生产可复现性存疑。</p>
+
+  <section id="actions" class="section">
+    <h2 class="section-title">行动建议</h2>
+    <ul><li>对NVIDIA两项性能宣称建立&#x27;待复现&#x27;跟踪项，关注社区（如vLLM GitHub issue、MLPerf官方结果页）是否出现独立基准与生产负载数据。</li><li>将Lazarus后门纳入AI代理部署前的安全检查清单：优先审计模型权重来源与神经元级改动，对具备终端/工具权限的代理实施最小权限与运行时行为监控。</li><li>对Phonon TTS暂缓采信，待第三方评测或可复现demo出现后再评估端侧部署价值。</li><li>对vLLM与Agweb保持低频观察，若后续出现多源报道或实质性功能更新再升级为正式条目。</li><li>在晨报编辑规范中固化&#x27;厂商宣称&#x27;标注规则：凡单一厂商来源的性能数字，一律附&#x27;未经独立验证&#x27;提示，避免读者误读为既成事实。</li></ul>
+  </section>
+
+  <section id="all-signals" class="section">
+    <h2 class="section-title">全部信号</h2>
+    <table class="signals-table"><thead><tr><th>信号</th><th>评分</th><th>证据数</th><th>来源</th></tr></thead><tbody><tr><td>TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor<span class="domain-tag">ai-llm-agent</span></td><td>2.6</td><td>1</td><td><a href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>A Closer Look at Phonon TTS. Launching High-Quality On-Device Speech That Tops the Benchmarks.<span class="domain-tag">ai-llm-agent</span></td><td>2.6</td><td>1</td><td><a href="https://huggingface.co/blog/phonon-tts" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Serving GLM-5.3 at 607.8 tok/s across two Nvidia DGX stations with vLLM<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Show HN: Agweb – a browser for agents that stays out of your way<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://github.com/paul-nameless/agweb" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>vllm-project/vllm<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Formally verifying agent-written full-stack web apps with PDD Kit<span class="domain-tag">ai-x-electronics</span></td><td>2.5</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/formally-verifying-agent-written-full-stack-web-apps-with-pdd-kit/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery<span class="domain-tag">ai-llm-agent</span></td><td>2.4</td><td>3</td><td><a href="https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>US IRS free online tax filing open source repo (2025)<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://github.com/IRS-Public/direct-file" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://platform.moonshot.cn/blog/posts/k2-think" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Post-Train NVIDIA Cosmos 3 Edge for On-Device Robot Control<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/post-train-nvidia-cosmos-3-edge-for-on-device-robot-control/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>NVIDIA JetPack 7.2.1 Adds Agentic Video Skills and T3000 Emulation<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/nvidia-jetpack-7-2-1-adds-agentic-video-skills-and-t3000-emulation/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Unifying Edge AI: How Coral NPU’s open standard brings portable, energy-viable inte…<span class="domain-tag">ai-x-electronics</span></td><td>1.8</td><td>1</td><td><a href="https://developers.googleblog.com/unifying-edge-ai-how-coral-npus-open-standard-brings-portable-energy-viable-intelligence-from-model-to-silicon/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Q3&#x27;25: Technology Update – Low Precision and Model Optimization<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://blog.openvino.ai/blog-posts/q325-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">链接 →</a></td></tr></tbody></table>
+  </section>
+
+  <footer>
+    <p>VS_AI 情报采集系统自动生成 · 数据来源：RSS / GitHub / 官方网站</p>
+  </footer>
+</div>
+</body>
+</html>
