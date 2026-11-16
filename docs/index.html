@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VS_AI 情报阅读站</title>
-<meta name="description" content="AI基础设施与安全领域今日呈现&#x27;能力扩展与风险同步放大&#x27;的双主线：厂商密集发布跨节点推理、端侧加速与TTS产品宣称，同时微软披露Lazarus后门揭示AI代理的工具权限正成为新的攻击面。">
+<meta name="description" content="AI代理能力扩展正同时打开攻击面与验证需求：微软揭示休眠神经元后门可将代理权限转为攻击武器，而PDD Kit尝试用形式化验证重建AI生成代码的信任链；边缘侧NVIDIA与Hugging Face的发布信号积极但证据薄弱。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -308,9 +308,9 @@
       <div class="hero-grid">
         <div class="eyebrow">Daily Briefing</div>
         <h1>Briefing For AI Signals.</h1>
-        <p class="hero-copy">AI基础设施与安全领域今日呈现&#x27;能力扩展与风险同步放大&#x27;的双主线：厂商密集发布跨节点推理、端侧加速与TTS产品宣称，同时微软披露Lazarus后门揭示AI代理的工具权限正成为新的攻击面。</p>
+        <p class="hero-copy">AI代理能力扩展正同时打开攻击面与验证需求：微软揭示休眠神经元后门可将代理权限转为攻击武器，而PDD Kit尝试用形式化验证重建AI生成代码的信任链；边缘侧NVIDIA与Hugging Face的发布信号积极但证据薄弱。</p>
         <div class="hero-meta">
-          <span class="chip">最新更新 2026-11-15T03:03:12.206508+00:00</span>
+          <span class="chip">最新更新 2026-11-16T03:05:05.942381+00:00</span>
           <span class="chip">自动版</span>
           <a class="chip" href="./archives/">进入归档检索</a>
           <a class="chip" href="./weekly/">进入周报</a>
@@ -326,7 +326,7 @@
         <article class="stat"><span class="subtle">Raw items</span><strong>89</strong></article>
         <article class="stat"><span class="subtle">Topics</span><strong>83</strong></article>
         <article class="stat"><span class="subtle">Domains</span><strong>2</strong></article>
-        <article class="stat"><span class="subtle">Sources</span><strong>24</strong></article>
+        <article class="stat"><span class="subtle">Sources</span><strong>26</strong></article>
       </div>
     </section>
 
@@ -334,17 +334,17 @@
       <h2 class="section-title">AI Insight</h2>
       <div class="summary-grid">
         <article class="summary-card">
-  <h3>NVIDIA跨节点推理演示：607.8 tok/s服务GLM-5.3</h3>
-  <p>验证了GLM-5.3在双DGX Station+vLLM上的跨节点可行性，但该数字是理想基准，与真实生产负载的首token延迟、并发稳定性及两台DGX Station的高昂TCO之间存在显著落差，中小团队难以直接复现。</p>
+  <h3>Lazarus后门：休眠神经元成为AI代理的隐蔽攻击面</h3>
+  <p>该技术表明后门可潜伏于模型休眠神经元中，使具备工具或终端权限的代理在隐藏触发器下静默下载并运行攻击者代码。对于越来越多被赋予终端与工具访问权的AI代理，这意味着能力扩展直接放大了攻击面，安全审计需从行为层深入到神经元层。</p>
 </article><article class="summary-card">
-  <h3>TensorRT Edge-LLM宣称Jetson AGX Thor上6.4倍加速</h3>
-  <p>若成立将显著提升边缘端Agentic LLM的可行性，但仅有NVIDIA官方单一来源，未披露基线配置、模型规模与功耗约束，6.4x应视为厂商宣称而非既成事实。</p>
+  <h3>PDD Kit：用意图规范与形式化验证重建AI生成代码的信任链</h3>
+  <p>当AI生成代码的规模与速度超出人类逐行审查能力时，PDD Kit将验证对象从代码行转移到开发者意图规范，用Verus形式化证明加测试补充的组合来保证正确性。其有效性上限取决于意图规范本身能否被正确表达和审查，这为AI辅助开发的可问责性提供了新范式。</p>
 </article><article class="summary-card">
-  <h3>微软Lazarus后门：重编程休眠神经元攻击AI代理</h3>
-  <p>揭示后门可寄生于模型既有但未激活的神经元，使&#x27;正常行为&#x27;与&#x27;恶意潜能&#x27;共存，常规行为测试难以发现；AI代理的工具/终端访问能力越强，触发后破坏越大，安全重心需转向模型权重与激活路径的完整性审计。</p>
+  <h3>NVIDIA TensorRT Edge-LLM：边缘Agentic推理的厂商性能信号</h3>
+  <p>6.4倍加速宣称有营销价值，但缺乏基线配置、模型规模和精度条件等对比细节，且为厂商自测。晨报宜将其作为边缘AI算力进展的信号引用，而非独立性能结论；边缘设备算力、功耗、内存约束下的实际可用性仍需验证。</p>
 </article>
       </div>
-      <p class="subtle" style="margin-top:16px;">短期内（1-3个月）NVIDIA 两项性能宣称维持&#x27;厂商单方基准&#x27;状态，社区讨论集中于复现难度与基线配置缺失，尚无系统性第三方验证；Phonon TTS 保持低证据热度，仅作为发布动态被引用；Lazarus 成为 AI 代理安全讨论的参考案例，推动部分团队在部署前增加模型来源审查与最小权限配置，但权重级完整性审计工具尚未成熟；vLLM 与 Agweb 维持中等热度、低频观察。整体呈现&#x27;能力宣称先行、验证与防御滞后&#x27;的格局。</p>
+      <p class="subtle" style="margin-top:16px;">未来3-6个月内，Lazarus作为概念验证型研究被安全社区跟进，出现初步的神经元层检测与审计讨论，但尚未形成标准化防御工具；PDD Kit在微软生态内试点，意图规范审查成为AI生成代码可信验证的新讨论焦点但未大规模落地；NVIDIA与Hugging Face的边缘发布维持厂商自测信号状态，第三方复现与基线披露缓慢推进，边缘AI算力叙事继续升温但实际可用性证据仍不充分。</p>
     </section>
 
     <section class="section">
@@ -370,21 +370,12 @@
   </div>
 </article><article class="signal">
   <span class="tag alt">AI / Agent</span>
-  <h3>Serving GLM-5.3 at 607.8 tok/s across two Nvidia DGX stations with vLLM</h3>
-  <p>Score: 129 | Comments: 65</p>
-  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span></div>
+  <h3>Understanding Positional Embeddings in Modern LLMs</h3>
+  <p>Score: 214 | Comments: 27</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span><span class="tag">trending</span></div>
   <div class="signal-footer">
-    <span>developer.nvidia.com · 2.5</span>
-    <a href="https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/" target="_blank" rel="noopener">查看原文</a>
-  </div>
-</article><article class="signal">
-  <span class="tag alt">AI / Agent</span>
-  <h3>Show HN: Agweb – a browser for agents that stays out of your way</h3>
-  <p>Score: 89 | Comments: 26</p>
-  <div class="signal-tags" style="margin-top:12px;"><span class="tag">hacker-news</span><span class="tag">show-hn</span></div>
-  <div class="signal-footer">
-    <span>github.com · 2.5</span>
-    <a href="https://github.com/paul-nameless/agweb" target="_blank" rel="noopener">查看原文</a>
+    <span>magazine.sebastianraschka.com · 2.5</span>
+    <a href="https://magazine.sebastianraschka.com/p/understanding-positional-embeddings" target="_blank" rel="noopener">查看原文</a>
   </div>
 </article><article class="signal">
   <span class="tag alt">AI / Agent</span>
@@ -403,6 +394,15 @@
   <div class="signal-footer">
     <span>microsoft.com · 2.5</span>
     <a href="https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/" target="_blank" rel="noopener">查看原文</a>
+  </div>
+</article><article class="signal">
+  <span class="tag alt">AI × Electronics</span>
+  <h3>Formally verifying agent-written full-stack web apps with PDD Kit</h3>
+  <p>AI agents can generate code at a scale that’s hard for humans to review line-by-line. PDD Kit helps ensure the code is doing what the developer intended by creating formal specifications and testing against them. It converts developer intent into a Verus specification, proves AI-generated code meets it for every input, and uses tests where proofs aren&#x27;t practical. Developers review intent, not every line. The post Formally verifying agent-written full-stack web apps with PDD Kit appeared first on Microsoft Research .</p>
+  <div class="signal-tags" style="margin-top:12px;"><span class="tag">Research Blog</span><span class="tag">ai-llm-agent</span></div>
+  <div class="signal-footer">
+    <span>microsoft.com · 2.5</span>
+    <a href="https://www.microsoft.com/en-us/research/blog/formally-verifying-agent-written-full-stack-web-apps-with-pdd-kit/" target="_blank" rel="noopener">查看原文</a>
   </div>
 </article>
       </div>
@@ -425,7 +425,16 @@
     <section class="section">
       <h2 class="section-title">Archive Stream</h2>
       <div class="archive-grid">
-        <article class="archive-card" data-domain="AI / Agent AI × Electronics" data-source="github.com huggingface.co openai.com developer.nvidia.com microsoft.com platform.moonshot.cn blog.openvino.ai developers.googleblog.com anthropic.com techpowerup.com scottjg.com crissyfield.de eff.org youtube.com unemploymentlabs.com reuters.com techspot.com blog.pypi.org news.umich.edu gitlab.com retrocomputing.stackexchange.com righto.com arstechnica.com c3-lang.org">
+        <article class="archive-card" data-domain="AI / Agent AI × Electronics" data-source="huggingface.co github.com openai.com developer.nvidia.com microsoft.com platform.moonshot.cn blog.openvino.ai developers.googleblog.com anthropic.com youtube.com reuters.com magazine.sebastianraschka.com jakub.jankiewicz.org crissyfield.de nytimes.com www1.wdr.de space.com operator0x.com baron.by.dai.studio netbsd.org steveblank.com hntrends.com colesgroup.com.au forum.torproject.org bloomberg.com cs.vu.nl">
+  <span class="eyebrow">2026.11.16</span>
+  <h3>AI代理能力扩展正同时打开攻击面与验证需求：微软揭示休眠神经元后门可将代理权限转为攻击武器，而PDD Kit尝试用形式化验证重建AI生成代码的信任链；边缘侧NVIDIA与Hugging Face的发布信号积极但证据薄弱。</h3>
+  <p>微软研究院发现Lazarus后门技术，可重编程AI模型休眠神经元，使具备工具或终端权限的代理在隐藏触发器下静默执行恶意代码，将代理能力直接转化为攻击面。 微软同期发布PDD Kit，将验证对象从代码行转移到开发者意图规范，用形式化证明加测试的组合应对AI生成代码规模超出人工审查能力的问题。 NVIDIA发布TensorRT Edge-LLM并在Jetson AGX Thor上完成MLPerf Edge Agentic基准，宣称6.4倍加速，但属厂商自测、缺乏独立验证与对比条件细节。</p>
+  <div class="archive-meta" style="margin-top:12px;"><span class="tag alt">AI / Agent</span><span class="tag alt">AI × Electronics</span><span class="tag warm">huggingface.co</span><span class="tag warm">github.com</span><span class="tag">自动版</span></div>
+  <div class="archive-footer">
+    <span>83 topics · 89 items</span>
+    <a href="archives/2026-11-16/">打开日报</a>
+  </div>
+</article><article class="archive-card" data-domain="AI / Agent AI × Electronics" data-source="github.com huggingface.co openai.com developer.nvidia.com microsoft.com platform.moonshot.cn blog.openvino.ai developers.googleblog.com anthropic.com techpowerup.com scottjg.com crissyfield.de eff.org youtube.com unemploymentlabs.com reuters.com techspot.com blog.pypi.org news.umich.edu gitlab.com retrocomputing.stackexchange.com righto.com arstechnica.com c3-lang.org">
   <span class="eyebrow">2026.11.15</span>
   <h3>AI基础设施与安全领域今日呈现&#x27;能力扩展与风险同步放大&#x27;的双主线：厂商密集发布跨节点推理、端侧加速与TTS产品宣称，同时微软披露Lazarus后门揭示AI代理的工具权限正成为新的攻击面。</h3>
   <p>NVIDIA集中释放三项性能信号：vLLM跨双DGX Station服务GLM-5.3达607.8 tok/s、TensorRT Edge-LLM在Jetson AGX Thor上宣称MLPerf Edge Agentic基准6.4倍加速，均为厂商单方基准，缺乏第三方复现与生产负载验证。 Hugging Face发布Phonon TTS，宣称端侧高质量语音合成并基准领先，但证据链单薄（单一来源、无数据片段），宜定位为待验证的发布动态。 微软研究院披露Lazarus后门技术，可重编程模型休眠神经元，使AI代理在隐藏触发器下静默执行恶意命令，对具备工具/终端访问权限的代理威胁尤为严重。</p>
@@ -469,15 +478,6 @@
   <div class="archive-footer">
     <span>83 topics · 89 items</span>
     <a href="archives/2026-11-11/">打开日报</a>
-  </div>
-</article><article class="archive-card" data-domain="AI / Agent AI × Electronics" data-source="github.com huggingface.co openai.com developer.nvidia.com microsoft.com platform.moonshot.cn blog.openvino.ai anthropic.com developers.googleblog.com foldableflight.com payments.ca artificialanalysis.ai anthropocenemagazine.org research.meta.ai blog.google denverpost.com arxiv.org eetimes.com infineon.com nabo.dev news.ycombinator.com taskandpurpose.com cnbc.com">
-  <span class="eyebrow">2026.11.10</span>
-  <h3>AI 智能体正从数字任务走向湿实验室、端侧部署与代码验证等真实场景，但今日多数信号为厂商自述、证据薄弱，方向确立的价值大于能力结论。</h3>
-  <p>OpenAI 发布 BioBasicsBench，将智能体评测推进到湿实验室原始数据解读，但仅 100 项任务、单一来源，信号价值在于评测方向而非能力定论。 端侧 AI 竞争升温：Hugging Face 宣称 Phonon TTS 端侧高质量且基准领先，NVIDIA 称 TensorRT Edge-LLM 在 Jetson AGX Thor 上实现 6.4 倍加速，两者均为厂商自述、缺少可复现基准条件。 微软研究院 PDD Kit 提出用形式化规范验证智能体生成的全栈 Web 应用，本质是把人类审查对象从代码行转移到意图规范，重构人机信任界面。</p>
-  <div class="archive-meta" style="margin-top:12px;"><span class="tag alt">AI / Agent</span><span class="tag alt">AI × Electronics</span><span class="tag warm">github.com</span><span class="tag warm">huggingface.co</span><span class="tag">自动版</span></div>
-  <div class="archive-footer">
-    <span>82 topics · 88 items</span>
-    <a href="archives/2026-11-10/">打开日报</a>
   </div>
 </article>
       </div>
