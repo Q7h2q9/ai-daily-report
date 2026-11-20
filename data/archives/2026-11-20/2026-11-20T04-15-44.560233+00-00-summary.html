@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自动情报快报</title>
+<style>
+  :root {
+    --bg:#0d1117; --bg2:#161b22; --bg3:#1c2333; --border:#30363d;
+    --text:#e6edf3; --text2:#8b949e; --accent:#58a6ff; --green:#3fb950;
+    --orange:#d29922; --red:#f85149; --purple:#bc8cff; --radius:8px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;
+  }
+  * { box-sizing:border-box;margin:0;padding:0; }
+  body { background:var(--bg);color:var(--text);line-height:1.6; }
+  .wrap { max-width:960px;margin:0 auto;padding:24px 20px 48px; }
+  header { text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:32px; }
+  header h1 { font-size:1.8em;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  header .meta { color:var(--text2);font-size:.9em;margin-top:8px; }
+  header .stats { display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  header .stat-pill { background:var(--bg3);padding:4px 14px;border-radius:20px;font-size:.85em;color:var(--text2);border:1px solid var(--border); }
+  .stage-badges { display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap; }
+  .stage-badge { background:var(--bg3);padding:3px 12px;border-radius:6px;font-size:.82em;border:1px solid var(--stage-color,#666);color:var(--text2); }
+  .section { margin-bottom:28px; }
+  .section-title { font-size:1.25em;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--accent); }
+  .judgment { font-size:1.35em;font-weight:700;text-align:center;padding:20px;background:var(--bg2);border-radius:var(--radius);border-left:4px solid var(--accent); }
+  .grid-2 { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px; }
+  .card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px; }
+  .card h4 { color:var(--accent);margin-bottom:10px;font-size:.95em; }
+  .card ul { padding-left:18px;color:var(--text2); }
+  .card li { margin-bottom:4px; }
+  .signal-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;transition:border-color .2s; }
+  .signal-card:hover { border-color:var(--accent); }
+  .signal-header { display:flex;justify-content:space-between;align-items:start;margin-bottom:10px; }
+  .signal-header h3 { font-size:1em;color:var(--text); }
+  .badge { font-size:.75em;padding:2px 10px;border-radius:12px;font-weight:600; }
+  .badge--high { background:#1a3a2a;color:var(--green); }
+  .badge--medium { background:#3a3020;color:var(--orange); }
+  .badge--low { background:#3a2220;color:var(--red); }
+  .signal-body p { margin:4px 0;color:var(--text2);font-size:.9em; }
+  .signal-link { display:inline-block;margin-top:10px;font-size:.85em;color:var(--accent);text-decoration:none; }
+  .signal-link:hover { text-decoration:underline; }
+  .forecast-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0; }
+  .forecast-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px; }
+  .forecast-card h4 { font-size:.9em;margin-bottom:8px; }
+  .forecast-card--best { border-left:3px solid var(--green); }
+  .forecast-card--worst { border-left:3px solid var(--red); }
+  .forecast-card--likely { border-left:3px solid var(--accent); }
+  .forecast-card p { font-size:.88em;color:var(--text2); }
+  .risk-note { background:#3a2220;border:1px solid var(--red);border-radius:var(--radius);padding:12px 16px;margin-top:12px;color:#fdaebb;font-size:.9em; }
+  .domain-tag { display:inline-block;font-size:.72em;background:var(--bg3);color:var(--text2);padding:1px 8px;border-radius:10px;margin-left:8px; }
+  table.signals-table { width:100%;border-collapse:collapse;margin-top:10px;font-size:.88em; }
+  .signals-table th,.signals-table td { padding:8px 12px;text-align:left;border-bottom:1px solid var(--border); }
+  .signals-table th { background:var(--bg3);color:var(--text2);font-weight:600;position:sticky;top:0; }
+  .signals-table tr:hover td { background:var(--bg2); }
+  footer { text-align:center;padding:24px 0;border-top:1px solid var(--border);margin-top:40px;color:var(--text2);font-size:.82em; }
+  @media(max-width:640px) { header h1 { font-size:1.4em; } .grid-2 { grid-template-columns:1fr; } .forecast-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>自动情报快报</h1>
+    <div class="meta">生成时间：2026-11-20T04:15:44.560233+00:00</div>
+    <div class="stats">
+      <span class="stat-pill">📡 87 条原始信息</span>
+      <span class="stat-pill">🎯 82 个主题</span>
+      <span class="stat-pill">📊 3 个重点分析</span>
+    </div>
+    <div class="stage-badges"><span class="stage-badge" style="--stage-color:#10b981">analysis: ok</span><span class="stage-badge" style="--stage-color:#10b981">summary: ok</span><span class="stage-badge" style="--stage-color:#10b981">forecast: ok</span></div>
+  </header>
+
+  <section id="judgment" class="section">
+    <div class="judgment">边缘AI推理加速与AI代理安全可控性正成为同一枚硬币的两面：能力越强，验证与防护的缺口越致命。</div>
+  </section>
+
+  <section id="executive-summary" class="section">
+    <h2 class="section-title">执行摘要</h2>
+    <ul><li>NVIDIA 宣称 TensorRT Edge-LLM 在 Jetson AGX Thor 上完成 MLPerf Edge Agentic 基准并提速 6.4 倍，方向性信号明确但仅有厂商单方口径、无证据片段，数字待独立验证。</li><li>微软研究院披露 Lazarus 后门技术，可重编程模型休眠神经元，使具备工具/终端权限的 AI 代理在隐藏触发下执行恶意代码——代理能力越强，后门危害越大。</li><li>微软同期发布 TokenEconomizer 与 PDD Kit，分别从运行时经验复用降低 token 成本、以及将验证对象从代码行迁移到形式化意图规范，回应代理效率与可信验证两大瓶颈。</li><li>Google 在 AI Edge Gallery 推进端侧语音识别与 TTS，vLLM 作为高吞吐推理引擎持续作为基础设施信号出现，但两者证据深度不足，仅作方向性观察。</li><li>整体看，边缘推理加速、代理效率优化与形式化验证三条线并行推进，而 Lazarus 揭示了这条能力增长曲线上的安全负债。</li></ul>
+  </section>
+
+  <section id="key-insights" class="section">
+    <h2 class="section-title">关键洞察</h2>
+    <ul><li>能力增长与验证能力之间的剪刀差正在扩大：NVIDIA 在推边缘推理速度，微软在补代理效率与形式化验证，而 Lazarus 证明模型内部完整性仍是未被覆盖的盲区——三者共同指向『生成/执行能力远超验证能力』这一结构性矛盾。</li><li>AI 代理的安全边界不再由模型输出决定，而由代理被授予的权限决定：Lazarus 的危害放大系数与工具/终端访问权限成正比，权限最小化比模型加固更具即时防御价值。</li><li>效率优化与安全验证正在同一层（代理运行时）交汇：TokenEconomizer 复用会话经验、PDD Kit 复用意图规范，二者都以『复用』换效率，但复用对象的正确性校验将成为新的信任瓶颈。</li><li>厂商自测性能数字在情报流水线中应默认降级为『方向信号』：6.4x 这类数字在缺乏基线、测试条件与第三方复现时，其情报价值在于确认竞争焦点，而非提供可引用事实。</li></ul>
+  </section>
+
+  <section id="mainlines" class="section">
+    <h2 class="section-title">重点主线</h2>
+    <ul style="padding-left:20px;"><li><strong>NVIDIA 边缘 agentic 推理宣称 6.4x 加速，信号可信但数字待验证</strong> 若属实，意味着边缘设备上 agentic 工作负载的可行性门槛显著下降；但仅有厂商博客单方口径、无基线配置与测试条件，晨报应将其定位为竞争方向信号而非既定性能事实。</li>
+<li><strong>Lazarus 后门：休眠神经元可被重编程，工具权限型 AI 代理成高危载体</strong> 攻击面从模型输出层下沉到模型内部参数层，隐藏触发使审计难以可见；对具备终端/工具执行权限的代理而言，后门即远程代码执行，安全设计需将模型完整性与权限最小化并列。</li>
+<li><strong>TokenEconomizer 把经验学习下移到代理运行时层</strong> 效率优化的真实价值不在 token 节省幅度，而在经验跨任务迁移的准确性；若经验过时或误迁移，节省的成本会以成功率下降的形式偿还。</li></ul>
+  </section>
+
+  <section id="memory" class="section">
+    <h2 class="section-title">跨日主线记忆</h2>
+    <ul style="padding-left:20px;"><li><strong>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 224 天 · 1 source(s) | official | 3 related support</li><li><strong>Q3&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 224 天 · 1 source(s) | official | 2 related support</li><li><strong>Q2&#x27;25: Technology Update – Low Precision and Model Optimization</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 224 天 · 1 source(s) | official | 2 related support</li><li><strong>Kimi 开放平台：新功能发布记录</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 224 天 · 1 source(s) | official</li><li><strong>Kimi K2 Turbo API 价格调整通知</strong> <span class="domain-tag">rising</span> <span class="domain-tag">low</span> 已持续 224 天 · 1 source(s) | official | 3 related support</li></ul>
+  </section>
+
+  <section id="topics" class="section">
+    <h2 class="section-title">重点主题分析</h2>
+    <div class="signal-card">
+                <div class="signal-header">
+                  <h3>TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor</h3>
+                  <span class="badge badge--low">low</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>厂商性能宣称的营销属性 vs 情报分析所需的可验证事实基础——6.4x 加速结论缺乏基线、测试条件和第三方复现支撑，证据链不完整</p>
+                  <p><strong>核心洞察：</strong>这是 NVIDIA 面向边缘 agentic AI 场景的官方性能背书，方向性信号明确（边缘 LLM 推理加速正在成为竞争焦点），但当前仅有厂商单方口径且无证据片段，晨报应采用&#x27;信号可信、数字待验证&#x27;的表述，避免将 6.4x 作为既定事实传播</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://developer.nvidia.com/blog/frontier-reasoning-reaches-the-edge-how-to-deploy-and-optimize-models-on-nvidia-jetson/" target="_blank" rel="noopener">Frontier Reasoning Reaches the Edge: How to Deploy and Optimize Models on NVIDIA Jetson</a></li><li>official | <a href="https://developer.nvidia.com/blog/run-native-dla-inference-in-python-on-nvidia-jetson-agx-orin-using-cudla/" target="_blank" rel="noopener">Run Native DLA Inference in Python on NVIDIA Jetson AGX Orin Using cuDLA</a></li><li>official | <a href="https://huggingface.co/blog/qvac/botpsy" target="_blank" rel="noopener">BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</h3>
+                  <span class="badge badge--medium">medium</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>AI代理日益增强的工具/终端执行能力 vs 模型内部休眠神经元可被重编程为隐蔽后门的安全可控性缺口</p>
+                  <p><strong>核心洞察：</strong>Lazarus表明后门可潜伏于模型休眠神经元中并由隐藏触发激活，使具备工具或终端权限的AI代理成为可被远程操控的代码执行载体，代理能力越强、后门危害越大。</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/" target="_blank" rel="noopener">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a></li><li>official | <a href="https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/" target="_blank" rel="noopener">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a></li><li>official | <a href="https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/" target="_blank" rel="noopener">On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+<div class="signal-card">
+                <div class="signal-header">
+                  <h3>TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</h3>
+                  <span class="badge badge--medium">medium</span>
+                </div>
+                <div class="signal-body">
+                  <p><strong>主领域：</strong>ai-llm-agent</p>
+                  <p><strong>主要矛盾：</strong>效率优化（减少重复学习的 token 与时间开销） vs 任务成功率保持（经验复用不能损害正确性）</p>
+                  <p><strong>核心洞察：</strong>TokenEconomizer 把&#x27;从经验中学习&#x27;从模型训练层下移到代理运行时层，用会话级经验复用压缩重复试错成本，其真实价值取决于经验迁移的准确性与跨任务泛化能力，而非单纯的 token 节省幅度。</p>
+                  <p><strong>生命周期：</strong>rising</p>
+                  <p><strong>风险等级：</strong>medium</p>
+                  <p><strong>交叉印证：</strong>1 source(s) | official | 3 related support</p>
+                  <p><strong>佐证列表：</strong></p>
+                  <ul><li>official | <a href="https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/" target="_blank" rel="noopener">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a></li><li>official | <a href="https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/" target="_blank" rel="noopener">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a></li><li>official | <a href="https://huggingface.co/blog/openrouter" target="_blank" rel="noopener">Hugging Face and OpenRouter join forces to make open-weight models easy to run</a></li></ul>
+                </div>
+                <a class="signal-link" href="https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/" target="_blank" rel="noopener">查看原文 →</a>
+              </div>
+  </section>
+
+  <section id="forecast" class="section">
+        <h2 class="section-title">📈 短期推演</h2>
+        <div class="forecast-grid">
+          <div class="forecast-card forecast-card--best"><h4>乐观情景</h4><p>微软与NVIDIA披露的方向性信号在1-3个月内获得独立验证：MLPerf官方榜单或第三方复现确认边缘agentic推理有显著加速，TokenEconomizer与PDD Kit在真实项目中展示出可量化的效率与验证收益；同时Lazarus披露推动AI代理权限最小化与运行时监控快速落地，形成&#x27;能力提升+安全补位&#x27;的良性循环。</p></div>
+          <div class="forecast-card forecast-card--worst"><h4>悲观情景</h4><p>NVIDIA 6.4x加速被证实为特定基线下的营销口径，无法在真实agentic负载中复现，引发对边缘AI性能宣称的普遍质疑；Lazarus类后门技术细节被攻击者复用，具备工具/终端权限的AI代理出现实际入侵事件，而PDD Kit等形式化验证工具因意图规范难以可靠形式化而落地受阻，导致&#x27;生成能力远超验证能力&#x27;的剪刀差进一步扩大，行业信任受损。</p></div>
+          <div class="forecast-card forecast-card--likely"><h4>最可能情景</h4><p>未来1-3个月内，NVIDIA的6.4x数字仍停留在厂商单方口径，MLPerf官方榜单与第三方复现逐步出现但结论趋于温和（加速存在但幅度与场景受限）；Lazarus作为研究披露引发安全社区讨论与权限最小化建议，但短期内无大规模在野利用证据；TokenEconomizer与PDD Kit维持研究博客层面的关注度，缺乏生产环境实测数据；端侧语音与vLLM继续作为方向性信号存在，整体格局为&#x27;方向明确、数字待验证、安全负债显性化&#x27;。</p></div>
+        </div>
+        <p><strong>关键变量：</strong></p>
+        <ul><li>MLPerf官方榜单与第三方对Jetson AGX Thor上TensorRT Edge-LLM的独立复现结果</li><li>Lazarus后门技术是否出现变种或在野利用证据，以及主流代理框架的权限最小化落地进度</li><li>TokenEconomizer经验跨任务迁移的成功率与误迁移率实测数据</li><li>PDD Kit意图规范形式化的覆盖范围与规范错误率，以及是否有生产级采用案例</li><li>Google端侧语音识别/TTS与vLLM的证据深度补充情况（官方文档、基准、社区采用度）</li><li>AI代理工具/终端权限授予策略在企业的实际调整节奏</li></ul>
+        <p><strong>结论：</strong>本期情报的核心矛盾是&#x27;AI代理生成与执行能力增长快于验证与防护能力&#x27;。短期（1-3个月）内，NVIDIA 6.4x加速应维持&#x27;厂商宣称、待验证&#x27;定位，不作为既定性能事实引用；Lazarus揭示的模型内部完整性盲区是当前最具即时防御价值的信号，权限最小化与运行时监控优先于模型层加固；TokenEconomizer与PDD Kit代表效率与验证范式的新方向，但均处于研究披露阶段，需跟踪实测数据而非设计目标。整体判断：方向信号可信，具体数字与收益待验证，安全负债已显性化。</p>
+      </section>
+
+  <section id="limitations" class="section">
+    <h2 class="section-title">局限性</h2>
+    <ul><li>NVIDIA 6.4x 加速仅有官方博客标题与元数据，证据片段为空，无基线配置、测试方法与第三方复现，不能作为既定性能事实引用。</li><li>Lazarus 为微软研究院披露的研究成果，实际攻击面与在野利用情况未知，技术细节的防御可用性与攻击可复用性并存。</li><li>TokenEconomizer 与 PDD Kit 均为研究博客层面的发布，缺乏独立基准与生产环境部署数据，效率与验证收益为设计目标而非实测结论。</li><li>Google 端侧语音与 vLLM 两条目证据深度不足（单一来源、无文本片段），仅能确认信号存在，无法评估具体能力与影响。</li><li>本摘要基于初步分析主题列表，未回到原始来源做交叉验证，所有『待验证』标注应在后续情报周期中闭环。</li></ul>
+  </section>
+
+  <p class="risk-note">⚠️ NVIDIA 6.4x 加速仅有官方博客标题与元数据，证据片段为空，无基线配置、测试方法与第三方复现，不能作为既定性能事实引用。</p>
+
+  <section id="actions" class="section">
+    <h2 class="section-title">行动建议</h2>
+    <ul><li>将 NVIDIA 6.4x 标注为『厂商宣称、待验证』，在后续周期追踪 MLPerf 官方榜单与第三方复现结果后再升级置信度。</li><li>针对 Lazarus 威胁，优先评估现有 AI 代理的工具/终端权限授予策略，落实权限最小化与运行时行为监控，而非等待模型层防御方案。</li><li>对 TokenEconomizer 与 PDD Kit 建立跟踪项：前者关注经验跨任务迁移的成功率数据，后者关注意图规范形式化的覆盖范围与规范错误率。</li><li>对 Google 端侧语音与 vLLM 补充证据采集（官方文档、基准、社区采用度），在证据深度达标前不纳入技术选型建议。</li><li>在晨报编辑规范中固化一条规则：单一来源且无证据片段的性能数字，一律以『方向信号』表述，禁止作为事实传播。</li></ul>
+  </section>
+
+  <section id="all-signals" class="section">
+    <h2 class="section-title">全部信号</h2>
+    <table class="signals-table"><thead><tr><th>信号</th><th>评分</th><th>证据数</th><th>来源</th></tr></thead><tbody><tr><td>TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor<span class="domain-tag">ai-llm-agent</span></td><td>2.6</td><td>1</td><td><a href="https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>vllm-project/vllm<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents<span class="domain-tag">ai-llm-agent</span></td><td>2.5</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Formally verifying agent-written full-stack web apps with PDD Kit<span class="domain-tag">ai-x-electronics</span></td><td>2.5</td><td>1</td><td><a href="https://www.microsoft.com/en-us/research/blog/formally-verifying-agent-written-full-stack-web-apps-with-pdd-kit/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery<span class="domain-tag">ai-llm-agent</span></td><td>2.1</td><td>2</td><td><a href="https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>LLMON: An LLM-Native Markup Language, now in Granite 4.1 3B and 8B<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://huggingface.co/blog/ibm-granite/llmon-an-llm-native-markup-language-now-in-granite" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://huggingface.co/blog/qvac/botpsy" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Kimi K2 Thinking 模型发布并开源，全面提升 Agent 和推理能力<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://platform.moonshot.cn/blog/posts/k2-think" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Post-Train NVIDIA Cosmos 3 Edge for On-Device Robot Control<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/post-train-nvidia-cosmos-3-edge-for-on-device-robot-control/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>NVIDIA JetPack 7.2.1 Adds Agentic Video Skills and T3000 Emulation<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/nvidia-jetpack-7-2-1-adds-agentic-video-skills-and-t3000-emulation/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Q3&#x27;25: Technology Update – Low Precision and Model Optimization<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://blog.openvino.ai/blog-posts/q325-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Q2&#x27;25: Technology Update – Low Precision and Model Optimization<span class="domain-tag">ai-llm-agent</span></td><td>1.8</td><td>1</td><td><a href="https://blog.openvino.ai/blog-posts/q225-technology-update---low-precision-and-model-optimization" target="_blank" rel="noopener">链接 →</a></td></tr><tr><td>Announcements<span class="domain-tag">ai-llm-agent</span></td><td>1.5</td><td>5</td><td><a href="https://www.anthropic.com/news/announcements" target="_blank" rel="noopener">链接 →</a></td></tr></tbody></table>
+  </section>
+
+  <footer>
+    <p>VS_AI 情报采集系统自动生成 · 数据来源：RSS / GitHub / 官方网站</p>
+  </footer>
+</div>
+</body>
+</html>
