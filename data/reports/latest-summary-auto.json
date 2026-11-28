@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-11-27T05:19:53.994717+00:00",
+    "generated_at": "2026-11-28T04:56:44.295371+00:00",
     "timezone": "Asia/Shanghai",
     "total_items": 87,
     "total_topics": 82,
@@ -10,80 +10,289 @@
       "review_note": ""
     }
   },
-  "one_line_core": "今日情报主线是AI代理从'能力展示'走向'研发与执行基础设施'：NVIDIA用边缘基准强化Jetson叙事、DeepMind让代理接管部分算力调度、微软尝试让编程代理复用经验省token，但三者均以厂商单方证据为主，性能与效率宣称仍需独立验证。",
+  "one_line_core": "AI代理安全与效率成为今日焦点：微软揭示可寄生于休眠神经元的后门威胁，同时推出TokenEconomizer以经验复用降低推理成本；边缘端性能宣称与开源工具动态活跃但证据深度不足。",
   "executive_summary": [
-    "NVIDIA发布TensorRT Edge-LLM并在Jetson AGX Thor上完成MLPerf Edge Agentic基准，宣称6.4倍加速，但基线、测试条件与第三方复现均缺失，应视为生态营销性宣称。",
-    "DeepMind的AI代理已接管部分计算资源用于Gemini实验，标志AI进入自身研发流程的执行环节，但递归式自我改进仍遥远，'工具性自动化'与'能力自主性'不应混淆。",
-    "微软研究院开源TokenEconomizer，让编程代理跨会话复用经验以降低token成本，核心张力在于效率收益是否以任务成功率为代价，目前仅有厂商单方证据。",
-    "Google将推动AI代理使用其MCP服务器，但Gmail服务不支持发邮件，反映代理接入企业工具时'连接能力'与'实际权限'之间的落差。",
-    "社区侧信号显示LLM正被用于逆向工程与老旧硬件移植（Rockbox移植到无文档的9美元MP3播放器），以及vLLM作为高吞吐推理引擎持续作为基础设施关注点。",
-    "整体看，今日主题集中在代理效率、代理自主性与代理接入生态三条线，但多数条目证据深度不足，结论置信度普遍偏低。"
+    "微软研究院发现名为Lazarus的后门技术，可重新编程AI模型休眠神经元，在隐藏触发器激活时让具备工具/终端权限的AI代理静默执行恶意代码，代理权限越大危害越严重。",
+    "微软开源TokenEconomizer插件，旨在通过复用历史会话经验减少重复学习，在保持任务成功率的同时降低AI编程代理的token与时间消耗，其成败取决于跨会话经验迁移的可靠性。",
+    "NVIDIA宣称TensorRT Edge-LLM在Jetson AGX Thor上完成MLPerf Edge Agentic基准测试，速度提升6.4倍，但仅有标题级信息，缺乏基准配置、对比基线与第三方验证。",
+    "社区动态方面，Show HN出现vLLM单卡GB10实现101 tok/s的推理实践、SessionGraph编码代理会话可视化工具，以及vLLM开源仓库的持续活跃，均属低证据深度信号。"
   ],
   "key_points": [
     {
-      "title": "NVIDIA边缘LLM性能宣称：6.4倍加速但缺基线",
-      "why_it_matters": "若数字成立，边缘设备运行智能体级LLM的门槛显著下降；但缺少对比基线、测试条件与第三方复现，当前只能作为厂商宣称处理，直接影响选型决策的可信度。"
+      "title": "Lazarus后门：休眠神经元可被重编程，AI代理权限成双刃剑",
+      "why_it_matters": "该技术表明后门可隐藏在模型看似正常的休眠神经元中，以隐藏触发器激活，使具备工具或终端访问权限的AI代理静默下载并运行攻击者代码。代理能力越强，后门潜在危害越大，对AI代理安全审计与权限管控提出新挑战。"
     },
     {
-      "title": "DeepMind让AI代理接管部分算力调度",
-      "why_it_matters": "这是AI进入自身研发执行环节的信号，但'递归自我改进仍遥远'的限定说明当前是研发效率工具化而非智能体自主进化，舆论容易将两者混为一谈。"
+      "title": "TokenEconomizer：以经验复用降低编程代理推理成本",
+      "why_it_matters": "该开源插件试图通过复用历史会话经验减少重复学习，在保持任务成功率的同时降低token与时间开销。其真实价值取决于经验筛选与适用性判断的准确性，若迁移不当，节省的成本可能被返工抵消。"
     },
     {
-      "title": "TokenEconomizer：让编程代理从经验中学习省token",
-      "why_it_matters": "真正看点不是省token，而是把'如何分配计算'变成代理的可复用能力；成败取决于经验检索精准度能否让效率收益不以成功率为代价。"
+      "title": "NVIDIA边缘Agentic基准宣称6.4倍加速，证据链待补",
+      "why_it_matters": "该宣称具备传播价值，但当前仅有标题级信息，缺乏基准配置、对比基线、功耗数据与第三方复现。边缘设备实际部署中内存带宽、功耗与散热约束可能限制端到端收益，宜作为厂商宣称待验证类快讯处理。"
     },
     {
-      "title": "Google推动代理使用MCP服务器但Gmail不能发邮件",
-      "why_it_matters": "代理接入企业工具时，连接协议的统一不等于权限的开放，'能连上'与'能执行'之间的差距是代理落地企业场景的关键摩擦点。"
-    },
-    {
-      "title": "LLM辅助移植Rockbox到无文档廉价MP3播放器",
-      "why_it_matters": "展示LLM在逆向工程与嵌入式移植中的实用价值，是代理/LLM作为'工程助手'而非'自主智能体'的典型落地案例。"
-    },
-    {
-      "title": "vLLM持续作为高吞吐LLM推理引擎被关注",
-      "why_it_matters": "推理服务层是代理与LLM应用的成本与性能底座，其生态活跃度反映基础设施层的竞争焦点仍在吞吐与显存效率。"
+      "title": "社区信号：vLLM推理实践、SessionGraph可视化与开源仓库活跃",
+      "why_it_matters": "Show HN出现单卡GB10实现101 tok/s的vLLM推理实践、编码代理会话可视化工具SessionGraph，以及vLLM开源仓库的持续活跃。这些信号反映边缘推理与代理可观测性领域的社区探索，但证据深度不足，需进一步验证。"
     }
   ],
   "key_insights": [
-    "今日多条情报的共同模式是：厂商以基准或博客形式发布效率/性能宣称，但普遍缺少基线、测试条件与第三方复现，'宣称'与'事实'之间的验证缺口是当前AI情报的主要噪声来源。",
-    "AI代理的进展呈现'执行层自动化快于能力自主性'的结构：代理已能调度算力、复用经验、接入工具，但递归自我改进、权限开放等能力边界仍未突破，二者被舆论混淆的风险高。",
-    "代理效率优化的核心矛盾正从'能不能做'转向'省不省得起'：token成本、上下文压缩与经验复用成为新竞争维度，但效率与成功率的权衡尚无独立证据支撑。",
-    "边缘LLM、代理研发自动化、代理工具接入三条线共同指向同一趋势：AI正从'被调用的模型'变为'参与流程的执行者'，但每一步的可靠性验证都滞后于叙事推进。"
+    "AI代理的安全与效率构成一对张力：Lazarus揭示权限扩展带来的攻击面扩大，TokenEconomizer则试图以经验复用降低计算成本，两者共同指向代理能力治理的迫切性。",
+    "厂商性能宣称（如NVIDIA 6.4倍加速）与证据链完整性之间存在系统性落差，晨报应建立'宣称-验证'分级标注机制，避免将营销数字等同于可复现事实。",
+    "社区低证据信号（Show HN、开源仓库）虽单条价值有限，但集中出现在vLLM推理优化与代理会话可视化方向，暗示边缘推理与代理可观测性正成为开发者关注的新兴热点。"
   ],
   "limitations": [
-    "NVIDIA 6.4倍加速缺少基线对比对象、测试条件说明与第三方复现，证据片段为空，仅有标题与来源元数据。",
-    "TokenEconomizer仅有微软研究院博客单条摘要，无第三方评测或量化基准，效率收益与成功率影响均未验证。",
-    "DeepMind代理接管算力的信息来自The Decoder报道与Hacker News讨论（47分），属二手转述，原始细节有限。",
-    "Google MCP与Gmail条目仅有Hacker News热度信号（295分/251评论），无正文证据，矛盾检测证据不足。",
-    "Rockbox移植与vLLM条目均为单一来源信号，缺乏深度证据，核心洞察为模板化描述，需进一步核实。",
-    "整体置信度以low为主，仅DeepMind条目为medium，晨报结论应作为线索而非定论使用。"
+    "Lazarus后门技术的具体触发机制、影响模型范围与缓解措施未在输入中详述，置信度为中等，需查阅原始论文以评估实际风险。",
+    "TokenEconomizer的跨会话经验迁移可靠性缺乏量化数据，其在不同代码库与任务分布下的泛化能力尚待验证。",
+    "NVIDIA 6.4倍加速宣称仅有标题级信息，无基准配置、对比基线、功耗数据与第三方复现，置信度低。",
+    "Show HN与开源仓库类信号证据深度不足（单来源、单条目），核心洞察为初步推断，需进一步验证。"
   ],
   "actions": [
-    "对NVIDIA 6.4倍宣称，追踪MLPerf官方提交记录与第三方复现，确认基线模型、batch配置与功耗数据后再纳入选型评估。",
-    "对TokenEconomizer，等待独立基准（任务成功率 vs token消耗的联合曲线），并在自有代码库上做小规模A/B验证后再考虑接入。",
-    "对DeepMind代理调度算力，区分'研发效率工具'与'自主进化'叙事，关注是否有关于代理决策边界与人类监督机制的一手披露。",
-    "对Google MCP生态，梳理各Workspace服务的实际可执行权限清单，避免将'协议接入'误判为'能力开放'。",
-    "将vLLM与LLM辅助逆向工程作为基础设施与工程助手两条跟踪线，持续观察社区活跃度与落地案例，而非单次热度。",
-    "在晨报流程中对厂商自发布内容统一标注'厂商宣称/待验证'，并优先补采第三方评测与基准提交作为证据补强。"
+    "安全团队应评估具备工具/终端访问权限的AI代理的后门风险，审查模型来源与休眠神经元异常行为，并限制代理权限至最小必要范围。",
+    "对TokenEconomizer等经验复用方案，建议在真实代码库上开展对照实验，量化经验迁移准确率与返工成本，再决定是否纳入生产流程。",
+    "对NVIDIA边缘性能宣称，建议等待MLPerf官方结果或第三方复现报告，并在采购决策中要求厂商提供完整基准配置与功耗数据。",
+    "持续跟踪vLLM推理优化与代理会话可视化（如SessionGraph）的社区进展，评估其在边缘部署与代理可观测性方面的实用价值。"
   ],
   "analyses": [
     {
       "facts": [
-        "NVIDIA 发布 TensorRT Edge-LLM，用于在边缘设备上运行 LLM 推理",
-        "该方案在 Jetson AGX Thor 上完成 MLPerf Edge Agentic Benchmark，速度提升 6.4 倍",
-        "信息来自 NVIDIA 官方开发者博客，属于厂商自发布内容",
-        "证据片段为空，仅有标题与来源元数据"
+        "微软研究人员发现了一种名为“Lazarus”的后门技术，可重新编程AI模型中的休眠神经元",
+        "被植入后门的模型在出现隐藏触发器时，会让原本正常的AI代理执行恶意命令",
+        "该威胁对具备工具或终端访问权限的AI代理尤为严重",
+        "被触发的模型可静默下载并运行攻击者代码"
       ],
       "contradictions": [
-        "厂商自测性能数据 vs 缺乏第三方独立验证",
-        "6.4x 加速的宣传口径 vs 未说明基线对比对象与测试条件",
-        "边缘端 LLM 性能提升 vs 边缘设备功耗、散热、成本约束",
-        "MLPerf Edge Agentic 基准的特定场景 vs 真实生产负载的泛化性",
-        "NVIDIA 生态锁定优势 vs 客户对多供应商可移植性的需求"
+        "AI代理的工具/终端访问能力 vs 后门触发后的恶意代码执行风险",
+        "模型休眠神经元的可利用性 vs 模型行为正常性的表象",
+        "后门隐蔽性（隐藏触发器） vs 安全检测与审计的可发现性",
+        "AI代理能力扩展带来的效用 vs 攻击面扩大带来的安全代价"
       ],
-      "primary_contradiction": "厂商单方发布的性能宣称 vs 缺乏可独立验证的基准细节与对比基线",
-      "core_insight": "这是 NVIDIA 通过 MLPerf 边缘智能体基准强化 Jetson 平台边缘 LLM 叙事的一次生态营销，6.4x 数字有传播价值，但在缺少基线、测试条件和第三方复现的情况下应作为厂商宣称而非既成事实处理",
+      "primary_contradiction": "AI代理的工具与终端访问能力 vs 后门触发后的恶意代码执行风险",
+      "core_insight": "Lazarus表明后门可寄生于模型休眠神经元并以隐藏触发器激活，使具备工具权限的AI代理在行为看似正常时静默执行攻击者代码，代理权限越大，后门危害越严重。",
+      "confidence": "medium",
+      "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
+      "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
+      "primary_domain": "ai-llm-agent",
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "microsoft-research"
+        ],
+        "source_types": [
+          "official"
+        ],
+        "support_evidence": [
+          {
+            "source_id": "microsoft-research",
+            "source_type": "official",
+            "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
+            "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
+            "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "microsoft-research",
+            "source_type": "official",
+            "title": "From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence",
+            "url": "https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/",
+            "summary": "<p>Evaluating Microsoft Copilot at enterprise scale requires test data that captures the full complexity of real organizations, yet real enterprise data contains sensitive information that cannot be used for evaluation under any circumstances.</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/\">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "google-ai-edge",
+            "source_type": "official",
+            "title": "On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery",
+            "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
+            "summary": "",
+            "evidence_scope": "current-run"
+          }
+        ],
+        "verification_flags": [
+          "official-source",
+          "related-support"
+        ],
+        "summary": "1 source(s) | official | 3 related support"
+      },
+      "memory": {
+        "days_seen": 18,
+        "first_seen": "2026-11-11",
+        "last_seen": "2026-11-28",
+        "previous_score": 2.5,
+        "previous_confidence": "low",
+        "previous_lifecycle_state": "rising",
+        "seen_dates": [
+          "2026-11-11",
+          "2026-11-12",
+          "2026-11-13",
+          "2026-11-14",
+          "2026-11-15",
+          "2026-11-16",
+          "2026-11-17",
+          "2026-11-18",
+          "2026-11-19",
+          "2026-11-20",
+          "2026-11-21",
+          "2026-11-22",
+          "2026-11-23",
+          "2026-11-24",
+          "2026-11-25",
+          "2026-11-26",
+          "2026-11-27",
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "rising",
+      "risk_level": "medium",
+      "support_evidence": [
+        {
+          "source_id": "microsoft-research",
+          "source_type": "official",
+          "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
+          "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
+          "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+          "evidence_scope": "current-run"
+        },
+        {
+          "source_id": "microsoft-research",
+          "source_type": "official",
+          "title": "From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence",
+          "url": "https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/",
+          "summary": "<p>Evaluating Microsoft Copilot at enterprise scale requires test data that captures the full complexity of real organizations, yet real enterprise data contains sensitive information that cannot be used for evaluation under any circumstances.</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/\">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+          "evidence_scope": "current-run"
+        },
+        {
+          "source_id": "google-ai-edge",
+          "source_type": "official",
+          "title": "On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery",
+          "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
+          "summary": "",
+          "evidence_scope": "current-run"
+        }
+      ]
+    },
+    {
+      "facts": [
+        "微软研究院发布开源插件 TokenEconomizer，用于提升 AI 编程代理的效率",
+        "该插件基于历史会话经验，减少重复学习相同教训所浪费的时间和 token",
+        "目标是在保持任务成功率的同时降低计算成本",
+        "定位是让编程代理不仅学会解决任务，还学会更有效地分配计算资源"
+      ],
+      "contradictions": [
+        "降低 token 消耗 vs 维持任务成功率",
+        "复用历史经验 vs 新任务情境的独特性（经验迁移可能失效）",
+        "前期投入经验积累/存储成本 vs 长期节省的推理成本",
+        "通用插件化方案 vs 不同代码库与任务分布的差异性"
+      ],
+      "primary_contradiction": "降低计算成本（token/时间）与维持任务成功率之间的张力——经验复用能否在不牺牲正确性的前提下真正省下开销",
+      "core_insight": "TokenEconomizer 的核心命题是把'经验复用'作为降低 agent 推理成本的杠杆，其真实价值取决于跨会话经验迁移的可靠性；若迁移不准，节省的 token 会被返工成本抵消，因此成败关键在于经验筛选与适用性判断而非单纯缓存。",
+      "confidence": "medium",
+      "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
+      "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
+      "primary_domain": "ai-llm-agent",
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "microsoft-research"
+        ],
+        "source_types": [
+          "official"
+        ],
+        "support_evidence": [
+          {
+            "source_id": "openai-news",
+            "source_type": "official",
+            "title": "How Intentful uses dots to make more time for growth",
+            "url": "https://openai.com/business/customer-stories/intentful-dots",
+            "summary": "Marina Petrova’s dot Aria helps research websites and build proposals, while proactively flagging messages and resolving issues.",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "microsoft-research",
+            "source_type": "official",
+            "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
+            "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
+            "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "microsoft-research",
+            "source_type": "official",
+            "title": "From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence",
+            "url": "https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/",
+            "summary": "<p>Evaluating Microsoft Copilot at enterprise scale requires test data that captures the full complexity of real organizations, yet real enterprise data contains sensitive information that cannot be used for evaluation under any circumstances.</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/\">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+            "evidence_scope": "current-run"
+          }
+        ],
+        "verification_flags": [
+          "official-source",
+          "related-support"
+        ],
+        "summary": "1 source(s) | official | 3 related support"
+      },
+      "memory": {
+        "days_seen": 12,
+        "first_seen": "2026-11-17",
+        "last_seen": "2026-11-28",
+        "previous_score": 2.5,
+        "previous_confidence": "low",
+        "previous_lifecycle_state": "rising",
+        "seen_dates": [
+          "2026-11-17",
+          "2026-11-18",
+          "2026-11-19",
+          "2026-11-20",
+          "2026-11-21",
+          "2026-11-22",
+          "2026-11-23",
+          "2026-11-24",
+          "2026-11-25",
+          "2026-11-26",
+          "2026-11-27",
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "rising",
+      "risk_level": "medium",
+      "support_evidence": [
+        {
+          "source_id": "openai-news",
+          "source_type": "official",
+          "title": "How Intentful uses dots to make more time for growth",
+          "url": "https://openai.com/business/customer-stories/intentful-dots",
+          "summary": "Marina Petrova’s dot Aria helps research websites and build proposals, while proactively flagging messages and resolving issues.",
+          "evidence_scope": "current-run"
+        },
+        {
+          "source_id": "microsoft-research",
+          "source_type": "official",
+          "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
+          "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
+          "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+          "evidence_scope": "current-run"
+        },
+        {
+          "source_id": "microsoft-research",
+          "source_type": "official",
+          "title": "From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence",
+          "url": "https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/",
+          "summary": "<p>Evaluating Microsoft Copilot at enterprise scale requires test data that captures the full complexity of real organizations, yet real enterprise data contains sensitive information that cannot be used for evaluation under any circumstances.</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/\">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+          "evidence_scope": "current-run"
+        }
+      ]
+    },
+    {
+      "facts": [
+        "NVIDIA 开发者博客宣布 TensorRT Edge-LLM 在 Jetson AGX Thor 上完成 MLPerf Edge Agentic Benchmark，速度提升 6.4 倍",
+        "该主题被归类为 ai-llm-agent 领域，来源为 NVIDIA 官方嵌入式渠道",
+        "证据片段为空，仅有标题级信息，无具体基准测试配置、对比基线或功耗数据"
+      ],
+      "contradictions": [
+        "厂商自测性能宣称 vs 缺乏第三方独立复现与完整基准配置披露",
+        "6.4x 加速的营销叙事 vs 边缘设备实际部署中内存带宽、功耗与散热约束可能限制端到端收益",
+        "MLPerf Edge Agentic 基准的代表性 vs 真实 agentic 工作负载多样性与长尾场景覆盖不足",
+        "边缘端 LLM 推理性能提升 vs 模型精度/量化损失与 agent 多步推理可靠性之间的权衡"
+      ],
+      "primary_contradiction": "厂商单方性能宣称（6.4x on Jetson AGX Thor）与证据链不完整（无基准配置、无基线、无第三方验证）之间的矛盾",
+      "core_insight": "这是 NVIDIA 围绕 Jetson AGX Thor 的边缘 agentic AI 性能营销节点，6.4x 数字具备传播价值但当前仅有标题级证据，晨报宜作为'厂商宣称待验证'类快讯处理，重点标注基准细节缺失与独立复现需求",
       "confidence": "low",
       "title": "TensorRT Edge-LLM Completes the MLPerf Edge Agentic Benchmark 6.4x Faster on Jetson AGX Thor",
       "url": "https://developer.nvidia.com/blog/tensorrt-edge-llm-completes-the-mlperf-edge-agentic-benchmark-6-4x-faster-on-jetson-agx-thor/",
@@ -129,9 +338,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 72,
+        "days_seen": 73,
         "first_seen": "2026-09-17",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 2.6,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -207,7 +416,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -240,224 +450,17 @@
       ]
     },
     {
-      "facts": [
-        "DeepMind的AI代理已开始控制其部分计算资源，用于Gemini相关实验",
-        "该信息来自The Decoder的报道，在Hacker News上获得47分、23条评论",
-        "报道同时指出，递归式自我改进（recursive self-improvement）仍然遥远"
-      ],
-      "contradictions": [
-        "AI代理已获得部分计算调度权 vs 递归式自我改进仍不可及——自动化程度提升与能力自主性之间存在落差",
-        "AI参与自身研发流程（Gemini实验） vs 人类仍掌握核心研究方向和边界设定",
-        "Hacker News社区关注度中等（47分） vs 该事件对AI研发范式的潜在结构性意义——讨论热度可能低估了事件重要性"
-      ],
-      "primary_contradiction": "AI代理对研发基础设施的自动化控制范围扩大 vs 系统仍不具备递归式自我改进能力——即'工具性自动化'与'能力自主性'之间的根本差距",
-      "core_insight": "DeepMind让AI代理接管部分计算调度，标志着AI开始进入自身研发流程的执行环节，但递归自我改进仍遥远这一限定说明：当前进展是研发效率工具化，而非智能体自主进化，二者之间存在被舆论混淆的风险",
-      "confidence": "medium",
-      "title": "AI agents now control part of DeepMind's compute for Gemini experiments",
-      "url": "https://the-decoder.com/ai-agents-now-control-part-of-deepminds-compute-for-gemini-experiments-but-recursive-self-improvement-remains-distant/",
-      "primary_domain": "ai-llm-agent",
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
-            "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
-            "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
-            "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
-            "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "huggingface-blog",
-            "source_type": "official",
-            "title": "Where scientists draw the line on AI agents",
-            "url": "https://huggingface.co/blog/allenai/where-scientists-draw-the-line-on-ai-agents",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "community",
-          "related-support"
-        ],
-        "summary": "1 source(s) | community | 3 related support"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "medium",
-      "support_evidence": [
-        {
-          "source_id": "microsoft-research",
-          "source_type": "official",
-          "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
-          "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
-          "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-          "evidence_scope": "current-run"
-        },
-        {
-          "source_id": "microsoft-research",
-          "source_type": "official",
-          "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
-          "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
-          "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-          "evidence_scope": "current-run"
-        },
-        {
-          "source_id": "huggingface-blog",
-          "source_type": "official",
-          "title": "Where scientists draw the line on AI agents",
-          "url": "https://huggingface.co/blog/allenai/where-scientists-draw-the-line-on-ai-agents",
-          "summary": "",
-          "evidence_scope": "current-run"
-        }
-      ]
-    },
-    {
-      "facts": [
-        "微软研究院发布TokenEconomizer，一个开源插件，让AI编程代理从过往会话中学习，减少重复学习相同教训所浪费的时间和token",
-        "该插件目标是在保持任务成功率的同时降低token成本",
-        "其定位是让编程代理不仅学会如何解决任务，还学会如何更有效地分配计算资源",
-        "证据仅来自微软研究院博客的单条摘要，尚无第三方评测或量化基准数据"
-      ],
-      "contradictions": [
-        "降低token消耗 vs 维持任务成功率：压缩上下文与经验复用可能遗漏关键细节，导致成功率下降",
-        "经验复用带来的效率提升 vs 过时或错误经验的固化：跨会话迁移可能把特定场景的教训误用到新任务",
-        "单会话成本下降 vs 经验检索与存储的额外开销：插件本身的检索机制可能引入新的token与延迟成本",
-        "开源插件的通用性 vs 不同代理框架与代码库的适配成本：跨环境迁移效果不确定",
-        "厂商自述的效率收益 vs 缺乏独立基准验证：宣传性证据与可复现结论之间存在缺口"
-      ],
-      "primary_contradiction": "token效率优化与任务成功率保持之间的权衡：TokenEconomizer的核心承诺是二者兼得，但经验复用机制在压缩计算的同时可能引入经验误用与上下文缺失风险，这一张力决定其实际价值",
-      "core_insight": "该工作的真正看点不是省token本身，而是把'从经验中学习如何分配计算'变成代理的可复用能力；其成败取决于经验检索的精准度能否让效率收益不以成功率为代价，而目前仅有厂商单方证据，需独立基准验证",
-      "confidence": "low",
-      "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
-      "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
-      "primary_domain": "ai-llm-agent",
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "microsoft-research"
-        ],
-        "source_types": [
-          "official"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "openai-news",
-            "source_type": "official",
-            "title": "How Intentful uses dots to make more time for growth",
-            "url": "https://openai.com/business/customer-stories/intentful-dots",
-            "summary": "Marina Petrova’s dot Aria helps research websites and build proposals, while proactively flagging messages and resolving issues.",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
-            "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
-            "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence",
-            "url": "https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/",
-            "summary": "<p>Evaluating Microsoft Copilot at enterprise scale requires test data that captures the full complexity of real organizations, yet real enterprise data contains sensitive information that cannot be used for evaluation under any circumstances.</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/\">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "official-source",
-          "related-support"
-        ],
-        "summary": "1 source(s) | official | 3 related support"
-      },
-      "memory": {
-        "days_seen": 11,
-        "first_seen": "2026-11-17",
-        "last_seen": "2026-11-27",
-        "previous_score": 2.5,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "rising",
-        "seen_dates": [
-          "2026-11-17",
-          "2026-11-18",
-          "2026-11-19",
-          "2026-11-20",
-          "2026-11-21",
-          "2026-11-22",
-          "2026-11-23",
-          "2026-11-24",
-          "2026-11-25",
-          "2026-11-26",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "medium",
-      "support_evidence": [
-        {
-          "source_id": "openai-news",
-          "source_type": "official",
-          "title": "How Intentful uses dots to make more time for growth",
-          "url": "https://openai.com/business/customer-stories/intentful-dots",
-          "summary": "Marina Petrova’s dot Aria helps research websites and build proposals, while proactively flagging messages and resolving issues.",
-          "evidence_scope": "current-run"
-        },
-        {
-          "source_id": "microsoft-research",
-          "source_type": "official",
-          "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
-          "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
-          "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-          "evidence_scope": "current-run"
-        },
-        {
-          "source_id": "microsoft-research",
-          "source_type": "official",
-          "title": "From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence",
-          "url": "https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/",
-          "summary": "<p>Evaluating Microsoft Copilot at enterprise scale requires test data that captures the full complexity of real organizations, yet real enterprise data contains sensitive information that cannot be used for evaluation under any circumstances.</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/\">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-          "evidence_scope": "current-run"
-        }
-      ]
-    },
-    {
-      "title": "Google Will Make AI Agents Use Its MCP Servers. The Gmail One Can't Send Email",
-      "url": "https://techstackups.com/articles/google-workspace-ai-agents-mcp/",
+      "title": "Show HN: Getting 101 tok/s from Inkling 2 Mini in vLLM on one GB10",
+      "url": "https://runtimenotes.com/blog/getting-101-tok-s-from-inkling-2-mini-in-vllm-on-one-gb10/",
       "primary_domain": "ai-llm-agent",
       "facts": [
-        "[hacker-news] Score: 295 | Comments: 251"
+        "[hacker-news] Score: 50 | Comments: 11"
       ],
       "contradictions": [
         "insufficient evidence depth for contradiction detection"
       ],
       "primary_contradiction": "signal visibility vs evidence depth (evidence=1, sources=1)",
-      "core_insight": "Google Will Make AI Agents Use Its MCP Servers. The Gmail One Can't Send Email appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.",
+      "core_insight": "Show HN: Getting 101 tok/s from Inkling 2 Mini in vLLM on one GB10 appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.",
       "confidence": "low",
       "source_count": 1,
       "enrichment": {
@@ -470,19 +473,11 @@
         ],
         "support_evidence": [
           {
-            "source_id": "microsoft-research",
+            "source_id": "huggingface-blog",
             "source_type": "official",
-            "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
-            "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
-            "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
-            "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
-            "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+            "title": "Hill-climbing Inkling 2 Mini inference on one RTX PRO 6000",
+            "url": "https://huggingface.co/blog/inkling-2-mini-inference-hillclimb",
+            "summary": "",
             "evidence_scope": "current-run"
           },
           {
@@ -492,6 +487,14 @@
             "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
             "summary": "",
             "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "nvidia-embedded",
+            "source_type": "official",
+            "title": "Run Native DLA Inference in Python on NVIDIA Jetson AGX Orin Using cuDLA",
+            "url": "https://developer.nvidia.com/blog/run-native-dla-inference-in-python-on-nvidia-jetson-agx-orin-using-cudla/",
+            "summary": "",
+            "evidence_scope": "current-run"
           }
         ],
         "verification_flags": [
@@ -502,32 +505,24 @@
       },
       "memory": {
         "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
         "previous_score": 0.0,
         "previous_confidence": "",
         "previous_lifecycle_state": "",
         "seen_dates": [
-          "2026-11-27"
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "new",
       "risk_level": "medium",
       "support_evidence": [
         {
-          "source_id": "microsoft-research",
+          "source_id": "huggingface-blog",
           "source_type": "official",
-          "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
-          "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
-          "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-          "evidence_scope": "current-run"
-        },
-        {
-          "source_id": "microsoft-research",
-          "source_type": "official",
-          "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
-          "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
-          "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+          "title": "Hill-climbing Inkling 2 Mini inference on one RTX PRO 6000",
+          "url": "https://huggingface.co/blog/inkling-2-mini-inference-hillclimb",
+          "summary": "",
           "evidence_scope": "current-run"
         },
         {
@@ -537,21 +532,29 @@
           "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
           "summary": "",
           "evidence_scope": "current-run"
+        },
+        {
+          "source_id": "nvidia-embedded",
+          "source_type": "official",
+          "title": "Run Native DLA Inference in Python on NVIDIA Jetson AGX Orin Using cuDLA",
+          "url": "https://developer.nvidia.com/blog/run-native-dla-inference-in-python-on-nvidia-jetson-agx-orin-using-cudla/",
+          "summary": "",
+          "evidence_scope": "current-run"
         }
       ]
     },
     {
-      "title": "Porting Rockbox to an undocumented $9 Aliexpress 'YP3' MP3 Player with LLMs",
-      "url": "https://jayd.ml/2026/11/14/rockbox-on-yp3.html",
+      "title": "SessionGraph: Visualize all your coding agent sessions in one interactive graph",
+      "url": "https://sessiongraph.ai/",
       "primary_domain": "ai-llm-agent",
       "facts": [
-        "[hacker-news] Score: 275 | Comments: 103"
+        "[hacker-news] Score: 39 | Comments: 17"
       ],
       "contradictions": [
         "insufficient evidence depth for contradiction detection"
       ],
       "primary_contradiction": "signal visibility vs evidence depth (evidence=1, sources=1)",
-      "core_insight": "Porting Rockbox to an undocumented $9 Aliexpress 'YP3' MP3 Player with LLMs appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.",
+      "core_insight": "SessionGraph: Visualize all your coding agent sessions in one interactive graph appeared across 1 source(s) with 1 item(s). Requires deeper verification and AI-assisted analysis.",
       "confidence": "low",
       "source_count": 1,
       "enrichment": {
@@ -562,46 +565,26 @@
         "source_types": [
           "community"
         ],
-        "support_evidence": [
-          {
-            "source_id": "huggingface-blog",
-            "source_type": "official",
-            "title": "How to build and maintain an agentic evaluation",
-            "url": "https://huggingface.co/blog/agentic-evals",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
+        "support_evidence": [],
         "verification_flags": [
-          "community",
-          "related-support"
+          "community"
         ],
-        "summary": "1 source(s) | community | 1 related support"
+        "summary": "1 source(s) | community"
       },
       "memory": {
-        "days_seen": 2,
-        "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
-        "previous_score": 2.5,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "new",
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
         "seen_dates": [
-          "2026-11-26",
-          "2026-11-27"
+          "2026-11-28"
         ]
       },
-      "lifecycle_state": "rising",
+      "lifecycle_state": "new",
       "risk_level": "medium",
-      "support_evidence": [
-        {
-          "source_id": "huggingface-blog",
-          "source_type": "official",
-          "title": "How to build and maintain an agentic evaluation",
-          "url": "https://huggingface.co/blog/agentic-evals",
-          "summary": "",
-          "evidence_scope": "current-run"
-        }
-      ]
+      "support_evidence": []
     },
     {
       "title": "vllm-project/vllm",
@@ -632,9 +615,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 230,
+        "days_seen": 231,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 2.5,
         "previous_confidence": "low",
         "previous_lifecycle_state": "verified",
@@ -868,7 +851,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "verified",
@@ -877,20 +861,20 @@
     }
   ],
   "forecast": {
-    "best_case": "未来1-3个月内，NVIDIA的6.4倍加速宣称获得MLPerf官方提交记录或第三方复现的部分佐证，边缘LLM在Jetson类设备上的智能体级推理门槛确实下降；TokenEconomizer出现独立基准，证明token节省不以任务成功率为代价；DeepMind披露代理调度算力的人类监督边界细节，行业对'工具性自动化'与'能力自主性'的区分形成共识，代理效率与接入生态两条线稳步推进。",
-    "worst_case": "厂商宣称持续缺乏独立验证，6.4倍数字被下游选型决策误当作既成事实，导致边缘部署预期落空；TokenEconomizer的经验复用被证明在跨任务时固化错误经验、拉低成功率，开源插件被过早集成进生产流程；DeepMind的'代理接管算力'被舆论放大为'递归自我改进临近'，引发不必要的监管恐慌或安全争议；Google MCP的'能连上但无权限'落差在企业落地中造成集成返工。",
-    "most_likely_case": "短期内三条主线维持'叙事推进快于验证'的格局：NVIDIA的6.4倍作为厂商宣称在社区传播，但基线、功耗与第三方复现仍缺位，选型方保持观望；TokenEconomizer停留在小范围试用，独立基准未出现，效率与成功率的权衡结论悬置；DeepMind代理调度算力的讨论热度中等，'递归自我改进仍遥远'的限定被部分媒体忽略；Google MCP生态的权限落差成为代理落地企业场景的显性摩擦点。整体证据深度不足，结论以线索而非定论形式流通。",
+    "best_case": "微软公开的Lazarus后门研究迅速转化为可落地的防御工具与审计规范，主流AI代理框架在数月内加入休眠神经元异常检测、触发器扫描与最小权限沙箱，TokenEconomizer类经验复用方案在真实代码库对照实验中验证有效并被谨慎采纳，NVIDIA边缘性能宣称获得第三方复现与完整基准披露，社区vLLM推理优化与SessionGraph类可观测工具成熟，形成'能力扩展—可观测—权限收敛'的良性循环。",
+    "worst_case": "Lazarus类后门技术被攻击者快速复现并武器化，出现针对具备终端/工具权限AI代理的真实入侵事件，造成代码仓库污染、供应链投毒或数据外泄；同时TokenEconomizer等经验复用机制因迁移失真引入隐蔽错误，放大返工与安全风险；厂商6.4倍加速类宣称在缺乏验证下被采购决策误用，边缘部署实际收益不达预期，行业信任受损。",
+    "most_likely_case": "短期内（3-6个月）Lazarus仍以研究披露与概念验证为主，尚未出现大规模在野利用，但安全团队会开始收紧AI代理的工具与终端权限、增加模型来源审查与行为监控；TokenEconomizer进入早期试用，经验迁移准确率与返工成本的量化数据成为采纳关键；NVIDIA 6.4倍宣称维持'厂商待验证'状态，等待MLPerf官方或第三方复现；vLLM推理优化与代理会话可视化等社区信号持续活跃但单条价值有限。",
     "key_variables": [
-      "NVIDIA是否向MLPerf提交可查记录，以及第三方能否复现6.4倍加速（含基线模型、batch配置、功耗数据）",
-      "TokenEconomizer是否出现独立基准，尤其是token消耗与任务成功率的联合曲线",
-      "DeepMind是否一手披露代理调度算力的决策边界与人类监督机制",
-      "Google Workspace各MCP服务的实际可执行权限清单是否公开，'连接'与'执行'落差是否收窄",
-      "厂商自发布内容在情报流程中是否被统一标注为'待验证'，以及第三方评测补采速度",
-      "边缘设备功耗、散热、成本约束是否被纳入性能宣称的对照口径",
-      "社区侧LLM工程助手类落地案例（如Rockbox移植）能否转化为可复用的方法论信号"
+      "Lazarus后门技术的可复现性与在野利用出现时间",
+      "主流AI代理框架与模型供应商是否快速推出休眠神经元检测与触发器扫描能力",
+      "企业对具备工具/终端权限AI代理的最小权限与沙箱管控落地速度",
+      "TokenEconomizer跨会话经验迁移准确率及返工成本的实测数据",
+      "NVIDIA 6.4倍加速宣称是否获得MLPerf官方结果或第三方独立复现",
+      "边缘设备内存带宽、功耗与散热约束对端到端收益的实际限制",
+      "vLLM等开源推理栈与代理可观测性工具的社区成熟度与采用率"
     ],
-    "forecast_conclusion": "短期（1-3个月）内，今日情报主线不会出现能力层面的实质突破，更可能沿'执行层自动化继续推进、验证层持续滞后'的路径演化。NVIDIA的6.4倍、TokenEconomizer的效率收益、DeepMind的代理调度均应作为待验证宣称处理，不宜纳入确定性选型或能力判断。最值得跟踪的杠杆点是MLPerf官方提交记录与TokenEconomizer的独立基准——前者决定边缘LLM叙事能否落地为事实，后者决定代理效率优化的核心张力（效率vs成功率）能否被证伪或证实。整体判断置信度偏低，建议以情景分布而非单一结论使用本预测。",
-    "confidence": "low"
+    "forecast_conclusion": "AI代理安全与效率的张力将在短期主导该领域议程：Lazarus揭示的休眠神经元后门使'代理权限越大、危害越深'成为可验证风险，防御侧将优先走向权限收敛与行为审计，而非等待完美检测方案；TokenEconomizer代表的经验复用路线价值取决于迁移可靠性验证，短期宜小范围对照实验而非生产全量采纳；NVIDIA边缘性能宣称应维持'宣称—验证'分级标注，采购决策需等待完整基准与第三方复现。整体判断为风险披露先行、防御工具跟进、性能宣称待验证的过渡期。",
+    "confidence": "medium"
   },
   "stage_status": {
     "analysis": "ok",
@@ -902,11 +886,11 @@
     "model": "deepseek-chat",
     "calls": 6,
     "token_usage": {
-      "prompt": 19879,
-      "completion": 3077,
-      "total": 22956
+      "prompt": 19546,
+      "completion": 2719,
+      "total": 22265
     },
-    "latency_seconds": 28.24,
+    "latency_seconds": 21.24,
     "fallback_stages": []
   },
   "mainline_memory": [
@@ -917,9 +901,9 @@
       "lifecycle_state": "rising",
       "risk_level": "low",
       "score": 1.8,
-      "days_seen": 231,
+      "days_seen": 232,
       "first_seen": "2026-04-09",
-      "last_seen": "2026-11-27",
+      "last_seen": "2026-11-28",
       "enrichment_summary": "1 source(s) | official | 3 related support"
     },
     {
@@ -929,9 +913,9 @@
       "lifecycle_state": "rising",
       "risk_level": "low",
       "score": 1.8,
-      "days_seen": 231,
+      "days_seen": 232,
       "first_seen": "2026-04-09",
-      "last_seen": "2026-11-27",
+      "last_seen": "2026-11-28",
       "enrichment_summary": "1 source(s) | official | 2 related support"
     },
     {
@@ -941,9 +925,9 @@
       "lifecycle_state": "rising",
       "risk_level": "low",
       "score": 1.8,
-      "days_seen": 231,
+      "days_seen": 232,
       "first_seen": "2026-04-09",
-      "last_seen": "2026-11-27",
+      "last_seen": "2026-11-28",
       "enrichment_summary": "1 source(s) | official | 2 related support"
     },
     {
@@ -953,9 +937,9 @@
       "lifecycle_state": "rising",
       "risk_level": "low",
       "score": 0.3,
-      "days_seen": 231,
+      "days_seen": 232,
       "first_seen": "2026-04-09",
-      "last_seen": "2026-11-27",
+      "last_seen": "2026-11-28",
       "enrichment_summary": "1 source(s) | official"
     },
     {
@@ -965,29 +949,29 @@
       "lifecycle_state": "rising",
       "risk_level": "low",
       "score": 0.3,
-      "days_seen": 231,
+      "days_seen": 232,
       "first_seen": "2026-04-09",
-      "last_seen": "2026-11-27",
+      "last_seen": "2026-11-28",
       "enrichment_summary": "1 source(s) | official | 3 related support"
     }
   ],
   "lifecycle_summary": {
-    "new": 15,
-    "rising": 66,
+    "new": 18,
+    "rising": 63,
     "verified": 1,
     "fading": 0
   },
   "risk_level": "medium",
   "highlights": [
-    "今日情报主线是AI代理从'能力展示'走向'研发与执行基础设施'：NVIDIA用边缘基准强化Jetson叙事、DeepMind让代理接管部分算力调度、微软尝试让编程代理复用经验省token，但三者均以厂商单方证据为主，性能与效率宣称仍需独立验证。",
+    "AI代理安全与效率成为今日焦点：微软揭示可寄生于休眠神经元的后门威胁，同时推出TokenEconomizer以经验复用降低推理成本；边缘端性能宣称与开源工具动态活跃但证据深度不足。",
     "本轮共采集到 87 条原始信息，去重后保留 82 个主题。",
     "当前覆盖 2 个领域，启用了 4 组来源配置。"
   ],
   "risks": [
-    "HN: fetched 59 raw, filtered to 20 relevant (min_score=10)",
-    "Website source failed: ti-e2e-blog -> 410 Client Error: Gone for url: https://e2e.ti.com/blogs_/artificial-intelligence",
-    "Website source failed: st-blog -> 404 Client Error: Not Found for url: https://blog.st.com/artificial-intelligence/",
     "GitHub repo failed: NVIDIA/cuda-cmake -> 404 Client Error: Not Found for url: https://api.github.com/repos/NVIDIA/cuda-cmake",
+    "HN: fetched 60 raw, filtered to 20 relevant (min_score=10)",
+    "Website source failed: ti-e2e-blog -> 500 Server Error: Internal Server Error for url: https://e2e.ti.com/blogs_/artificial-intelligence",
+    "Website source failed: st-blog -> 404 Client Error: Not Found for url: https://blog.st.com/artificial-intelligence/",
     "RSS source failed: meta-ai-blog -> 404 Client Error: Not Found for url: https://ai.meta.com/blog/rss/",
     "RSS source failed: arxiv-cs-ai -> 404 Client Error: Not Found for url: https://rss.arxiv.org/cs.AI"
   ],
@@ -1049,9 +1033,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 72,
+        "days_seen": 73,
         "first_seen": "2026-09-17",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 2.6,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -1127,207 +1111,11 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
-      "risk_level": "medium"
-    },
-    {
-      "title": "Google Will Make AI Agents Use Its MCP Servers. The Gmail One Can't Send Email",
-      "url": "https://techstackups.com/articles/google-workspace-ai-agents-mcp/",
-      "summary": "Score: 295 | Comments: 251",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 2.5,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
-            "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
-            "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
-            "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
-            "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "google-ai-edge",
-            "source_type": "official",
-            "title": "On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery",
-            "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "community",
-          "related-support"
-        ],
-        "summary": "1 source(s) | community | 3 related support"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "medium"
-    },
-    {
-      "title": "Porting Rockbox to an undocumented $9 Aliexpress 'YP3' MP3 Player with LLMs",
-      "url": "https://jayd.ml/2026/11/14/rockbox-on-yp3.html",
-      "summary": "Score: 275 | Comments: 103",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 2.5,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "huggingface-blog",
-            "source_type": "official",
-            "title": "How to build and maintain an agentic evaluation",
-            "url": "https://huggingface.co/blog/agentic-evals",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "community",
-          "related-support"
-        ],
-        "summary": "1 source(s) | community | 1 related support"
-      },
-      "memory": {
-        "days_seen": 2,
-        "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
-        "previous_score": 2.5,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "new",
-        "seen_dates": [
-          "2026-11-26",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "medium"
-    },
-    {
-      "title": "AI agents now control part of DeepMind's compute for Gemini experiments",
-      "url": "https://the-decoder.com/ai-agents-now-control-part-of-deepminds-compute-for-gemini-experiments-but-recursive-self-improvement-remains-distant/",
-      "summary": "Score: 47 | Comments: 23",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 2.5,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
-            "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
-            "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
-            "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
-            "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "huggingface-blog",
-            "source_type": "official",
-            "title": "Where scientists draw the line on AI agents",
-            "url": "https://huggingface.co/blog/allenai/where-scientists-draw-the-line-on-ai-agents",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "community",
-          "related-support"
-        ],
-        "summary": "1 source(s) | community | 3 related support"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
       "risk_level": "medium"
     },
     {
@@ -1381,9 +1169,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 230,
+        "days_seen": 231,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 2.5,
         "previous_confidence": "low",
         "previous_lifecycle_state": "verified",
@@ -1617,11 +1405,127 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "verified",
       "risk_level": "low"
+    },
+    {
+      "title": "Show HN: Getting 101 tok/s from Inkling 2 Mini in vLLM on one GB10",
+      "url": "https://runtimenotes.com/blog/getting-101-tok-s-from-inkling-2-mini-in-vllm-on-one-gb10/",
+      "summary": "Score: 50 | Comments: 11",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 2.5,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "show-hn"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [
+          {
+            "source_id": "huggingface-blog",
+            "source_type": "official",
+            "title": "Hill-climbing Inkling 2 Mini inference on one RTX PRO 6000",
+            "url": "https://huggingface.co/blog/inkling-2-mini-inference-hillclimb",
+            "summary": "",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "google-ai-edge",
+            "source_type": "official",
+            "title": "On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery",
+            "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
+            "summary": "",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "nvidia-embedded",
+            "source_type": "official",
+            "title": "Run Native DLA Inference in Python on NVIDIA Jetson AGX Orin Using cuDLA",
+            "url": "https://developer.nvidia.com/blog/run-native-dla-inference-in-python-on-nvidia-jetson-agx-orin-using-cudla/",
+            "summary": "",
+            "evidence_scope": "current-run"
+          }
+        ],
+        "verification_flags": [
+          "community",
+          "related-support"
+        ],
+        "summary": "1 source(s) | community | 3 related support"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "medium"
+    },
+    {
+      "title": "SessionGraph: Visualize all your coding agent sessions in one interactive graph",
+      "url": "https://sessiongraph.ai/",
+      "summary": "Score: 39 | Comments: 17",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 2.5,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "medium"
     },
     {
       "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
@@ -1681,9 +1585,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 11,
+        "days_seen": 12,
         "first_seen": "2026-11-17",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 2.5,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -1698,7 +1602,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -1762,11 +1667,11 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 17,
+        "days_seen": 18,
         "first_seen": "2026-11-11",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 2.5,
-        "previous_confidence": "medium",
+        "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
         "seen_dates": [
           "2026-11-11",
@@ -1785,7 +1690,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -1824,9 +1730,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 22,
+        "days_seen": 23,
         "first_seen": "2026-11-06",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 2.5,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -1852,7 +1758,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -1915,9 +1822,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 176,
+        "days_seen": 177,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 2.1,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -2097,7 +2004,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -2160,9 +2068,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.8,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -2397,7 +2305,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -2460,9 +2369,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 100,
+        "days_seen": 101,
         "first_seen": "2026-08-19",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.8,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -2566,7 +2475,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -2613,9 +2523,9 @@
         "summary": "1 source(s) | official | 1 related support"
       },
       "memory": {
-        "days_seen": 107,
+        "days_seen": 108,
         "first_seen": "2026-08-12",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.8,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -2726,7 +2636,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -2789,9 +2700,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 178,
+        "days_seen": 179,
         "first_seen": "2026-06-02",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.8,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -2973,7 +2884,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -3028,9 +2940,9 @@
         "summary": "1 source(s) | official | 2 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -3265,7 +3177,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -3320,9 +3233,9 @@
         "summary": "1 source(s) | official | 2 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -3557,7 +3470,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -3620,17 +3534,18 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 1,
+        "days_seen": 2,
         "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
+        "last_seen": "2026-11-28",
+        "previous_score": 1.8,
+        "previous_confidence": "low",
+        "previous_lifecycle_state": "new",
         "seen_dates": [
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
-      "lifecycle_state": "new",
+      "lifecycle_state": "rising",
       "risk_level": "low"
     },
     {
@@ -3690,15 +3605,16 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 2,
+        "days_seen": 3,
         "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.8,
         "previous_confidence": "low",
-        "previous_lifecycle_state": "new",
+        "previous_lifecycle_state": "rising",
         "seen_dates": [
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -3735,15 +3651,16 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 2,
+        "days_seen": 3,
         "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.8,
         "previous_confidence": "low",
-        "previous_lifecycle_state": "new",
+        "previous_lifecycle_state": "rising",
         "seen_dates": [
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -3806,9 +3723,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 4,
+        "days_seen": 5,
         "first_seen": "2026-11-24",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.8,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -3816,7 +3733,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -3863,16 +3781,17 @@
         "summary": "1 source(s) | official | 1 related support"
       },
       "memory": {
-        "days_seen": 3,
+        "days_seen": 4,
         "first_seen": "2026-11-25",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.8,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
         "seen_dates": [
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -3909,9 +3828,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 39,
+        "days_seen": 40,
         "first_seen": "2026-05-15",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.5,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -3954,7 +3873,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -3991,911 +3911,18 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "1Password Security Incident",
-      "url": "https://1password.com/blog/update-on-nov-2026-security-incident",
-      "summary": "Score: 1647 | Comments: 708",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "hot",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
         "days_seen": 2,
-        "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
-        "previous_score": 1.0,
+        "first_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
+        "previous_score": 1.1,
         "previous_confidence": "low",
         "previous_lifecycle_state": "new",
         "seen_dates": [
-          "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
-      "risk_level": "low"
-    },
-    {
-      "title": "The New York Times warns photographers not to update Photoshop over AI features",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features",
-      "summary": "Score: 661 | Comments: 525 | Text: <a href=\"https:&#x2F;&#x2F;archive.ph&#x2F;pcUgy\" rel=\"nofollow\">https:&#x2F;&#x2F;archive.ph&#x2F;pcUgy</a>",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "hot",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence",
-            "url": "https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/",
-            "summary": "<p>Evaluating Microsoft Copilot at enterprise scale requires test data that captures the full complexity of real organizations, yet real enterprise data contains sensitive information that cannot be used for evaluation under any circumstances.</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/\">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
-            "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
-            "summary": "<p>Microsoft researchers have discovered &#8220;Lazarus,&#8221; a backdoor technique that can reprogram dormant neurons in an AI model, causing an otherwise normal AI agent to execute malicious commands when a hidden trigger appears. The threat is especially serious for AI agents with tool or terminal access. A triggered model could quietly download and run attacker code, [&#8230;]</p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/\">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "google-ai-edge",
-            "source_type": "official",
-            "title": "On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery",
-            "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "community",
-          "related-support"
-        ],
-        "summary": "1 source(s) | community | 3 related support"
-      },
-      "memory": {
-        "days_seen": 37,
-        "first_seen": "2026-10-22",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.3,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "rising",
-        "seen_dates": [
-          "2026-10-22",
-          "2026-10-23",
-          "2026-10-24",
-          "2026-10-25",
-          "2026-10-26",
-          "2026-10-27",
-          "2026-10-28",
-          "2026-10-29",
-          "2026-10-30",
-          "2026-10-31",
-          "2026-11-01",
-          "2026-11-02",
-          "2026-11-03",
-          "2026-11-04",
-          "2026-11-05",
-          "2026-11-06",
-          "2026-11-07",
-          "2026-11-08",
-          "2026-11-09",
-          "2026-11-10",
-          "2026-11-11",
-          "2026-11-12",
-          "2026-11-13",
-          "2026-11-14",
-          "2026-11-15",
-          "2026-11-16",
-          "2026-11-17",
-          "2026-11-18",
-          "2026-11-19",
-          "2026-11-20",
-          "2026-11-21",
-          "2026-11-22",
-          "2026-11-23",
-          "2026-11-24",
-          "2026-11-25",
-          "2026-11-26",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "low"
-    },
-    {
-      "title": "Much shorter version of GRH Lean verification from Anthropic",
-      "url": "https://github.com/lsernau/grh-lean",
-      "summary": "Score: 552 | Comments: 351",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "hot",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 2,
-        "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
-        "previous_score": 1.0,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "new",
-        "seen_dates": [
-          "2026-11-26",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "low"
-    },
-    {
-      "title": "Intel One Mono font (2023)",
-      "url": "https://github.com/intel/intel-one-mono",
-      "summary": "Score: 490 | Comments: 247",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "OpenAI cuts GPT-6.2 usage: Astra hits limits 40% faster, Sol 25% faster",
-      "url": "https://twitter.com/thsottiaux/status/2125784147889393806",
-      "summary": "Score: 475 | Comments: 263",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 2,
-        "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
-        "previous_score": 1.0,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "new",
-        "seen_dates": [
-          "2026-11-26",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "low"
-    },
-    {
-      "title": "AI made self-hosting fun again",
-      "url": "https://janlukas.blog/posts/ai-self-hosting",
-      "summary": "Score: 459 | Comments: 242",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "Slow Ubuntu security response times",
-      "url": "https://www.openwall.com/lists/oss-security/2026/11/25/9",
-      "summary": "Score: 415 | Comments: 261",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 2,
-        "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
-        "previous_score": 1.0,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "new",
-        "seen_dates": [
-          "2026-11-26",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "low"
-    },
-    {
-      "title": "AMD-specific fork of llama.cpp",
-      "url": "https://devnull.land/amd-specific-llama-cpp",
-      "summary": "Score: 312 | Comments: 77",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "huggingface-blog",
-            "source_type": "official",
-            "title": "Introducing the llama.cpp benchmark dashboard for AMD Ryzen and Radeon",
-            "url": "https://huggingface.co/blog/ggml-org/llamacpp-amd-bench",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "community",
-          "related-support"
-        ],
-        "summary": "1 source(s) | community | 1 related support"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "OpenAI may be in cost control mode",
-      "url": "https://micjm.com/blog/openai-is-in-cost-control-mode/",
-      "summary": "Score: 308 | Comments: 316",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "The short age of dragon riders",
-      "url": "https://atilloy.com/2026/11/16/the-short-age-of-dragon-riders/",
-      "summary": "Score: 297 | Comments: 208",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 3,
-        "first_seen": "2026-05-30",
-        "last_seen": "2026-11-27",
-        "previous_score": 1.0,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "fading",
-        "seen_dates": [
-          "2026-05-30",
-          "2026-08-19",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "low"
-    },
-    {
-      "title": "An algebraic quantization of gravity from the null cone",
-      "url": "https://arxiv.org/abs/2611.34924",
-      "summary": "Score: 226 | Comments: 87",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news",
-        "trending"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "The USAID Files",
-      "url": "https://reclaimthenet.org/usaid-files",
-      "summary": "Score: 198 | Comments: 246",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "Rvoip: VoIP stack in Rust",
-      "url": "https://github.com/eisenzopf/rvoip",
-      "summary": "Score: 109 | Comments: 22",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "Largest 2D Chart library in the world using BUI: BlenderUI",
-      "url": "https://bui.preetham.top/charts/",
-      "summary": "Score: 85 | Comments: 11",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "nvidia-embedded",
-            "source_type": "official",
-            "title": "Run Native DLA Inference in Python on NVIDIA Jetson AGX Orin Using cuDLA",
-            "url": "https://developer.nvidia.com/blog/run-native-dla-inference-in-python-on-nvidia-jetson-agx-orin-using-cudla/",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "community",
-          "related-support"
-        ],
-        "summary": "1 source(s) | community | 1 related support"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "Google will show solo Android developers' phone numbers and addresses",
-      "url": "https://support.google.com/googleplay/android-developer/answer/17594752?hl=en",
-      "summary": "Score: 66 | Comments: 31",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "community"
-        ],
-        "summary": "1 source(s) | community"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "An introduction to uncertainty in machine learning",
-      "url": "https://chrhenning.com/blog/2026/introduction-to-uncertainty/",
-      "summary": "Score: 43 | Comments: 1",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "huggingface-blog",
-            "source_type": "official",
-            "title": "How to build and maintain an agentic evaluation",
-            "url": "https://huggingface.co/blog/agentic-evals",
-            "summary": "",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "google-ai-edge",
-            "source_type": "official",
-            "title": "On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery",
-            "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
-            "summary": "",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "microsoft-research",
-            "source_type": "official",
-            "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
-            "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
-            "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "community",
-          "related-support"
-        ],
-        "summary": "1 source(s) | community | 3 related support"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
-      "risk_level": "low"
-    },
-    {
-      "title": "Top-cited AI scientists at four US companies compared",
-      "url": "https://topcitedscientists.com/figures/ai-at-four-us-companies/",
-      "summary": "Score: 39 | Comments: 23",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "hacker-news"
-      ],
-      "tags": [
-        "hacker-news"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "hacker-news"
-        ],
-        "source_types": [
-          "community"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "nvidia-embedded",
-            "source_type": "official",
-            "title": "Deploy Agentic-Ready AI at the Edge with Memory Efficiency in NVIDIA JetPack 7.2",
-            "url": "https://developer.nvidia.com/blog/deploy-agentic-ready-ai-at-the-edge-with-memory-efficiency-in-nvidia-jetpack-7-2/",
-            "summary": "",
-            "evidence_scope": "current-run"
-          },
-          {
-            "source_id": "huggingface-blog",
-            "source_type": "official",
-            "title": "Where scientists draw the line on AI agents",
-            "url": "https://huggingface.co/blog/allenai/where-scientists-draw-the-line-on-ai-agents",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "community",
-          "related-support"
-        ],
-        "summary": "1 source(s) | community | 2 related support"
-      },
-      "memory": {
-        "days_seen": 1,
-        "first_seen": "2026-11-27",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.0,
-        "previous_confidence": "",
-        "previous_lifecycle_state": "",
-        "seen_dates": [
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "new",
       "risk_level": "low"
     },
     {
@@ -4943,9 +3970,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 230,
+        "days_seen": 231,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -5179,7 +4206,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -5234,9 +4262,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 230,
+        "days_seen": 231,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -5470,293 +4498,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "low"
-    },
-    {
-      "title": "tenstorrent/tt-metal",
-      "url": "https://github.com/tenstorrent/tt-metal",
-      "summary": ":metal: TT-NN operator library, and TT-Metalium low level kernel programming model.",
-      "primary_domain": "ai-x-electronics",
-      "matched_domains": [
-        "ai-x-electronics",
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "curated-repos"
-      ],
-      "tags": [
-        "accelerator",
-        "ai",
-        "ai-llm-agent",
-        "cuda",
-        "deepseek",
-        "gpu",
-        "img-gen",
-        "kernels",
-        "llama",
-        "llm",
-        "metal",
-        "scale-out",
-        "stable-diffusion",
-        "tenstorrent",
-        "video-gen"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "curated-repos"
-        ],
-        "source_types": [
-          "repo"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "repo"
-        ],
-        "summary": "1 source(s) | repo"
-      },
-      "memory": {
-        "days_seen": 228,
-        "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
-        "previous_score": 1.0,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "rising",
-        "seen_dates": [
-          "2026-04-09",
-          "2026-04-11",
-          "2026-04-12",
-          "2026-04-13",
-          "2026-04-14",
-          "2026-04-15",
-          "2026-04-16",
-          "2026-04-17",
-          "2026-04-18",
-          "2026-04-19",
-          "2026-04-20",
-          "2026-04-21",
-          "2026-04-22",
-          "2026-04-23",
-          "2026-04-24",
-          "2026-04-25",
-          "2026-04-26",
-          "2026-04-27",
-          "2026-04-28",
-          "2026-04-29",
-          "2026-04-30",
-          "2026-05-01",
-          "2026-05-02",
-          "2026-05-03",
-          "2026-05-04",
-          "2026-05-05",
-          "2026-05-06",
-          "2026-05-07",
-          "2026-05-08",
-          "2026-05-09",
-          "2026-05-10",
-          "2026-05-11",
-          "2026-05-12",
-          "2026-05-13",
-          "2026-05-14",
-          "2026-05-15",
-          "2026-05-16",
-          "2026-05-17",
-          "2026-05-18",
-          "2026-05-19",
-          "2026-05-20",
-          "2026-05-21",
-          "2026-05-22",
-          "2026-05-23",
-          "2026-05-24",
-          "2026-05-25",
-          "2026-05-26",
-          "2026-05-27",
-          "2026-05-28",
-          "2026-05-29",
-          "2026-05-30",
-          "2026-05-31",
-          "2026-06-01",
-          "2026-06-02",
-          "2026-06-03",
-          "2026-06-04",
-          "2026-06-05",
-          "2026-06-06",
-          "2026-06-07",
-          "2026-06-08",
-          "2026-06-09",
-          "2026-06-10",
-          "2026-06-11",
-          "2026-06-12",
-          "2026-06-13",
-          "2026-06-14",
-          "2026-06-15",
-          "2026-06-16",
-          "2026-06-17",
-          "2026-06-18",
-          "2026-06-19",
-          "2026-06-20",
-          "2026-06-21",
-          "2026-06-22",
-          "2026-06-23",
-          "2026-06-24",
-          "2026-06-25",
-          "2026-06-26",
-          "2026-06-27",
-          "2026-06-28",
-          "2026-06-29",
-          "2026-06-30",
-          "2026-07-01",
-          "2026-07-02",
-          "2026-07-03",
-          "2026-07-04",
-          "2026-07-05",
-          "2026-07-06",
-          "2026-07-07",
-          "2026-07-08",
-          "2026-07-09",
-          "2026-07-10",
-          "2026-07-12",
-          "2026-07-13",
-          "2026-07-14",
-          "2026-07-15",
-          "2026-07-16",
-          "2026-07-17",
-          "2026-07-18",
-          "2026-07-19",
-          "2026-07-20",
-          "2026-07-21",
-          "2026-07-22",
-          "2026-07-23",
-          "2026-07-24",
-          "2026-07-25",
-          "2026-07-26",
-          "2026-07-27",
-          "2026-07-28",
-          "2026-07-29",
-          "2026-07-30",
-          "2026-07-31",
-          "2026-08-01",
-          "2026-08-02",
-          "2026-08-03",
-          "2026-08-04",
-          "2026-08-05",
-          "2026-08-06",
-          "2026-08-07",
-          "2026-08-08",
-          "2026-08-09",
-          "2026-08-10",
-          "2026-08-11",
-          "2026-08-12",
-          "2026-08-13",
-          "2026-08-14",
-          "2026-08-15",
-          "2026-08-16",
-          "2026-08-17",
-          "2026-08-18",
-          "2026-08-19",
-          "2026-08-20",
-          "2026-08-21",
-          "2026-08-22",
-          "2026-08-23",
-          "2026-08-24",
-          "2026-08-25",
-          "2026-08-27",
-          "2026-08-28",
-          "2026-08-29",
-          "2026-08-30",
-          "2026-08-31",
-          "2026-09-01",
-          "2026-09-02",
-          "2026-09-03",
-          "2026-09-04",
-          "2026-09-05",
-          "2026-09-06",
-          "2026-09-07",
-          "2026-09-08",
-          "2026-09-09",
-          "2026-09-10",
-          "2026-09-11",
-          "2026-09-12",
-          "2026-09-13",
-          "2026-09-14",
-          "2026-09-15",
-          "2026-09-16",
-          "2026-09-17",
-          "2026-09-18",
-          "2026-09-19",
-          "2026-09-20",
-          "2026-09-21",
-          "2026-09-22",
-          "2026-09-23",
-          "2026-09-24",
-          "2026-09-25",
-          "2026-09-26",
-          "2026-09-27",
-          "2026-09-28",
-          "2026-09-29",
-          "2026-09-30",
-          "2026-10-01",
-          "2026-10-02",
-          "2026-10-03",
-          "2026-10-04",
-          "2026-10-05",
-          "2026-10-06",
-          "2026-10-07",
-          "2026-10-08",
-          "2026-10-09",
-          "2026-10-10",
-          "2026-10-11",
-          "2026-10-12",
-          "2026-10-13",
-          "2026-10-14",
-          "2026-10-15",
-          "2026-10-16",
-          "2026-10-17",
-          "2026-10-18",
-          "2026-10-19",
-          "2026-10-21",
-          "2026-10-22",
-          "2026-10-23",
-          "2026-10-24",
-          "2026-10-25",
-          "2026-10-26",
-          "2026-10-27",
-          "2026-10-28",
-          "2026-10-29",
-          "2026-10-30",
-          "2026-10-31",
-          "2026-11-01",
-          "2026-11-02",
-          "2026-11-03",
-          "2026-11-04",
-          "2026-11-05",
-          "2026-11-06",
-          "2026-11-07",
-          "2026-11-08",
-          "2026-11-09",
-          "2026-11-10",
-          "2026-11-11",
-          "2026-11-12",
-          "2026-11-13",
-          "2026-11-14",
-          "2026-11-15",
-          "2026-11-16",
-          "2026-11-18",
-          "2026-11-19",
-          "2026-11-20",
-          "2026-11-21",
-          "2026-11-22",
-          "2026-11-23",
-          "2026-11-24",
-          "2026-11-25",
-          "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -5805,9 +4548,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 228,
+        "days_seen": 229,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -6039,7 +4782,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -6084,9 +4828,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 229,
+        "days_seen": 230,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -6319,7 +5063,295 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "rising",
+      "risk_level": "low"
+    },
+    {
+      "title": "tenstorrent/tt-metal",
+      "url": "https://github.com/tenstorrent/tt-metal",
+      "summary": ":metal: TT-NN operator library, and TT-Metalium low level kernel programming model.",
+      "primary_domain": "ai-x-electronics",
+      "matched_domains": [
+        "ai-x-electronics",
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "curated-repos"
+      ],
+      "tags": [
+        "accelerator",
+        "ai",
+        "ai-llm-agent",
+        "cuda",
+        "deepseek",
+        "gpu",
+        "img-gen",
+        "kernels",
+        "llama",
+        "llm",
+        "metal",
+        "scale-out",
+        "stable-diffusion",
+        "tenstorrent",
+        "video-gen"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "curated-repos"
+        ],
+        "source_types": [
+          "repo"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "repo"
+        ],
+        "summary": "1 source(s) | repo"
+      },
+      "memory": {
+        "days_seen": 229,
+        "first_seen": "2026-04-09",
+        "last_seen": "2026-11-28",
+        "previous_score": 1.0,
+        "previous_confidence": "low",
+        "previous_lifecycle_state": "rising",
+        "seen_dates": [
+          "2026-04-09",
+          "2026-04-11",
+          "2026-04-12",
+          "2026-04-13",
+          "2026-04-14",
+          "2026-04-15",
+          "2026-04-16",
+          "2026-04-17",
+          "2026-04-18",
+          "2026-04-19",
+          "2026-04-20",
+          "2026-04-21",
+          "2026-04-22",
+          "2026-04-23",
+          "2026-04-24",
+          "2026-04-25",
+          "2026-04-26",
+          "2026-04-27",
+          "2026-04-28",
+          "2026-04-29",
+          "2026-04-30",
+          "2026-05-01",
+          "2026-05-02",
+          "2026-05-03",
+          "2026-05-04",
+          "2026-05-05",
+          "2026-05-06",
+          "2026-05-07",
+          "2026-05-08",
+          "2026-05-09",
+          "2026-05-10",
+          "2026-05-11",
+          "2026-05-12",
+          "2026-05-13",
+          "2026-05-14",
+          "2026-05-15",
+          "2026-05-16",
+          "2026-05-17",
+          "2026-05-18",
+          "2026-05-19",
+          "2026-05-20",
+          "2026-05-21",
+          "2026-05-22",
+          "2026-05-23",
+          "2026-05-24",
+          "2026-05-25",
+          "2026-05-26",
+          "2026-05-27",
+          "2026-05-28",
+          "2026-05-29",
+          "2026-05-30",
+          "2026-05-31",
+          "2026-06-01",
+          "2026-06-02",
+          "2026-06-03",
+          "2026-06-04",
+          "2026-06-05",
+          "2026-06-06",
+          "2026-06-07",
+          "2026-06-08",
+          "2026-06-09",
+          "2026-06-10",
+          "2026-06-11",
+          "2026-06-12",
+          "2026-06-13",
+          "2026-06-14",
+          "2026-06-15",
+          "2026-06-16",
+          "2026-06-17",
+          "2026-06-18",
+          "2026-06-19",
+          "2026-06-20",
+          "2026-06-21",
+          "2026-06-22",
+          "2026-06-23",
+          "2026-06-24",
+          "2026-06-25",
+          "2026-06-26",
+          "2026-06-27",
+          "2026-06-28",
+          "2026-06-29",
+          "2026-06-30",
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06",
+          "2026-07-07",
+          "2026-07-08",
+          "2026-07-09",
+          "2026-07-10",
+          "2026-07-12",
+          "2026-07-13",
+          "2026-07-14",
+          "2026-07-15",
+          "2026-07-16",
+          "2026-07-17",
+          "2026-07-18",
+          "2026-07-19",
+          "2026-07-20",
+          "2026-07-21",
+          "2026-07-22",
+          "2026-07-23",
+          "2026-07-24",
+          "2026-07-25",
+          "2026-07-26",
+          "2026-07-27",
+          "2026-07-28",
+          "2026-07-29",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01",
+          "2026-08-02",
+          "2026-08-03",
+          "2026-08-04",
+          "2026-08-05",
+          "2026-08-06",
+          "2026-08-07",
+          "2026-08-08",
+          "2026-08-09",
+          "2026-08-10",
+          "2026-08-11",
+          "2026-08-12",
+          "2026-08-13",
+          "2026-08-14",
+          "2026-08-15",
+          "2026-08-16",
+          "2026-08-17",
+          "2026-08-18",
+          "2026-08-19",
+          "2026-08-20",
+          "2026-08-21",
+          "2026-08-22",
+          "2026-08-23",
+          "2026-08-24",
+          "2026-08-25",
+          "2026-08-27",
+          "2026-08-28",
+          "2026-08-29",
+          "2026-08-30",
+          "2026-08-31",
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-04",
+          "2026-09-05",
+          "2026-09-06",
+          "2026-09-07",
+          "2026-09-08",
+          "2026-09-09",
+          "2026-09-10",
+          "2026-09-11",
+          "2026-09-12",
+          "2026-09-13",
+          "2026-09-14",
+          "2026-09-15",
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-19",
+          "2026-09-20",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-26",
+          "2026-09-27",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-03",
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-10",
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16",
+          "2026-10-17",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-21",
+          "2026-10-22",
+          "2026-10-23",
+          "2026-10-24",
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29",
+          "2026-10-30",
+          "2026-10-31",
+          "2026-11-01",
+          "2026-11-02",
+          "2026-11-03",
+          "2026-11-04",
+          "2026-11-05",
+          "2026-11-06",
+          "2026-11-07",
+          "2026-11-08",
+          "2026-11-09",
+          "2026-11-10",
+          "2026-11-11",
+          "2026-11-12",
+          "2026-11-13",
+          "2026-11-14",
+          "2026-11-15",
+          "2026-11-16",
+          "2026-11-18",
+          "2026-11-19",
+          "2026-11-20",
+          "2026-11-21",
+          "2026-11-22",
+          "2026-11-23",
+          "2026-11-24",
+          "2026-11-25",
+          "2026-11-26",
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -6370,9 +5402,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 227,
+        "days_seen": 228,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -6603,7 +5635,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -6640,9 +5673,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 227,
+        "days_seen": 228,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -6873,7 +5906,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -6910,9 +5944,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 227,
+        "days_seen": 228,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -7143,278 +6177,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "low"
-    },
-    {
-      "title": "jax-ml/jax",
-      "url": "https://github.com/jax-ml/jax",
-      "summary": "Composable transformations of Python+NumPy programs: differentiate, vectorize, JIT to GPU/TPU, and more",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 1.0,
-      "evidence_count": 1,
-      "source_ids": [
-        "curated-repos"
-      ],
-      "tags": [
-        "ai-llm-agent",
-        "jax"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "curated-repos"
-        ],
-        "source_types": [
-          "repo"
-        ],
-        "support_evidence": [],
-        "verification_flags": [
-          "repo"
-        ],
-        "summary": "1 source(s) | repo"
-      },
-      "memory": {
-        "days_seen": 227,
-        "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
-        "previous_score": 1.0,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "rising",
-        "seen_dates": [
-          "2026-04-09",
-          "2026-04-11",
-          "2026-04-12",
-          "2026-04-13",
-          "2026-04-14",
-          "2026-04-15",
-          "2026-04-16",
-          "2026-04-17",
-          "2026-04-18",
-          "2026-04-19",
-          "2026-04-20",
-          "2026-04-21",
-          "2026-04-22",
-          "2026-04-23",
-          "2026-04-24",
-          "2026-04-25",
-          "2026-04-26",
-          "2026-04-27",
-          "2026-04-28",
-          "2026-04-29",
-          "2026-04-30",
-          "2026-05-01",
-          "2026-05-02",
-          "2026-05-03",
-          "2026-05-04",
-          "2026-05-05",
-          "2026-05-06",
-          "2026-05-07",
-          "2026-05-08",
-          "2026-05-09",
-          "2026-05-10",
-          "2026-05-11",
-          "2026-05-12",
-          "2026-05-13",
-          "2026-05-14",
-          "2026-05-15",
-          "2026-05-16",
-          "2026-05-17",
-          "2026-05-18",
-          "2026-05-19",
-          "2026-05-20",
-          "2026-05-21",
-          "2026-05-22",
-          "2026-05-23",
-          "2026-05-24",
-          "2026-05-25",
-          "2026-05-26",
-          "2026-05-27",
-          "2026-05-28",
-          "2026-05-29",
-          "2026-05-30",
-          "2026-05-31",
-          "2026-06-01",
-          "2026-06-02",
-          "2026-06-03",
-          "2026-06-04",
-          "2026-06-05",
-          "2026-06-06",
-          "2026-06-07",
-          "2026-06-08",
-          "2026-06-09",
-          "2026-06-10",
-          "2026-06-11",
-          "2026-06-12",
-          "2026-06-13",
-          "2026-06-14",
-          "2026-06-15",
-          "2026-06-16",
-          "2026-06-17",
-          "2026-06-18",
-          "2026-06-19",
-          "2026-06-20",
-          "2026-06-21",
-          "2026-06-22",
-          "2026-06-23",
-          "2026-06-24",
-          "2026-06-25",
-          "2026-06-26",
-          "2026-06-27",
-          "2026-06-28",
-          "2026-06-29",
-          "2026-06-30",
-          "2026-07-01",
-          "2026-07-02",
-          "2026-07-03",
-          "2026-07-04",
-          "2026-07-05",
-          "2026-07-06",
-          "2026-07-07",
-          "2026-07-08",
-          "2026-07-09",
-          "2026-07-10",
-          "2026-07-12",
-          "2026-07-13",
-          "2026-07-14",
-          "2026-07-15",
-          "2026-07-16",
-          "2026-07-17",
-          "2026-07-18",
-          "2026-07-19",
-          "2026-07-20",
-          "2026-07-21",
-          "2026-07-22",
-          "2026-07-23",
-          "2026-07-24",
-          "2026-07-25",
-          "2026-07-27",
-          "2026-07-28",
-          "2026-07-29",
-          "2026-07-30",
-          "2026-07-31",
-          "2026-08-01",
-          "2026-08-02",
-          "2026-08-03",
-          "2026-08-04",
-          "2026-08-05",
-          "2026-08-06",
-          "2026-08-07",
-          "2026-08-08",
-          "2026-08-09",
-          "2026-08-10",
-          "2026-08-11",
-          "2026-08-12",
-          "2026-08-13",
-          "2026-08-14",
-          "2026-08-15",
-          "2026-08-16",
-          "2026-08-17",
-          "2026-08-18",
-          "2026-08-19",
-          "2026-08-20",
-          "2026-08-21",
-          "2026-08-22",
-          "2026-08-23",
-          "2026-08-24",
-          "2026-08-25",
-          "2026-08-27",
-          "2026-08-28",
-          "2026-08-29",
-          "2026-08-30",
-          "2026-08-31",
-          "2026-09-01",
-          "2026-09-02",
-          "2026-09-03",
-          "2026-09-04",
-          "2026-09-05",
-          "2026-09-06",
-          "2026-09-07",
-          "2026-09-08",
-          "2026-09-09",
-          "2026-09-10",
-          "2026-09-11",
-          "2026-09-12",
-          "2026-09-13",
-          "2026-09-14",
-          "2026-09-15",
-          "2026-09-16",
-          "2026-09-17",
-          "2026-09-18",
-          "2026-09-19",
-          "2026-09-20",
-          "2026-09-21",
-          "2026-09-22",
-          "2026-09-23",
-          "2026-09-24",
-          "2026-09-25",
-          "2026-09-26",
-          "2026-09-27",
-          "2026-09-28",
-          "2026-09-29",
-          "2026-09-30",
-          "2026-10-01",
-          "2026-10-02",
-          "2026-10-03",
-          "2026-10-04",
-          "2026-10-05",
-          "2026-10-06",
-          "2026-10-07",
-          "2026-10-08",
-          "2026-10-09",
-          "2026-10-10",
-          "2026-10-11",
-          "2026-10-12",
-          "2026-10-13",
-          "2026-10-14",
-          "2026-10-15",
-          "2026-10-16",
-          "2026-10-17",
-          "2026-10-18",
-          "2026-10-19",
-          "2026-10-21",
-          "2026-10-22",
-          "2026-10-23",
-          "2026-10-24",
-          "2026-10-25",
-          "2026-10-26",
-          "2026-10-27",
-          "2026-10-28",
-          "2026-10-29",
-          "2026-10-30",
-          "2026-10-31",
-          "2026-11-01",
-          "2026-11-02",
-          "2026-11-03",
-          "2026-11-04",
-          "2026-11-05",
-          "2026-11-06",
-          "2026-11-07",
-          "2026-11-08",
-          "2026-11-09",
-          "2026-11-10",
-          "2026-11-11",
-          "2026-11-12",
-          "2026-11-13",
-          "2026-11-14",
-          "2026-11-15",
-          "2026-11-16",
-          "2026-11-18",
-          "2026-11-19",
-          "2026-11-20",
-          "2026-11-21",
-          "2026-11-22",
-          "2026-11-23",
-          "2026-11-24",
-          "2026-11-25",
-          "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -7464,9 +6228,9 @@
         "summary": "1 source(s) | repo"
       },
       "memory": {
-        "days_seen": 227,
+        "days_seen": 228,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -7697,10 +6461,1175 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
+      "risk_level": "low"
+    },
+    {
+      "title": "jax-ml/jax",
+      "url": "https://github.com/jax-ml/jax",
+      "summary": "Composable transformations of Python+NumPy programs: differentiate, vectorize, JIT to GPU/TPU, and more",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "curated-repos"
+      ],
+      "tags": [
+        "ai-llm-agent",
+        "jax"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "curated-repos"
+        ],
+        "source_types": [
+          "repo"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "repo"
+        ],
+        "summary": "1 source(s) | repo"
+      },
+      "memory": {
+        "days_seen": 228,
+        "first_seen": "2026-04-09",
+        "last_seen": "2026-11-28",
+        "previous_score": 1.0,
+        "previous_confidence": "low",
+        "previous_lifecycle_state": "rising",
+        "seen_dates": [
+          "2026-04-09",
+          "2026-04-11",
+          "2026-04-12",
+          "2026-04-13",
+          "2026-04-14",
+          "2026-04-15",
+          "2026-04-16",
+          "2026-04-17",
+          "2026-04-18",
+          "2026-04-19",
+          "2026-04-20",
+          "2026-04-21",
+          "2026-04-22",
+          "2026-04-23",
+          "2026-04-24",
+          "2026-04-25",
+          "2026-04-26",
+          "2026-04-27",
+          "2026-04-28",
+          "2026-04-29",
+          "2026-04-30",
+          "2026-05-01",
+          "2026-05-02",
+          "2026-05-03",
+          "2026-05-04",
+          "2026-05-05",
+          "2026-05-06",
+          "2026-05-07",
+          "2026-05-08",
+          "2026-05-09",
+          "2026-05-10",
+          "2026-05-11",
+          "2026-05-12",
+          "2026-05-13",
+          "2026-05-14",
+          "2026-05-15",
+          "2026-05-16",
+          "2026-05-17",
+          "2026-05-18",
+          "2026-05-19",
+          "2026-05-20",
+          "2026-05-21",
+          "2026-05-22",
+          "2026-05-23",
+          "2026-05-24",
+          "2026-05-25",
+          "2026-05-26",
+          "2026-05-27",
+          "2026-05-28",
+          "2026-05-29",
+          "2026-05-30",
+          "2026-05-31",
+          "2026-06-01",
+          "2026-06-02",
+          "2026-06-03",
+          "2026-06-04",
+          "2026-06-05",
+          "2026-06-06",
+          "2026-06-07",
+          "2026-06-08",
+          "2026-06-09",
+          "2026-06-10",
+          "2026-06-11",
+          "2026-06-12",
+          "2026-06-13",
+          "2026-06-14",
+          "2026-06-15",
+          "2026-06-16",
+          "2026-06-17",
+          "2026-06-18",
+          "2026-06-19",
+          "2026-06-20",
+          "2026-06-21",
+          "2026-06-22",
+          "2026-06-23",
+          "2026-06-24",
+          "2026-06-25",
+          "2026-06-26",
+          "2026-06-27",
+          "2026-06-28",
+          "2026-06-29",
+          "2026-06-30",
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06",
+          "2026-07-07",
+          "2026-07-08",
+          "2026-07-09",
+          "2026-07-10",
+          "2026-07-12",
+          "2026-07-13",
+          "2026-07-14",
+          "2026-07-15",
+          "2026-07-16",
+          "2026-07-17",
+          "2026-07-18",
+          "2026-07-19",
+          "2026-07-20",
+          "2026-07-21",
+          "2026-07-22",
+          "2026-07-23",
+          "2026-07-24",
+          "2026-07-25",
+          "2026-07-27",
+          "2026-07-28",
+          "2026-07-29",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01",
+          "2026-08-02",
+          "2026-08-03",
+          "2026-08-04",
+          "2026-08-05",
+          "2026-08-06",
+          "2026-08-07",
+          "2026-08-08",
+          "2026-08-09",
+          "2026-08-10",
+          "2026-08-11",
+          "2026-08-12",
+          "2026-08-13",
+          "2026-08-14",
+          "2026-08-15",
+          "2026-08-16",
+          "2026-08-17",
+          "2026-08-18",
+          "2026-08-19",
+          "2026-08-20",
+          "2026-08-21",
+          "2026-08-22",
+          "2026-08-23",
+          "2026-08-24",
+          "2026-08-25",
+          "2026-08-27",
+          "2026-08-28",
+          "2026-08-29",
+          "2026-08-30",
+          "2026-08-31",
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-04",
+          "2026-09-05",
+          "2026-09-06",
+          "2026-09-07",
+          "2026-09-08",
+          "2026-09-09",
+          "2026-09-10",
+          "2026-09-11",
+          "2026-09-12",
+          "2026-09-13",
+          "2026-09-14",
+          "2026-09-15",
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-19",
+          "2026-09-20",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-26",
+          "2026-09-27",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-03",
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-10",
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16",
+          "2026-10-17",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-21",
+          "2026-10-22",
+          "2026-10-23",
+          "2026-10-24",
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29",
+          "2026-10-30",
+          "2026-10-31",
+          "2026-11-01",
+          "2026-11-02",
+          "2026-11-03",
+          "2026-11-04",
+          "2026-11-05",
+          "2026-11-06",
+          "2026-11-07",
+          "2026-11-08",
+          "2026-11-09",
+          "2026-11-10",
+          "2026-11-11",
+          "2026-11-12",
+          "2026-11-13",
+          "2026-11-14",
+          "2026-11-15",
+          "2026-11-16",
+          "2026-11-18",
+          "2026-11-19",
+          "2026-11-20",
+          "2026-11-21",
+          "2026-11-22",
+          "2026-11-23",
+          "2026-11-24",
+          "2026-11-25",
+          "2026-11-26",
+          "2026-11-27",
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "rising",
+      "risk_level": "low"
+    },
+    {
+      "title": "1Password Security Incident",
+      "url": "https://1password.com/blog/update-on-nov-2026-security-incident",
+      "summary": "Score: 1702 | Comments: 725",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "hot",
+        "trending"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 3,
+        "first_seen": "2026-11-26",
+        "last_seen": "2026-11-28",
+        "previous_score": 1.0,
+        "previous_confidence": "low",
+        "previous_lifecycle_state": "rising",
+        "seen_dates": [
+          "2026-11-26",
+          "2026-11-27",
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "rising",
+      "risk_level": "low"
+    },
+    {
+      "title": "AI made self-hosting fun again",
+      "url": "https://janlukas.blog/posts/ai-self-hosting",
+      "summary": "Score: 1107 | Comments: 509",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "hot",
+        "trending"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 2,
+        "first_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
+        "previous_score": 1.0,
+        "previous_confidence": "low",
+        "previous_lifecycle_state": "new",
+        "seen_dates": [
+          "2026-11-27",
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "rising",
+      "risk_level": "low"
+    },
+    {
+      "title": "Group chat where your AI talks behind your back",
+      "url": "https://construct22.com/",
+      "summary": "Score: 692 | Comments: 286",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "hot",
+        "trending"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [
+          {
+            "source_id": "huggingface-blog",
+            "source_type": "official",
+            "title": "Where scientists draw the line on AI agents",
+            "url": "https://huggingface.co/blog/allenai/where-scientists-draw-the-line-on-ai-agents",
+            "summary": "",
+            "evidence_scope": "current-run"
+          }
+        ],
+        "verification_flags": [
+          "community",
+          "related-support"
+        ],
+        "summary": "1 source(s) | community | 1 related support"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "Claude sabotaging ML research tasks?",
+      "url": "https://twitter.com/RealAstropulse/status/2126119408997466389",
+      "summary": "Score: 648 | Comments: 300",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "hot",
+        "trending"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "Michael Nielsen took down his book on neural nets",
+      "url": "https://neuralnetworksanddeeplearning.com/",
+      "summary": "Score: 449 | Comments: 282",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "trending"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "GPT 6.2 Astra Solves a Historical Mystery",
+      "url": "https://generativehistory.substack.com/p/gpt-62-astra-solves-a-historical",
+      "summary": "Score: 375 | Comments: 238",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "trending"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "US Air Force's cloud computing platform hacked",
+      "url": "https://news.sky.com/story/us-air-forces-cloud-computing-platform-hacked-13617163",
+      "summary": "Score: 338 | Comments: 209",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "trending"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "The need for a formally verifiable mainstream programming language",
+      "url": "https://blainehansen.me/post/mainstream-verifiable-language/",
+      "summary": "Score: 319 | Comments: 302",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "trending"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "Google's DeepCrossAttention achieves comparable model quality up to 3x faster",
+      "url": "https://research.google/blog/supercharging-transformer-residual-connections/",
+      "summary": "Score: 228 | Comments: 78",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "trending"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [
+          {
+            "source_id": "huggingface-blog",
+            "source_type": "official",
+            "title": "Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
+            "url": "https://huggingface.co/blog/harness-adapters-at-scale",
+            "summary": "",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "google-ai-edge",
+            "source_type": "official",
+            "title": "On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery",
+            "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
+            "summary": "",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "google-ai-edge",
+            "source_type": "official",
+            "title": "Smaller apps and faster GPU inference with LiteRT in Google Play services",
+            "url": "https://developers.googleblog.com/smaller-apps-and-faster-gpu-inference-with-litert-in-google-play-services/",
+            "summary": "",
+            "evidence_scope": "current-run"
+          }
+        ],
+        "verification_flags": [
+          "community",
+          "related-support"
+        ],
+        "summary": "1 source(s) | community | 3 related support"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "\"What's Claude's fursona?\" and other questions",
+      "url": "https://herecomesthemoon.net/2026/11/whats-claudes-fursona/",
+      "summary": "Score: 189 | Comments: 181",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "An introduction to uncertainty in machine learning",
+      "url": "https://chrhenning.com/blog/2026/introduction-to-uncertainty/",
+      "summary": "Score: 144 | Comments: 13",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [
+          {
+            "source_id": "huggingface-blog",
+            "source_type": "official",
+            "title": "How to build and maintain an agentic evaluation",
+            "url": "https://huggingface.co/blog/agentic-evals",
+            "summary": "",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "google-ai-edge",
+            "source_type": "official",
+            "title": "On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery",
+            "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
+            "summary": "",
+            "evidence_scope": "current-run"
+          },
+          {
+            "source_id": "microsoft-research",
+            "source_type": "official",
+            "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
+            "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
+            "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+            "evidence_scope": "current-run"
+          }
+        ],
+        "verification_flags": [
+          "community",
+          "related-support"
+        ],
+        "summary": "1 source(s) | community | 3 related support"
+      },
+      "memory": {
+        "days_seen": 2,
+        "first_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
+        "previous_score": 1.0,
+        "previous_confidence": "low",
+        "previous_lifecycle_state": "new",
+        "seen_dates": [
+          "2026-11-27",
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "rising",
+      "risk_level": "low"
+    },
+    {
+      "title": "Show HN: DragDropMath – Learn math by feel",
+      "url": "https://dragdropmath.com/",
+      "summary": "Score: 117 | Comments: 33 | Text: Hi HN!<p>I am a professional physicist and I shuffle symbols in equations and mathematical expressions all day long. During my PhD (almost 20 years ago) I noticed that it is as if the symbols have their own &#x27;physics&#x27;, which makes the wrong moves impossible and the right ones obvious.<p>So",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news",
+        "show-hn"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "Woman evicted after landlord's AI assistant told her she could delay rent",
+      "url": "https://drmahfouz.substack.com/p/woman-evicted-after-landlords-ai",
+      "summary": "Score: 116 | Comments: 87",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "Build your own amp modeler: $78 DIY pedal kit from TONE3000",
+      "url": "https://www.guitarworld.com/gear/guitar-pedals/tone3000-daisy-audio-diy-pedal-kit",
+      "summary": "Score: 63 | Comments: 16",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "Tabernetes: A Kubernetes cluster whose nodes are browser tabs",
+      "url": "https://tabernet.es/",
+      "summary": "Score: 58 | Comments: 27",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "Prospero: Bloat-free, native AI coding harness with ImGui",
+      "url": "https://github.com/skeeto/prospero",
+      "summary": "Score: 50 | Comments: 10",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [
+          {
+            "source_id": "microsoft-research",
+            "source_type": "official",
+            "title": "TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient",
+            "url": "https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/",
+            "summary": "<p>AI coding agents can waste time and tokens relearning the same lessons. TokenEconomizer is an open-source plugin that builds on past sessions to cut costs while maintaining task success. It’s a path toward coding agents that learn not only how to solve tasks, but also how to spend computation more effectively. </p>\n<p>The post <a href=\"https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/\">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> appeared first on <a href=\"https://www.microsoft.com/en-us/research\">Microsoft Research</a>.</p>",
+            "evidence_scope": "current-run"
+          }
+        ],
+        "verification_flags": [
+          "community",
+          "related-support"
+        ],
+        "summary": "1 source(s) | community | 1 related support"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "Claude silently added rules to ignore users skintone preferences in our app",
+      "url": "https://twitter.com/jakozloski/status/2126281598517576049",
+      "summary": "Score: 28 | Comments: 8",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [
+          {
+            "source_id": "google-ai-edge",
+            "source_type": "official",
+            "title": "On-Device Speech Recognition and Text-to-Speech in Google AI Edge Gallery",
+            "url": "https://developers.googleblog.com/on-device-speech-recognition-and-text-to-speech-in-google-ai-edge-gallery/",
+            "summary": "",
+            "evidence_scope": "current-run"
+          }
+        ],
+        "verification_flags": [
+          "community",
+          "related-support"
+        ],
+        "summary": "1 source(s) | community | 1 related support"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
+      "risk_level": "low"
+    },
+    {
+      "title": "Synthetic fuel from sunlight, water and air",
+      "url": "https://blog.terraformindustries.com/2026/11/24/terraform-industries-activates-muroc-desert-test-site/",
+      "summary": "Score: 22 | Comments: 6",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 1.0,
+      "evidence_count": 1,
+      "source_ids": [
+        "hacker-news"
+      ],
+      "tags": [
+        "hacker-news"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "hacker-news"
+        ],
+        "source_types": [
+          "community"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "community"
+        ],
+        "summary": "1 source(s) | community"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
       "risk_level": "low"
     },
     {
@@ -7735,16 +7664,17 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 3,
+        "days_seen": 4,
         "first_seen": "2026-11-25",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
         "seen_dates": [
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -7782,16 +7712,17 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 3,
+        "days_seen": 4,
         "first_seen": "2026-11-25",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
         "seen_dates": [
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -7854,16 +7785,17 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 3,
+        "days_seen": 4,
         "first_seen": "2026-11-25",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
         "seen_dates": [
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -7900,9 +7832,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 4,
+        "days_seen": 5,
         "first_seen": "2026-05-07",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -7910,7 +7842,8 @@
           "2026-05-07",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -7948,9 +7881,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 4,
+        "days_seen": 5,
         "first_seen": "2026-11-24",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -7958,7 +7891,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -7996,9 +7930,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 5,
+        "days_seen": 6,
         "first_seen": "2026-11-18",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -8007,7 +7941,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -8055,9 +7990,9 @@
         "summary": "1 source(s) | official | 1 related support"
       },
       "memory": {
-        "days_seen": 4,
+        "days_seen": 5,
         "first_seen": "2026-11-24",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -8065,7 +8000,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -8129,9 +8065,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 28,
+        "days_seen": 29,
         "first_seen": "2026-10-31",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -8163,7 +8099,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -8201,9 +8138,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 36,
+        "days_seen": 37,
         "first_seen": "2026-10-23",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -8243,7 +8180,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -8281,9 +8219,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 37,
+        "days_seen": 38,
         "first_seen": "2026-10-22",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 1.0,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -8324,7 +8262,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -8361,9 +8300,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 40,
+        "days_seen": 41,
         "first_seen": "2026-06-18",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -8407,7 +8346,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -8444,9 +8384,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 31,
+        "days_seen": 32,
         "first_seen": "2026-10-28",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -8481,7 +8421,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -8518,9 +8459,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 43,
+        "days_seen": 44,
         "first_seen": "2026-05-11",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -8567,7 +8508,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -8604,9 +8546,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -8841,7 +8783,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -8904,9 +8847,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -9141,7 +9084,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -9204,9 +9148,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -9441,7 +9385,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -9504,9 +9449,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -9741,7 +9686,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -9804,9 +9750,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -10041,7 +9987,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -10104,9 +10051,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 14,
+        "days_seen": 15,
         "first_seen": "2026-11-14",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -10124,7 +10071,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -10187,9 +10135,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 84,
+        "days_seen": 85,
         "first_seen": "2026-09-05",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -10277,7 +10225,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -10340,9 +10289,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 30,
+        "days_seen": 31,
         "first_seen": "2026-10-29",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -10376,7 +10325,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -10413,9 +10363,9 @@
         "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 39,
+        "days_seen": 40,
         "first_seen": "2026-10-20",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -10458,7 +10408,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -10513,9 +10464,9 @@
         "summary": "1 source(s) | official | 2 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -10750,7 +10701,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -10797,9 +10749,9 @@
         "summary": "1 source(s) | official | 1 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -11034,7 +10986,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -11081,9 +11034,9 @@
         "summary": "1 source(s) | official | 1 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -11318,7 +11271,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -11381,9 +11335,9 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 231,
+        "days_seen": 232,
         "first_seen": "2026-04-09",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -11618,10 +11572,55 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
+      "risk_level": "low"
+    },
+    {
+      "title": "Taking Trainium3 to the Track: Generating Videos with LTX-2.5",
+      "url": "https://huggingface.co/blog/video-trainium3",
+      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
+      "primary_domain": "ai-llm-agent",
+      "matched_domains": [
+        "ai-llm-agent"
+      ],
+      "score": 0.3,
+      "evidence_count": 1,
+      "source_ids": [
+        "huggingface-blog"
+      ],
+      "tags": [
+        "ai-llm-agent"
+      ],
+      "enrichment": {
+        "cross_source_count": 1,
+        "source_ids": [
+          "huggingface-blog"
+        ],
+        "source_types": [
+          "official"
+        ],
+        "support_evidence": [],
+        "verification_flags": [
+          "official-source"
+        ],
+        "summary": "1 source(s) | official"
+      },
+      "memory": {
+        "days_seen": 1,
+        "first_seen": "2026-11-28",
+        "last_seen": "2026-11-28",
+        "previous_score": 0.0,
+        "previous_confidence": "",
+        "previous_lifecycle_state": "",
+        "seen_dates": [
+          "2026-11-28"
+        ]
+      },
+      "lifecycle_state": "new",
       "risk_level": "low"
     },
     {
@@ -11681,15 +11680,16 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 2,
+        "days_seen": 3,
         "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
-        "previous_lifecycle_state": "new",
+        "previous_lifecycle_state": "rising",
         "seen_dates": [
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -11752,15 +11752,16 @@
         "summary": "1 source(s) | official | 3 related support"
       },
       "memory": {
-        "days_seen": 2,
+        "days_seen": 3,
         "first_seen": "2026-11-26",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
-        "previous_lifecycle_state": "new",
+        "previous_lifecycle_state": "rising",
         "seen_dates": [
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -11815,9 +11816,9 @@
         "summary": "1 source(s) | official | 2 related support"
       },
       "memory": {
-        "days_seen": 7,
+        "days_seen": 8,
         "first_seen": "2026-11-21",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -11828,7 +11829,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -11875,9 +11877,9 @@
         "summary": "1 source(s) | official | 1 related support"
       },
       "memory": {
-        "days_seen": 7,
+        "days_seen": 8,
         "first_seen": "2026-11-21",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -11888,7 +11890,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -11918,26 +11921,16 @@
         "source_types": [
           "official"
         ],
-        "support_evidence": [
-          {
-            "source_id": "huggingface-blog",
-            "source_type": "official",
-            "title": "180B Parameters, 32GB of RAM: Pushing MoE Inference to the Limit with Transformers",
-            "url": "https://huggingface.co/blog/moe-expert-streaming",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
+        "support_evidence": [],
         "verification_flags": [
-          "official-source",
-          "related-support"
+          "official-source"
         ],
-        "summary": "1 source(s) | official | 1 related support"
+        "summary": "1 source(s) | official"
       },
       "memory": {
-        "days_seen": 9,
+        "days_seen": 10,
         "first_seen": "2026-11-19",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -11950,7 +11943,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -11997,9 +11991,9 @@
         "summary": "1 source(s) | official | 1 related support"
       },
       "memory": {
-        "days_seen": 9,
+        "days_seen": 10,
         "first_seen": "2026-11-19",
-        "last_seen": "2026-11-27",
+        "last_seen": "2026-11-28",
         "previous_score": 0.3,
         "previous_confidence": "low",
         "previous_lifecycle_state": "rising",
@@ -12012,69 +12006,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
-        ]
-      },
-      "lifecycle_state": "rising",
-      "risk_level": "low"
-    },
-    {
-      "title": "180B Parameters, 32GB of RAM: Pushing MoE Inference to the Limit with Transformers",
-      "url": "https://huggingface.co/blog/moe-expert-streaming",
-      "summary": "来源共 1 条，等待后续 AI 深度摘要。",
-      "primary_domain": "ai-llm-agent",
-      "matched_domains": [
-        "ai-llm-agent"
-      ],
-      "score": 0.3,
-      "evidence_count": 1,
-      "source_ids": [
-        "huggingface-blog"
-      ],
-      "tags": [
-        "ai-llm-agent"
-      ],
-      "enrichment": {
-        "cross_source_count": 1,
-        "source_ids": [
-          "huggingface-blog"
-        ],
-        "source_types": [
-          "official"
-        ],
-        "support_evidence": [
-          {
-            "source_id": "huggingface-blog",
-            "source_type": "official",
-            "title": "DaisyRose-27B: Pushing the Frontier of Post-Training Efficiency",
-            "url": "https://huggingface.co/blog/RadixArk/daisyrose-27b-pushing-the-frontier-of-post-trainin",
-            "summary": "",
-            "evidence_scope": "current-run"
-          }
-        ],
-        "verification_flags": [
-          "official-source",
-          "related-support"
-        ],
-        "summary": "1 source(s) | official | 1 related support"
-      },
-      "memory": {
-        "days_seen": 9,
-        "first_seen": "2026-11-19",
-        "last_seen": "2026-11-27",
-        "previous_score": 0.3,
-        "previous_confidence": "low",
-        "previous_lifecycle_state": "rising",
-        "seen_dates": [
-          "2026-11-19",
-          "2026-11-20",
-          "2026-11-21",
-          "2026-11-22",
-          "2026-11-23",
-          "2026-11-24",
-          "2026-11-25",
-          "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       },
       "lifecycle_state": "rising",
@@ -12082,7 +12015,7 @@
     }
   ],
   "predictions": [
-    "短期（1-3个月）内，今日情报主线不会出现能力层面的实质突破，更可能沿'执行层自动化继续推进、验证层持续滞后'的路径演化。NVIDIA的6.4倍、TokenEconomizer的效率收益、DeepMind的代理调度均应作为待验证宣称处理，不宜纳入确定性选型或能力判断。最值得跟踪的杠杆点是MLPerf官方提交记录与TokenEconomizer的独立基准——前者决定边缘LLM叙事能否落地为事实，后者决定代理效率优化的核心张力（效率vs成功率）能否被证伪或证实。整体判断置信度偏低，建议以情景分布而非单一结论使用本预测。"
+    "AI代理安全与效率的张力将在短期主导该领域议程：Lazarus揭示的休眠神经元后门使'代理权限越大、危害越深'成为可验证风险，防御侧将优先走向权限收敛与行为审计，而非等待完美检测方案；TokenEconomizer代表的经验复用路线价值取决于迁移可靠性验证，短期宜小范围对照实验而非生产全量采纳；NVIDIA边缘性能宣称应维持'宣称—验证'分级标注，采购决策需等待完整基准与第三方复现。整体判断为风险披露先行、防御工具跟进、性能宣称待验证的过渡期。"
   ],
   "sources": {
     "github": {
